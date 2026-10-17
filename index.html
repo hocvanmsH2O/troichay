@@ -67,7 +67,9 @@ nav.tabs{display:flex;gap:4px}
 nav.tabs button{white-space:nowrap;background:none;border:0;padding:8px 10px;border-radius:12px;color:var(--ink-soft);font-weight:600;font-size:.9rem}
 nav.tabs button[aria-current="page"]{background:var(--surface-2);color:var(--water-deep)}
 .brand b{white-space:nowrap}
-@media (max-width:560px){.top-in{flex-wrap:wrap;row-gap:6px}.brand span{display:none} nav.tabs{width:100%} nav.tabs button{flex:1;padding:7px 4px;font-size:.88rem}}
+@media (max-width:560px){.top-in{flex-wrap:wrap;row-gap:6px}.brand span{display:none} nav.tabs{width:100%;order:3} nav.tabs button{flex:1;padding:7px 4px;font-size:.88rem}}
+@media (min-width:561px){.top-in .role{order:3}}
+@media (max-width:560px){.brand{flex:1;min-width:0}.brand b{font-size:1rem}.role summary{padding:6px 10px;font-size:.8rem}.role .menu{min-width:230px;max-width:calc(100vw - 32px)}}
 
 /* Mặt nước – lời chào */
 .hero{margin-top:20px;background:linear-gradient(160deg,var(--water) 0%,var(--jade) 100%);color:var(--on-accent);border-radius:28px;padding:22px 22px 0;position:relative;overflow:hidden}
@@ -261,8 +263,19 @@ mark.k{background:transparent;color:var(--leaf);font-weight:700}
 .river text{font-family:var(--f-display);font-weight:700;fill:var(--ink);font-size:15px}
 .river .need{font-family:var(--f-body);font-weight:500;fill:var(--ink-soft);font-size:11px}
 @media (prefers-reduced-motion:reduce){.drop .lv{animation:none}.alive.bob{animation-duration:4s}}
-.teach-link{display:inline-block;margin-top:8px;color:var(--ink-soft);font-weight:600;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px}
-.teach-link:hover{color:var(--water);border-color:var(--water)}
+/* Menu chọn trang */
+.role{position:relative}
+.role summary{list-style:none;display:flex;align-items:center;gap:6px;cursor:pointer;background:var(--surface-2);color:var(--water-deep);font-weight:700;font-size:.85rem;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.role summary::-webkit-details-marker{display:none}
+.role summary::after{content:"▾";font-size:.8em}
+.role[open] summary{background:var(--water);color:var(--on-accent)}
+.role .menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:6px;min-width:240px;z-index:20;display:flex;flex-direction:column;gap:2px}
+.role .menu a{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:10px;text-decoration:none;color:var(--ink)}
+.role .menu a:hover,.role .menu a:focus-visible{background:var(--surface-2)}
+.role .menu a[aria-current="page"]{background:color-mix(in srgb,var(--leaf) 12%,transparent)}
+.role .menu b{display:block;font-size:.92rem}
+.role .menu span.d{font-size:.78rem;color:var(--ink-soft);line-height:1.35}
+.role .menu .e{font-size:1.2rem;line-height:1.3}
 footer.foot{margin-top:28px;font-size:.8rem;color:var(--ink-soft);text-align:center}
 </style>
 
@@ -272,6 +285,13 @@ footer.foot{margin-top:28px;font-size:.8rem;color:var(--ink-soft);text-align:cen
       <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div><b>Trôi chảy cùng cô H₂O</b><span>Nói trôi chảy – Nghe thấm sâu</span></div>
     </button>
+    <details class="role" id="roleMenu">
+      <summary aria-label="Chọn trang">🎒 Học sinh</summary>
+      <div class="menu">
+        <a href="#" aria-current="page" id="roleStu"><span class="e">🎒</span><span><b>Trang học sinh</b><span class="d">Luyện nói và nghe, xem hành trình</span></span></a>
+        <a href="https://claude.ai/artifact/MVhBwUArejvWZRKQXCrfEC" target="_blank" rel="noopener"><span class="e">📚</span><span><b>Góc Văn cô H₂O</b><span class="d">Trang giáo viên: AI nhận xét, báo cáo, tạo chủ đề. Chỉ cô Thủy mở được.</span></span></a>
+      </div>
+    </details>
     <nav class="tabs" aria-label="Điều hướng">
       <button data-go="home" aria-current="page">Bài học</button>
       <button data-go="journey">Hành trình</button>
@@ -714,6 +734,8 @@ function go(name,params={}){stopRec();VIEW={name,...params};render();window.scro
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(t._h);t._h=setTimeout(()=>t.hidden=true,2600);}
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>go(b.dataset.go));
 document.getElementById("brandBtn").onclick=()=>go("home");
+document.getElementById("roleStu").onclick=e=>{e.preventDefault();document.getElementById("roleMenu").open=false;go("home")};
+document.addEventListener("click",e=>{const m=document.getElementById("roleMenu");if(m.open&&!m.contains(e.target))m.open=false});
 
 function render(){
   if(VIEW.name==="home")renderHome();
@@ -787,7 +809,7 @@ function renderHome(){
       <div><button class="btn water" id="freeGo">Luyện chủ đề này</button></div>
     </section>
   </div>
-  <footer class="foot">Sản phẩm của ${esc(CONFIG.teacher)} · ${esc(CONFIG.school)}<br><a class="teach-link" href="${CONFIG.teacherPage}" target="_blank" rel="noopener">📚 Góc Văn cô H₂O</a></footer>`;
+  <footer class="foot">Sản phẩm của ${esc(CONFIG.teacher)} · ${esc(CONFIG.school)}</footer>`;
   const save=()=>{const se=document.getElementById("stt");ME.stt=se?se.value.trim():ME.stt;ME.name=document.getElementById("nm").value.trim();store.set("me",ME)};
   const sttEl=document.getElementById("stt");if(sttEl)sttEl.onchange=save;document.getElementById("nm").onchange=save;
   app.querySelectorAll("[data-me]").forEach(b=>b.onclick=()=>{save();ME.mode=b.dataset.me;store.set("me",ME);renderHome()});
