@@ -261,6 +261,8 @@ mark.k{background:transparent;color:var(--leaf);font-weight:700}
 .river text{font-family:var(--f-display);font-weight:700;fill:var(--ink);font-size:15px}
 .river .need{font-family:var(--f-body);font-weight:500;fill:var(--ink-soft);font-size:11px}
 @media (prefers-reduced-motion:reduce){.drop .lv{animation:none}.alive.bob{animation-duration:4s}}
+.teach-link{display:inline-block;margin-top:8px;color:var(--ink-soft);font-weight:600;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+.teach-link:hover{color:var(--water);border-color:var(--water)}
 footer.foot{margin-top:28px;font-size:.8rem;color:var(--ink-soft);text-align:center}
 </style>
 
@@ -318,7 +320,9 @@ const CONFIG = {
   // Form 2 – Kết quả luyện nói (điền sau khi cô gửi link điền sẵn)
   resultForm: { action: "", entries: {} },
   // Form 3 – Lời nhắn gửi cô (link xem form)
-  messageForm: ""
+  messageForm: "",
+  // Trang giáo viên (chỉ cô Thủy mở được)
+  teacherPage: "https://claude.ai/artifact/MVhBwUArejvWZRKQXCrfEC"
 };
 
 /* =========================================================
@@ -763,6 +767,7 @@ function renderHome(){
       </div>
     </section>
     ${(()=>{const t=tipToday();return `<section class="tip"><span class="ico" aria-hidden="true">${t[0]}</span><div><p class="lbl">MẸO NÓI HAY HÔM NAY</p><p>${t[1]}</p></div></section>`})()}
+    ${CUSTOM?`<section class="featured" style="border-color:var(--jade)"><div class="stack" style="gap:10px"><span class="chip star" style="align-self:flex-start;background:var(--jade)">✍️ Chủ đề cô vừa giao</span><h3>${esc(CUSTOM.de)}</h3><div class="row"><button class="btn" data-custom="1">Luyện chủ đề này</button><span class="small muted">${KINDS[CUSTOM.kind].short}</span></div></div>${mascot("happy","mascot bob")}</section>`:""}
     ${(()=>{const f=LESSONS.find(l=>l.id===CONFIG.currentLesson);return f?`
     <section class="featured">
       <div class="stack" style="gap:10px">
@@ -782,20 +787,25 @@ function renderHome(){
       <div><button class="btn water" id="freeGo">Luyện chủ đề này</button></div>
     </section>
   </div>
-  <footer class="foot">Sản phẩm của ${esc(CONFIG.teacher)} · ${esc(CONFIG.school)}</footer>`;
+  <footer class="foot">Sản phẩm của ${esc(CONFIG.teacher)} · ${esc(CONFIG.school)}<br><a class="teach-link" href="${CONFIG.teacherPage}" target="_blank" rel="noopener">📚 Góc Văn cô H₂O</a></footer>`;
   const save=()=>{const se=document.getElementById("stt");ME.stt=se?se.value.trim():ME.stt;ME.name=document.getElementById("nm").value.trim();store.set("me",ME)};
   const sttEl=document.getElementById("stt");if(sttEl)sttEl.onchange=save;document.getElementById("nm").onchange=save;
   app.querySelectorAll("[data-me]").forEach(b=>b.onclick=()=>{save();ME.mode=b.dataset.me;store.set("me",ME);renderHome()});
   app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{save();go("lesson",{id:+b.dataset.l,step:"prep"})});
+  app.querySelectorAll("[data-custom]").forEach(b=>b.onclick=()=>{save();go("lesson",{id:"custom",step:"prep"})});
   document.getElementById("freeGo").onclick=()=>{save();const t=document.getElementById("freeT").value.trim();if(!t){toast("Em hãy gõ chủ đề trước nhé");return;}
     go("lesson",{id:"free",free:{topic:t,kind:document.getElementById("freeK").value},step:"prep"})};
 }
 
+let CUSTOM=null;
+try{const m=location.hash.match(/#de=([A-Za-z0-9_-]+)/);if(m){const j=JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,"+").replace(/_/g,"/")))));
+  if(j&&j.de)CUSTOM={id:"custom",bai:"Chủ đề cô giao",kind:KINDS[j.kind]?j.kind:"trinhbay",de:j.de,mucDich:j.mucDich||"Trình bày rõ ràng, thuyết phục về vấn đề cô giao.",nguoiNghe:j.nguoiNghe||"Thầy cô và các bạn.",topics:(j.topics&&j.topics.length)?j.topics:[j.de],topicSrc:"Đề tài cô gợi ý",questions:(j.questions&&j.questions.length)?j.questions:["Vấn đề em muốn nói là gì?","Ý kiến của em là gì?","Em có lí lẽ, bằng chứng nào?"],keywords:j.keywords||[],peers:(j.peers&&j.peers.length)?j.peers:["Mình nghĩ vấn đề này không quan trọng lắm với học sinh."]};}}catch(e){CUSTOM=null}
 function getLesson(){
+  if(VIEW.id==="custom"&&CUSTOM)return CUSTOM;
   if(VIEW.id==="free"){const k=VIEW.free.kind;return {id:"free",bai:"Chủ đề tự do",kind:k,de:VIEW.free.topic,mucDich:"Trình bày, trao đổi về chủ đề em tự chọn một cách rõ ràng, thuyết phục.",nguoiNghe:"Thầy cô và các bạn.",topics:[VIEW.free.topic],questions:["Vấn đề em muốn nói là gì? Vì sao em quan tâm?","Ý kiến của em là gì?","Em có lí lẽ, bằng chứng nào?","Em muốn người nghe làm gì hoặc nghĩ gì sau khi nghe?"],keywords:norm(VIEW.free.topic).trim().split(" ").filter(x=>x.length>2),peers:k==="thaoluan"?["Mình nghĩ vấn đề này không quan trọng lắm với học sinh.","Mình đồng ý đây là vấn đề cần bàn, nhưng mỗi người một cách nghĩ thôi."]:null};}
   return LESSONS.find(l=>l.id===VIEW.id);
 }
-function draftKey(l){return "L"+l.id;}
+function draftKey(l){return l.id==="custom"?"C"+l.de.slice(0,40):"L"+l.id;}
 
 function renderLesson(){
   const l=getLesson(); const step=VIEW.step||"prep"; const dk=draftKey(l);
@@ -805,7 +815,7 @@ function renderLesson(){
   <button class="back" id="backBtn">← Danh sách bài</button>
   <div class="lhead" style="--lc:${lsty(l).c}">
     <div class="lh-in"><span class="ic">${lsty(l).i}</span><div class="stack" style="gap:4px;min-width:0">
-      <span class="num">${l.id==="free"?"Chủ đề tự do":"Bài "+l.id+" · "+esc(l.bai)} · ${KINDS[l.kind].short}</span>
+      <span class="num">${l.id==="free"?"Chủ đề tự do":l.id==="custom"?"Chủ đề cô giao":"Bài "+l.id+" · "+esc(l.bai)} · ${KINDS[l.kind].short}</span>
       <h2>${esc(l.de)}</h2>${l.sgk?`<span class="small" style="opacity:.85">${esc(l.sgk)}</span>`:""}</div></div>
     <svg class="wave" viewBox="0 0 400 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 C60 0 120 20 200 10 S330 0 400 10 V20 H0Z" fill="var(--bg)"/></svg>
   </div>
@@ -986,7 +996,7 @@ function finish(l,d,text,seconds,typed,peer){
   const mode=VIEW.mode||"solo";
   const res=scoreSpeech({text,seconds,lesson:l,topic:d.topic,mode,peerText:peer,typed});
   const prev=[...HISTORY].reverse().find(h=>h.lessonId===l.id&&h.mode===mode);
-  const entry={lessonId:l.id,lessonName:(l.id==="free"?"Tự do: "+l.de:"Bài "+l.id)+(mode==="summary"?" · tóm tắt":mode==="reply"?" · phản hồi":""),topic:d.topic,mode,total:res.total,crit:res.crit,metrics:res.metrics,date:new Date().toISOString(),text,peer:peer||"",attempt:HISTORY.filter(h=>h.lessonId===l.id).length+1,sent:false};
+  const entry={lessonId:l.id,lessonName:(l.id==="free"?"Tự do: "+l.de:l.id==="custom"?"Cô giao: "+l.de.slice(0,40):"Bài "+l.id)+(mode==="summary"?" · tóm tắt":mode==="reply"?" · phản hồi":""),topic:d.topic,mode,total:res.total,crit:res.crit,metrics:res.metrics,date:new Date().toISOString(),text,peer:peer||"",attempt:HISTORY.filter(h=>h.lessonId===l.id).length+1,sent:false};
   const before=BADGES.filter(b=>b.ok()).length;
   HISTORY.push(entry);store.set("history",HISTORY);
   const got=BADGES.filter(b=>b.ok());const newBadge=got.length>before?got[got.length-1]:null;
@@ -1038,9 +1048,18 @@ function renderResult(body,l,d){
     <div class="row">
       <button class="btn water" id="again">🎤 Nói lại</button>
       ${ME.mode==="lop"?'<button class="btn leaf" id="send">📨 Gửi cho cô</button>':""}
+      <button class="btn ghost" id="cpT">📋 Chép cho cô</button>
       <button class="btn ghost" id="home2">Về danh sách bài</button>
     </div>
-    <p class="small muted" id="sendNote">${entry.sent?"Đã gửi cho cô ✅":""}</p>`;
+    <p class="small muted" id="sendNote">${entry.sent?"Đã gửi cho cô ✅":""}</p>
+    <textarea id="cpTbox" hidden aria-label="Gói chép cho cô"></textarea>`;
+  document.getElementById("cpT").onclick=()=>{
+    const pkg=["[H2O]",`Mã bài: ${l.id}`,`Đề: ${l.de}`,`Kiểu: ${l.kind}`,`Chế độ: ${entry.mode}`,`Đề tài: ${entry.topic}`,`Học sinh: ${ME.stt?"STT "+ME.stt:""}${ME.name?" – "+ME.name:""}`,
+      `Số liệu: tổng ${String(res.total).replace(".",",")}/10 · ${res.crit.map(c=>c.name+" "+String(c.v).replace(".",",")).join(" · ")} · ${Math.round(m.sec)} giây · ${m.nw} tiếng · ${m.fill} từ đệm · ${m.wpm} tiếng/phút`,
+      entry.peer?`Ý kiến bạn: ${entry.peer}`:"","Lời nói:",entry.text].filter(Boolean).join("\n");
+    const ta=document.getElementById("cpTbox");
+    navigator.clipboard.writeText(pkg).then(()=>toast("Đã chép ✅ Cô dán vào trang giáo viên nhé")).catch(()=>{ta.hidden=false;ta.value=pkg;ta.focus();ta.select();toast("Bôi đen rồi bấm Ctrl+C để chép nhé")});
+  };
   if(VIEW.result.fresh){VIEW.result.fresh=false;if(newBadge||improved||res.total>=8)rainDrops();}
   document.getElementById("again").onclick=()=>{VIEW.step="talk";renderLesson()};
   document.getElementById("home2").onclick=()=>go("home");
