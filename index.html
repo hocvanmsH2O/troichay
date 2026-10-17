@@ -1,0 +1,1191 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Trôi chảy cùng cô H₂O</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Trợ lí AI luyện Nói và nghe Ngữ văn 8 – cô Nguyễn Thị Thủy, THCS Ngô Quyền, Hà Nội">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: một cột như dòng nước chảy từ trên xuống; đầu trang là "mặt nước", các khối bo tròn như đá cuội. Thủy sinh Mộc: xanh nước là chính, xanh mầm là phụ. */
+:root{
+  --water:#1E6FA8;      /* Thủy – màu chính */
+  --water-deep:#14507C;
+  --leaf:#3FA36B;       /* Mộc – màu phụ */
+  --jade:#17A2A2;       /* giao thoa – nút, huy hiệu */
+  --bg:#F2F8FB;         /* nền xanh rất nhạt thay cho trắng (Kim) */
+  --surface:#FFFFFF;
+  --surface-2:#E6F1F7;
+  --ink:#163246;        /* chữ xanh than */
+  --ink-soft:#4A6476;
+  --line:#CFE2EC;
+  --coral:#E07A5F;      /* chỉ dùng cho cảnh báo nhẹ */
+  --on-accent:#FFFFFF;
+  --shadow:0 6px 18px rgba(20,80,124,.10);
+  --f-display:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --water:#5BA9DE;--water-deep:#8CC6EC;--leaf:#6CC892;--jade:#3CC4C0;
+  --bg:#0D1B26;--surface:#132634;--surface-2:#183244;--ink:#E3F0F7;--ink-soft:#A3BCCB;--line:#244559;
+  --coral:#F09A82;--on-accent:#06202E;--shadow:0 6px 18px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --water:#5BA9DE;--water-deep:#8CC6EC;--leaf:#6CC892;--jade:#3CC4C0;
+  --bg:#0D1B26;--surface:#132634;--surface-2:#183244;--ink:#E3F0F7;--ink-soft:#A3BCCB;--line:#244559;
+  --coral:#F09A82;--on-accent:#06202E;--shadow:0 6px 18px rgba(0,0,0,.35);color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+h1,h2,h3{font-family:var(--f-display);line-height:1.2;text-wrap:balance;margin:0}
+h2{font-size:1.6rem;font-weight:700;color:var(--water-deep)}
+h3{font-size:1.2rem;font-weight:700}
+p{margin:0}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--jade);outline-offset:2px}
+.muted{color:var(--ink-soft)}
+.small{font-size:.875rem}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* Đầu trang */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;color:var(--ink);text-align:left}
+.brand svg{width:40px;height:40px;flex:none}
+.brand b{font-family:var(--f-display);font-size:1.15rem;font-weight:800;color:var(--water-deep);display:block;line-height:1.1}
+.brand span{font-size:.75rem;color:var(--ink-soft)}
+nav.tabs{display:flex;gap:4px}
+nav.tabs button{white-space:nowrap;background:none;border:0;padding:8px 10px;border-radius:12px;color:var(--ink-soft);font-weight:600;font-size:.9rem}
+nav.tabs button[aria-current="page"]{background:var(--surface-2);color:var(--water-deep)}
+.brand b{white-space:nowrap}
+@media (max-width:560px){.top-in{flex-wrap:wrap;row-gap:6px}.brand span{display:none} nav.tabs{width:100%} nav.tabs button{flex:1;padding:7px 4px;font-size:.88rem}}
+
+/* Mặt nước – lời chào */
+.hero{margin-top:20px;background:linear-gradient(160deg,var(--water) 0%,var(--jade) 100%);color:var(--on-accent);border-radius:28px;padding:22px 22px 0;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}
+.hero h1{font-size:clamp(1.6rem,5vw,2.2rem);font-weight:800}
+.hero .slogan{font-family:var(--f-display);font-weight:600;font-size:1.1rem;opacity:.95}
+.bubble{background:var(--surface);color:var(--ink);border-radius:18px 18px 18px 4px;padding:12px 14px;margin:14px 0 18px;max-width:46ch;box-shadow:var(--shadow);font-weight:500}
+.hero .mascot{width:120px;height:132px;margin-bottom:-6px}
+.wave{display:block;width:100%;height:28px;margin-top:4px}
+@media (max-width:480px){.hero .mascot{width:92px;height:100px}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.who{display:grid;grid-template-columns:110px 1fr;gap:10px}
+@media (max-width:420px){.who{grid-template-columns:1fr}}
+label{font-weight:600;font-size:.9rem;display:block;margin-bottom:4px}
+input[type=text],input[type=number],textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+textarea{min-height:84px;resize:vertical}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface-2);border-radius:14px;padding:10px 12px}
+.stat b{font-family:var(--f-display);font-size:1.5rem;color:var(--water-deep);display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.8rem;color:var(--ink-soft)}
+
+.section-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:8px}
+.kind-h{font-family:var(--f-display);font-weight:700;font-size:1rem;color:var(--ink-soft);margin:8px 0 -6px;letter-spacing:.02em}
+.lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.lesson{display:flex;flex-direction:column;gap:6px;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;color:var(--ink);transition:transform .15s,border-color .15s}
+.lesson:hover{border-color:var(--jade);transform:translateY(-2px)}
+.lesson .num{font-family:var(--f-display);font-weight:800;color:var(--water);font-size:.95rem}
+.lesson .t{font-weight:600;line-height:1.35}
+.lesson .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-soft)}
+.chip.star{background:var(--leaf);color:var(--on-accent)}
+.chip.done{background:transparent;border:1px solid var(--jade);color:var(--jade)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 20px;font-weight:700;background:var(--jade);color:var(--on-accent);min-height:46px}
+.btn.water{background:var(--water)}
+.btn.leaf{background:var(--leaf)}
+.btn.ghost{background:transparent;color:var(--water-deep);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.big{font-size:1.15rem;padding:16px 28px;min-height:60px}
+
+/* Trang bài học */
+.back{background:none;border:0;color:var(--water);font-weight:600;padding:12px 0 4px}
+.lesson-head{display:flex;flex-direction:column;gap:6px}
+.lesson-head .num{font-family:var(--f-display);color:var(--leaf);font-weight:800}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--surface-2);padding:5px;border-radius:999px}
+.steps button{border:0;background:none;border-radius:999px;padding:9px 6px;font-weight:700;color:var(--ink-soft);font-size:.92rem}
+.steps button[aria-selected="true"]{background:var(--surface);color:var(--water-deep);box-shadow:var(--shadow)}
+.purpose{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.purpose{grid-template-columns:1fr}}
+.purpose div{background:var(--surface-2);border-radius:14px;padding:12px}
+.purpose b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--leaf);margin-bottom:2px}
+.topics{display:flex;flex-wrap:wrap;gap:8px}
+.topic{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 14px;font-weight:500}
+.topic[aria-pressed="true"]{background:var(--water);border-color:var(--water);color:var(--on-accent)}
+.q{display:flex;flex-direction:column;gap:6px}
+.q p{font-weight:600}
+.outline{display:grid;gap:10px}
+.outline .part{border-left:4px solid var(--jade);padding-left:12px}
+.outline .part:nth-child(1){border-color:var(--water)}
+.outline .part:nth-child(3){border-color:var(--leaf)}
+
+/* Luyện nói */
+.mic-area{display:flex;flex-direction:column;align-items:center;gap:14px;padding:22px 16px;text-align:center}
+.timer{font-family:var(--f-display);font-size:3rem;font-weight:800;color:var(--water-deep);font-variant-numeric:tabular-nums;line-height:1}
+.target{font-size:.85rem;color:var(--ink-soft)}
+.micbtn{width:112px;height:112px;border-radius:50%;border:0;background:var(--water);color:var(--on-accent);display:grid;place-items:center;box-shadow:0 0 0 8px var(--surface-2)}
+.micbtn svg{width:46px;height:46px}
+.micbtn.on{background:var(--coral);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 8px var(--surface-2)}50%{box-shadow:0 0 0 18px var(--surface-2)}}
+@media (prefers-reduced-motion:reduce){.micbtn.on{animation:none}.lesson{transition:none}}
+.live{min-height:120px;background:var(--bg);border:1.5px dashed var(--line);border-radius:14px;padding:12px;text-align:left;width:100%;white-space:pre-wrap}
+.live .interim{color:var(--ink-soft)}
+.peek{width:100%;text-align:left;font-size:.88rem;background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.peek b{color:var(--water-deep)}
+.peer{display:grid;grid-template-columns:56px 1fr;gap:10px;align-items:start;text-align:left;width:100%}
+.peer .av{width:56px;height:56px;border-radius:50%;background:var(--leaf);display:grid;place-items:center;color:var(--on-accent);font-family:var(--f-display);font-weight:800;font-size:1.3rem}
+.say.blur{filter:blur(6px);user-select:none}
+.peer .say{background:var(--surface-2);border-radius:4px 16px 16px 16px;padding:10px 12px}
+.mode{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.mode button{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:600;color:var(--ink-soft)}
+.mode button[aria-pressed="true"]{border-color:var(--leaf);color:var(--leaf)}
+.note{font-size:.85rem;background:var(--surface-2);border-radius:12px;padding:10px 12px;color:var(--ink-soft)}
+.note.warn{border-left:4px solid var(--coral)}
+details summary{cursor:pointer;font-weight:600;color:var(--water)}
+
+/* Kết quả */
+.score-top{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.score-top .mascot{width:96px;height:106px}
+@media (max-width:420px){.score-top{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.big-score{font-family:var(--f-display);font-weight:800;font-size:3rem;line-height:1;color:var(--water-deep);font-variant-numeric:tabular-nums}
+.big-score small{font-size:1.1rem;color:var(--ink-soft)}
+.crit{display:grid;gap:12px}
+.crit-row{display:grid;grid-template-columns:minmax(120px,170px) 1fr 44px;gap:10px;align-items:center}
+@media (max-width:460px){.crit-row{grid-template-columns:1fr 44px}.crit-row .bar{grid-column:1/-1;order:3}}
+.crit-row .name{font-weight:600;font-size:.92rem}
+.bar{height:12px;background:var(--surface-2);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--water),var(--leaf))}
+.crit-row .v{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.fb{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.fb li{display:grid;grid-template-columns:28px 1fr;gap:6px;align-items:start}
+.fb li .ic{font-size:1.15rem;line-height:1.5}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:520px){.metrics{grid-template-columns:repeat(2,1fr)}}
+.metrics div{background:var(--surface-2);border-radius:12px;padding:8px 10px}
+.metrics b{display:block;font-family:var(--f-display);font-size:1.25rem;color:var(--water-deep);font-variant-numeric:tabular-nums}
+.metrics span{font-size:.78rem;color:var(--ink-soft)}
+.delta-up{color:var(--leaf);font-weight:700}
+.delta-down{color:var(--coral);font-weight:700}
+.check{display:grid;gap:8px}
+.check label{display:flex;gap:10px;align-items:flex-start;font-weight:500;margin:0}
+.check input{width:20px;height:20px;margin-top:3px;accent-color:var(--leaf);flex:none}
+.transcript{background:var(--bg);border-radius:12px;padding:12px;white-space:pre-wrap;font-size:.95rem}
+mark.f{background:transparent;color:var(--coral);font-weight:700;text-decoration:underline wavy}
+mark.k{background:transparent;color:var(--leaf);font-weight:700}
+
+/* Hành trình */
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:520px){.badges{grid-template-columns:repeat(2,1fr)}}
+.badge{border-radius:var(--r);padding:14px 10px;text-align:center;background:var(--surface);border:1.5px solid var(--line)}
+.badge .e{font-size:2rem;line-height:1.2;filter:grayscale(1);opacity:.45}
+.badge.got{border-color:var(--jade)}
+.badge.got .e{filter:none;opacity:1}
+.badge b{display:block;font-family:var(--f-display)}
+.badge span{font-size:.75rem;color:var(--ink-soft)}
+.hist{width:100%;border-collapse:collapse;font-size:.9rem}
+.hist th,.hist td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}
+.hist td.n{text-align:right;font-variant-numeric:tabular-nums}
+.scroll-x{overflow-x:auto}
+.spark{width:100%;height:120px}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:600;z-index:20;max-width:calc(100% - 32px)}
+/* Bé Giọt sống động */
+.alive .eyes{transform-box:fill-box;transform-origin:center;animation:blink 4s infinite}
+.alive .leaf{transform-box:fill-box;transform-origin:50% 100%;animation:sway 2.8s ease-in-out infinite}
+.alive.bob{animation:bob 2.6s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.08)}}
+@keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes bob{0%,100%{transform:translateY(0) scale(1,1)}45%{transform:translateY(-10px) scale(.97,1.03)}80%{transform:translateY(0) scale(1.04,.96)}}
+.tip{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;background:var(--surface);border:1.5px dashed var(--jade);border-radius:var(--r);padding:12px 14px}
+.tip .lbl{font-family:var(--f-display);font-weight:700;color:var(--jade);font-size:.85rem;letter-spacing:.03em}
+.tip .ico{font-size:1.6rem}
+/* Thẻ bài học có biểu tượng */
+.lesson{padding:0;overflow:hidden;gap:0;border-color:color-mix(in srgb,var(--lc) 35%,var(--line))}
+.lesson:hover{border-color:var(--lc)}
+.lesson .band{display:flex;align-items:center;gap:10px;background:var(--lc);color:#fff;padding:12px 14px 6px}
+.lesson .bandwave{display:block;width:100%;height:10px;margin-top:-1px}
+.lesson .ic,.lhead .ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;flex:none;background:rgba(255,255,255,.18);color:#fff}
+.lesson .ic svg,.lhead .ic svg{width:25px;height:25px}
+.lesson .bt{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.lesson .bt b{font-family:var(--f-display);font-size:1.05rem}
+.lesson .bt span{font-size:.82rem;opacity:.92}
+.lesson .t{padding:8px 14px 0}
+.lesson .meta{padding:10px 14px 14px}
+.lesson.is-cur{box-shadow:0 0 0 3px color-mix(in srgb,var(--leaf) 45%,transparent)}
+.lhead{margin-top:6px;background:var(--lc);color:#fff;border-radius:22px;overflow:hidden}
+.lhead .lh-in{display:flex;gap:12px;align-items:flex-start;padding:16px 16px 4px}
+.lhead h2{color:#fff;font-size:1.35rem}
+.lhead .num{font-family:var(--f-display);font-weight:700;opacity:.9}
+.lhead .wave{display:block;width:100%;height:20px}
+/* Trang trí hai bên (màn hình rộng) */
+.deco{display:none}
+@media (min-width:1080px){
+  .deco{display:block;position:fixed;top:0;bottom:0;width:calc((100vw - 800px)/2);z-index:0;pointer-events:none;overflow:hidden;
+    background:linear-gradient(180deg,color-mix(in srgb,var(--water) 16%,var(--bg)),color-mix(in srgb,var(--leaf) 14%,var(--bg)))}
+  .deco.l{left:0}.deco.r{right:0;transform:scaleX(-1)}
+  .deco svg{position:absolute;inset:0;width:100%;height:100%}
+  main.wrap,footer.foot{position:relative;z-index:1}
+}
+.featured{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--leaf) 14%,var(--surface)),var(--surface));border:1.5px solid var(--leaf);border-radius:22px;padding:18px}
+.featured .mascot{width:82px;height:90px}
+.src{font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-top:4px}
+/* Sóng nước theo giọng nói */
+.mic-wrap{position:relative;width:260px;height:260px;max-width:100%;display:grid;place-items:center}
+.mic-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.vol{font-size:.85rem;font-weight:600;color:var(--ink-soft);min-height:1.4em}
+/* Giọt điểm */
+.drop{width:120px;height:140px;flex:none}
+.drop .lv{animation:rise 1.4s cubic-bezier(.2,.8,.2,1) both}
+.drop .wv{animation:waveX 2.6s linear infinite}
+@keyframes rise{from{transform:translateY(140px)}}
+@keyframes waveX{to{transform:translateX(-60px)}}
+.drop text{font-family:var(--f-display);font-weight:800;font-size:30px;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:5px}
+.celebrate{display:flex;gap:12px;align-items:center;background:color-mix(in srgb,var(--leaf) 14%,var(--surface));border:1.5px solid var(--leaf);border-radius:var(--r);padding:12px 14px;font-weight:600}
+.celebrate .e{font-size:2rem}
+#rain{position:fixed;inset:0;pointer-events:none;z-index:30;width:100%;height:100%}
+/* Dòng sông hành trình */
+.river{width:100%;height:auto;display:block}
+.river text{font-family:var(--f-display);font-weight:700;fill:var(--ink);font-size:15px}
+.river .need{font-family:var(--f-body);font-weight:500;fill:var(--ink-soft);font-size:11px}
+@media (prefers-reduced-motion:reduce){.drop .lv{animation:none}.alive.bob{animation-duration:4s}}
+footer.foot{margin-top:28px;font-size:.8rem;color:var(--ink-soft);text-align:center}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <button class="brand" id="brandBtn" aria-label="Về trang chủ">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
+      <div><b>Trôi chảy cùng cô H₂O</b><span>Nói trôi chảy – Nghe thấm sâu</span></div>
+    </button>
+    <nav class="tabs" aria-label="Điều hướng">
+      <button data-go="home" aria-current="page">Bài học</button>
+      <button data-go="journey">Hành trình</button>
+      <button data-go="about">Giới thiệu</button>
+    </nav>
+  </div>
+</header>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gDrop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5BB7E8"/><stop offset="1" stop-color="#1E6FA8"/></linearGradient>
+    <symbol id="logo" viewBox="0 0 64 64">
+      <path d="M32 4 C32 4 12 28 12 40 a20 20 0 0 0 40 0 C52 28 32 4 32 4Z" fill="url(#gDrop)"/>
+      <path d="M32 6 C30 0 24 -1 21 2 C25 2 29 4 32 8Z" fill="#3FA36B"/>
+      <path d="M32 6 C35 1 41 1 43 4 C39 3 35 5 32 9Z" fill="#5CC08A"/>
+      <g fill="#FFFFFF"><rect x="21" y="36" width="3.5" height="8" rx="1.75"/><rect x="27" y="31" width="3.5" height="18" rx="1.75"/><rect x="33" y="28" width="3.5" height="24" rx="1.75"/><rect x="39" y="33" width="3.5" height="14" rx="1.75"/></g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="deco l" aria-hidden="true"><svg viewBox="0 0 300 900" preserveAspectRatio="xMidYMid slice">
+  <g fill="none" stroke="var(--water)" stroke-width="2" opacity=".28">
+    <path d="M-20 120 C40 100 80 140 140 120 S240 100 320 120"/><path d="M-20 150 C40 130 80 170 140 150 S240 130 320 150"/>
+    <path d="M-20 620 C40 600 80 640 140 620 S240 600 320 620"/><path d="M-20 650 C40 630 80 670 140 650 S240 630 320 650"/><path d="M-20 680 C40 660 80 700 140 680 S240 660 320 680"/></g>
+  <g fill="var(--water)" opacity=".22"><circle cx="60" cy="260" r="16"/><circle cx="110" cy="320" r="8"/><circle cx="40" cy="380" r="5"/><circle cx="200" cy="470" r="12"/><circle cx="160" cy="520" r="6"/><circle cx="90" cy="790" r="10"/></g>
+  <g fill="var(--leaf)" opacity=".3"><path d="M210 240 c30 -30 70 -20 80 0 c-30 20 -60 25 -80 0Z"/><path d="M50 520 c25 -35 60 -30 72 -10 c-28 18 -52 25 -72 10Z"/><path d="M220 820 c30 -30 70 -20 80 0 c-30 20 -60 25 -80 0Z"/></g>
+  <g opacity=".35"><path d="M150 370 C150 370 120 405 120 425 a30 30 0 0 0 60 0 C180 405 150 370 150 370Z" fill="var(--jade)"/></g>
+</svg></div>
+<div class="deco r" aria-hidden="true"><svg viewBox="0 0 300 900" preserveAspectRatio="xMidYMid slice">
+  <g fill="none" stroke="var(--leaf)" stroke-width="2" opacity=".28"><path d="M-20 300 C40 280 80 320 140 300 S240 280 320 300"/><path d="M-20 330 C40 310 80 350 140 330 S240 310 320 330"/><path d="M-20 760 C40 740 80 780 140 760 S240 740 320 760"/></g>
+  <g fill="var(--water)" opacity=".22"><circle cx="230" cy="120" r="14"/><circle cx="190" cy="180" r="6"/><circle cx="80" cy="560" r="16"/><circle cx="130" cy="610" r="7"/><circle cx="240" cy="860" r="9"/></g>
+  <g fill="var(--leaf)" opacity=".3"><path d="M40 440 c30 -30 70 -20 80 0 c-30 20 -60 25 -80 0Z"/><path d="M180 660 c25 -35 60 -30 72 -10 c-28 18 -52 25 -72 10Z"/></g>
+  <g opacity=".35"><path d="M120 200 C120 200 96 228 96 244 a24 24 0 0 0 48 0 C144 228 120 200 120 200Z" fill="var(--water)"/></g>
+</svg></div>
+<main class="wrap" id="app" aria-live="polite"></main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* =========================================================
+   CẤU HÌNH CỦA CÔ (cô Thủy dán link form vào đây)
+   ========================================================= */
+const CONFIG = {
+  teacher: "Cô Nguyễn Thị Thủy (Ms. H₂O)",
+  school: "Trường THCS Ngô Quyền, phường Bạch Mai, Hà Nội",
+  currentLesson: 2,          // bài cô đang giao
+  // Form 2 – Kết quả luyện nói (điền sau khi cô gửi link điền sẵn)
+  resultForm: { action: "", entries: {} },
+  // Form 3 – Lời nhắn gửi cô (link xem form)
+  messageForm: ""
+};
+
+/* =========================================================
+   DỮ LIỆU 10 BÀI NÓI VÀ NGHE – NGỮ VĂN 8 (KNTT)
+   ========================================================= */
+const KINDS = {
+  trinhbay:{name:"Trình bày ý kiến về một vấn đề xã hội", short:"Trình bày ý kiến", target:[90,180]},
+  gioithieu:{name:"Giới thiệu sách", short:"Giới thiệu sách", target:[60,150]},
+  thaoluan:{name:"Thảo luận một vấn đề trong đời sống", short:"Thảo luận", target:[45,120]}
+};
+const LESSONS = [
+ {id:1,tap:1,bai:"Câu chuyện của lịch sử",kind:"gioithieu",tiet:"12",tuan:3,sgk:"SGK Ngữ văn 8, tập một, tr. 33–34",
+  de:"Trình bày bài giới thiệu ngắn về một cuốn sách (cuốn truyện lịch sử)",
+  mucDich:"Cung cấp thông tin cơ bản về một cuốn truyện lịch sử, khơi gợi hứng thú ở người nghe và khuyến khích họ tìm đọc tác phẩm.",
+  nguoiNghe:"Những người yêu thích truyện lịch sử hoặc quan tâm đến cuốn truyện lịch sử được giới thiệu.",
+  yccd:"Biết trình bày giới thiệu về một cuốn sách.",
+  topics:["Tiêu Sơn tráng sĩ (Khái Hưng)","Đêm hội Long Trì (Nguyễn Huy Tưởng)","An Tư (Nguyễn Huy Tưởng)","Núi rừng Yên Thế (Nguyễn Hồng)","Trên sông truyền hịch (Hà Ân)","Người Thăng Long (Hà Ân)"],topicSrc:"Gợi ý trong SGK",
+  extraTopics:["Lá cờ thêu sáu chữ vàng (Nguyễn Huy Tưởng)","Hoàng Lê nhất thống chí (Ngô gia văn phái)"],extraSrc:"Văn bản đã học trong Bài 1",
+  questions:["Giới thiệu chung: tên truyện, tác giả, nhà xuất bản, năm xuất bản, số trang...","Thời kì lịch sử nào được tái hiện trong truyện? Tóm lược cốt truyện, các sự kiện gắn với nhân vật chính.","Nét nổi bật về nghệ thuật: sự hấp dẫn của cách kể, cách khắc hoạ nhân vật, ngôn ngữ kể chuyện và đối thoại.","Suy nghĩ của em về ý nghĩa của cuốn truyện là gì?"],
+  keywords:["lịch sử","nhân vật","tác giả","truyện","sự kiện","cốt truyện","thời kì","dân tộc","anh hùng","nghệ thuật","nhà xuất bản"]},
+ {id:2,tap:1,bai:"Vẻ đẹp cổ điển",kind:"trinhbay",featured:true,tiet:"24",tuan:6,sgk:"SGK Ngữ văn 8, tập một, tr. 53–54",
+  de:"Trình bày ý kiến về một vấn đề xã hội (một sản phẩm văn hoá truyền thống trong cuộc sống hiện tại)",
+  mucDich:"Trình bày ý kiến về một sản phẩm văn hoá truyền thống trong cuộc sống hiện tại nhằm giúp người nghe có quan niệm, ứng xử đúng đắn đối với di sản văn hoá của dân tộc.",
+  nguoiNghe:"Những người có nhu cầu tìm hiểu các giá trị văn hoá truyền thống.",
+  yccd:"Trình bày được ý kiến về một sản phẩm văn hoá truyền thống trong cuộc sống hiện tại.",
+  topics:["Bánh chưng ngày Tết","Múa rối nước","Áo dài Việt Nam","Phở"],topicSrc:"Gợi ý trong SGK",
+  extraTopics:["Gốm Bát Tràng","Cốm làng Vòng","Lụa Vạn Phúc","Tranh Đông Hồ","Hát quan họ","Phố cổ Hà Nội"],extraSrc:"Gợi ý gần gũi với Hà Nội",
+  questions:["Em sẽ trình bày ý kiến về phương diện nào của sản phẩm văn hoá truyền thống? (hiện trạng, giá trị, hướng bảo tồn, phát triển...)","Sản phẩm ra đời ở đâu? Vị trí và ý nghĩa của sản phẩm là gì?","Ý kiến của em là gì?","Vì sao em có ý kiến như vậy? Lí lẽ, bằng chứng của em là gì?"],
+  keywords:["văn hoá","truyền thống","di sản","bảo tồn","phát huy","phát triển","giữ gìn","giá trị","nguồn gốc","ra đời","hiện nay","hiện trạng","hiện đại","dân tộc","ông cha","thế hệ","giới trẻ","bản sắc","quê hương","đặc trưng","lâu đời","ý nghĩa"]},
+ {id:3,tap:1,bai:"Lời sông núi",kind:"thaoluan",tiet:"40",tuan:10,sgk:"SGK Ngữ văn 8, tập một, tr. 75–76",
+  de:"Thảo luận về một vấn đề trong đời sống phù hợp với lứa tuổi (ý thức trách nhiệm với cộng đồng của học sinh)",
+  mucDich:"Để những người tham gia thảo luận cùng hiểu đúng bản chất của vấn đề, tạo được sự đồng thuận, từ đó có thái độ và hành động phù hợp.",
+  nguoiNghe:"Các thành viên tham gia cuộc thảo luận và những người tham dự buổi thảo luận do muốn hiểu thêm về vấn đề.",
+  yccd:"Biết thảo luận ý kiến về một vấn đề trong đời sống phù hợp với lứa tuổi; nắm bắt được nội dung chính mà nhóm đã thảo luận và trình bày lại được nội dung đó.",
+  topics:["Học sinh có cần quan tâm đến những vấn đề lớn lao của đất nước?","Học sinh có trách nhiệm như thế nào với vấn đề trật tự an toàn giao thông?","Học sinh cần làm gì để góp phần giữ gìn tiếng nói của dân tộc?"],topicSrc:"Gợi ý trong SGK",
+  extraTopics:["Học sinh sử dụng AI như thế nào cho có trách nhiệm?","Học sinh có trách nhiệm gì khi tham gia mạng xã hội?","Học sinh làm gì để giữ gìn môi trường nơi mình sống?","Học sinh có thể làm gì để giúp đỡ những người có hoàn cảnh khó khăn?","Học sinh thể hiện trách nhiệm với việc xây dựng và bảo vệ Tổ quốc từ những việc làm nào?"],extraSrc:"Chủ đề mới, gần gũi với học sinh hôm nay",
+  questions:["Em nhìn nhận vấn đề này theo góc nhìn nào? Vì sao vấn đề này quan trọng với học sinh?","Ý kiến của em là gì? Em có lí lẽ, bằng chứng nào để thuyết phục người nghe?","Em dự kiến tán thành hay phản đối những ý kiến nào? Em sẽ nói thế nào cho lịch sự?","Theo em, học sinh nên có hành động cụ thể nào?"],
+  keywords:["trách nhiệm","cộng đồng","học sinh","đất nước","xã hội","ý thức","giao thông","tiếng việt","tiếng nói","dân tộc","hành động","việc làm","mạng xã hội","môi trường","tổ quốc","ai","trí tuệ nhân tạo"],
+  roles:[
+    {e:"🧭",name:"Người điều hành",task:"Nhắc lại đề tài, nêu định hướng và mục đích thảo luận; mời từng bạn phát biểu, giữ thời gian; cuối buổi tổng hợp và kết luận."},
+    {e:"📝",name:"Thư kí",task:"Ghi chép nhanh, đầy đủ các ý kiến; giúp người điều hành tổng hợp."},
+    {e:"🙋",name:"Thành viên",task:"Phát biểu ý kiến tập trung vào trọng tâm, có lí lẽ, bằng chứng; người nói sau có thể tán thành hay phản đối ý kiến người nói trước, từ đó khẳng định quan điểm của mình."}],
+  evaluate:["Vấn đề được thảo luận thực sự có ý nghĩa, có tác động đến nhận thức của bản thân","Các ý kiến phát biểu tập trung vào trọng tâm vấn đề, làm sáng tỏ vấn đề","Các thành viên tương tác với nhau, thể hiện thái độ tôn trọng, học hỏi nhau","Người điều hành và thư kí thể hiện đúng vai trò của mình"],
+  peers:["Học sinh còn nhỏ, việc của cộng đồng là việc của người lớn. Mình chỉ cần học giỏi là đủ.","Mình nghĩ học sinh có thể thể hiện trách nhiệm với cộng đồng từ những việc nhỏ như đội mũ bảo hiểm, nhặt rác, giúp đỡ hàng xóm."],
+  topicPeers:{
+   "Học sinh có cần quan tâm đến những vấn đề lớn lao của đất nước?":["Học sinh còn nhỏ, những vấn đề lớn lao của đất nước là việc của người lớn.","Chỉ cần học giỏi là đã góp phần cho đất nước rồi, không cần quan tâm thêm.","Mình nghĩ học sinh nên theo dõi tin tức thời sự để hiểu đất nước đang thay đổi thế nào.","Biển đảo ở xa, chẳng liên quan gì đến học sinh thành phố như mình."],
+   "Học sinh có trách nhiệm như thế nào với vấn đề trật tự an toàn giao thông?":["Đi xe đạp vượt đèn đỏ một chút khi đường vắng cũng không sao.","Đi xe đạp điện thì không cần đội mũ bảo hiểm.","Mình nghĩ học sinh nên nhắc cả bố mẹ đội mũ bảo hiểm và đi đúng làn đường.","Đi hàng ba, hàng tư trên đường cho vui cũng chẳng ảnh hưởng đến ai."],
+   "Học sinh cần làm gì để góp phần giữ gìn tiếng nói của dân tộc?":["Chêm tiếng Anh khi nói chuyện cho sành điệu, chẳng ảnh hưởng gì đến tiếng Việt.","Viết tắt, dùng teencode khi nhắn tin là chuyện bình thường, không cần giữ gìn.","Giữ gìn tiếng Việt là việc của các nhà ngôn ngữ học, không phải của học sinh.","Mình nghĩ mỗi bạn nên nói và viết tiếng Việt chuẩn, nhất là khi viết bài và nói chuyện với người lớn."],
+   "Học sinh sử dụng AI như thế nào cho có trách nhiệm?":["Dùng AI làm hộ bài tập về nhà cho nhanh, miễn là được điểm cao.","AI trả lời gì cũng đúng, không cần kiểm tra lại.","Học sinh không nên dùng AI vì sẽ lười suy nghĩ.","Mình dùng AI để gợi ý ý tưởng, rồi tự viết bằng lời của mình và ghi rõ là có dùng AI."],
+   "Học sinh có trách nhiệm gì khi tham gia mạng xã hội?":["Thấy tin hay thì chia sẻ ngay, đúng hay sai là việc của người đăng.","Bình luận gay gắt trên mạng cũng không sao, vì không ai biết mình là ai.","Mình luôn kiểm tra nguồn tin trước khi chia sẻ.","Học sinh chưa cần quan tâm đến việc bảo vệ thông tin cá nhân trên mạng."],
+   "Học sinh làm gì để giữ gìn môi trường nơi mình sống?":["Một mình mình nhặt rác thì chẳng thay đổi được gì.","Dùng túi ni lông một lần cho tiện, có sao đâu.","Mình nghĩ phân loại rác ở nhà là việc học sinh làm được ngay.","Trồng và chăm sóc cây xanh là việc của công ty cây xanh."],
+   "Học sinh có thể làm gì để giúp đỡ những người có hoàn cảnh khó khăn?":["Chỉ người giàu mới cần làm từ thiện.","Giúp đỡ bạn học yếu là việc của thầy cô.","Mình nghĩ một lời hỏi thăm, một cuốn sách cũ cũng là sự giúp đỡ ý nghĩa.","Quyên góp tiền là đủ, không cần tham gia các hoạt động tình nguyện."],
+   "Học sinh thể hiện trách nhiệm với việc xây dựng và bảo vệ Tổ quốc từ những việc làm nào?":["Bảo vệ Tổ quốc là nhiệm vụ của bộ đội, không phải của học sinh.","Học sinh thể hiện lòng yêu nước bằng cách học tập tốt và rèn luyện sức khoẻ.","Chia sẻ thông tin chưa kiểm chứng về chủ quyền biển đảo lên mạng cũng chẳng sao.","Mình nghĩ tìm hiểu lịch sử dân tộc là một cách thể hiện trách nhiệm với đất nước."]
+  }},
+ {id:4,tap:1,bai:"Tiếng cười trào phúng trong thơ",kind:"trinhbay",tiet:"53",tuan:14,sgk:"SGK Ngữ văn 8, tập một, tr. 96–97",
+  de:"Trình bày ý kiến về một vấn đề xã hội (ý nghĩa của tiếng cười trong đời sống)",
+  mucDich:"Trình bày ý kiến của em về ý nghĩa của tiếng cười trong đời sống để tìm sự chia sẻ, đồng tình của người nghe.",
+  nguoiNghe:"Những người có nhu cầu tìm hiểu ý nghĩa của tiếng cười trong đời sống.",
+  yccd:"Bày tỏ ý kiến của mình về ý nghĩa của tiếng cười trong đời sống. Bài nói có luận đề và các luận điểm rõ ràng, có lí lẽ và bằng chứng xác đáng, giàu sức thuyết phục.",
+  nls:"Năng lực số: lựa chọn phương tiện nghe nhìn số phù hợp với bối cảnh thuyết trình. AI: phân tích chuẩn mực ứng xử, cách tạo tiếng cười lành mạnh trên mạng xã hội.",
+  topics:["Tiếng cười nói chung trong đời sống","Tiếng cười trào phúng","Tiếng cười tán thưởng","Tiếng cười vui mừng"],topicSrc:"Phạm vi gợi ý trong SGK",
+  extraTopics:["Tiếng cười lành mạnh trên mạng xã hội"],extraSrc:"Gắn với kế hoạch năng lực số của trường",
+  questions:["Tiếng cười đó nhằm tới đối tượng nào?","Tiếng cười đó được biểu hiện như thế nào?","Người tạo ra tiếng cười ấy muốn thể hiện điều gì?","Đánh giá của em về ý nghĩa của tiếng cười đó là gì?"],
+  keywords:["tiếng cười","niềm vui","hài hước","trào phúng","tán thưởng","châm biếm","phê phán","lạc quan","tinh thần","đối tượng","ý nghĩa","đời sống"]},
+ {id:5,tap:1,bai:"Những câu chuyện hài",kind:"trinhbay",tiet:"70",tuan:18,sgk:"SGK Ngữ văn 8, tập một, tr. 118–119",
+  de:"Trình bày ý kiến về một vấn đề xã hội (một thói xấu của con người trong xã hội hiện đại)",
+  mucDich:"Phê phán một thói xấu của con người trong xã hội hiện đại, qua đó có nhận thức đúng đắn và thái độ sống phù hợp.",
+  nguoiNghe:"Những người quan tâm đến vấn đề em trình bày, có ý thức xây dựng lối sống và hoàn thiện bản thân.",
+  yccd:"Biết trình bày ý kiến, khẳng định và bảo vệ ý kiến phê phán một thói xấu của con người trong xã hội hiện đại; biết lắng nghe, tóm tắt được nội dung thuyết trình của người khác, nêu ý kiến nhận xét, đối thoại với người trình bày.",
+  topics:["Thói khoe khoang","Thói thiếu chủ kiến","Thói khoác lác","Thói đạo đức giả"],topicSrc:"Gợi ý từ các văn bản phần Đọc (SGK)",
+  extraTopics:["Thói học đòi, đua đòi","Thói vô cảm","Thói nghiện điện thoại"],extraSrc:"Gợi ý thêm",
+  questions:["Thói xấu em phê phán là gì? Biểu hiện của nó ra sao?","Thói xấu đó gây ra tác hại gì?","Em có thể dựa vào văn bản nào trong phần Đọc, hoặc thông tin từ sách báo, tranh ảnh nào để làm bằng chứng?","Theo em, cần làm gì để khắc phục thói xấu đó?"],
+  keywords:["thói xấu","biểu hiện","tác hại","nguyên nhân","khắc phục","phê phán","xã hội","hiện đại","con người","bản thân","lối sống"]},
+ {id:6,tap:2,bai:"Chân dung cuộc sống",kind:"gioithieu",tiet:"85",tuan:22,sgk:"SGK Ngữ văn 8, tập hai, tr. 31–32",
+  de:"Giới thiệu về một cuốn sách (truyện)",
+  mucDich:"Cung cấp những thông tin cơ bản về một cuốn sách, khơi gợi hứng thú ở người nghe và khuyến khích họ tìm đọc tác phẩm.",
+  nguoiNghe:"Những người yêu thích cuốn sách hoặc có nhu cầu tìm hiểu về cuốn sách được giới thiệu.",
+  yccd:"Trình bày được bài giới thiệu ngắn về một cuốn sách: cung cấp thông tin quan trọng nhất, nêu đề tài hay chủ đề và một số nét đặc sắc về nghệ thuật; nghe và tóm tắt được nội dung bài giới thiệu, trao đổi với người nói.",
+  topics:["Mắt sói (Đa-ni-en Pen-nắc)","Lặng lẽ Sa Pa (Nguyễn Thành Long)","Chiếc lá cuối cùng (O. Hen-ry)"],topicSrc:"Văn bản trong Bài 6",
+  extraTopics:["Dế Mèn phiêu lưu kí (Tô Hoài)","Hoàng tử bé (Ăng-toan đơ Xanh-tơ Ê-xu-pe-ri)"],extraSrc:"Gợi ý thêm",
+  questions:["Lí do em muốn giới thiệu cuốn sách này là gì?","Thông tin về cuốn sách: thể loại, tác giả, nhà xuất bản, năm xuất bản, số trang, sự đón nhận của độc giả...","Đề tài, nội dung chính: bối cảnh, cốt truyện, nhân vật, chủ đề; một vài nét nổi bật về nghệ thuật.","Nhận xét, đánh giá của em về cuốn sách là gì?"],
+  keywords:["truyện","nhân vật","tác giả","cốt truyện","chủ đề","đề tài","chi tiết","nghệ thuật","bài học","ý nghĩa","cuốn sách"]},
+ {id:7,tap:2,bai:"Tin yêu và ước vọng",kind:"thaoluan",tiet:"98",tuan:25,sgk:"SGK Ngữ văn 8, tập hai, tr. 54–55",
+  de:"Thảo luận ý kiến về một vấn đề đời sống phù hợp với lứa tuổi (được gợi ra từ tác phẩm văn học đã học)",
+  mucDich:"Để có cái nhìn đúng đắn, sâu sắc và toàn diện hơn về một vấn đề; tăng cường sự hiểu biết giữa các thành viên tham gia thảo luận.",
+  nguoiNghe:"Các thành viên tham gia thảo luận và những người tham dự buổi thảo luận do có nhu cầu tìm hiểu về vấn đề.",
+  yccd:"Biết xác định vấn đề đời sống phù hợp với lứa tuổi từ tác phẩm văn học đã học; nêu được ý kiến thảo luận; rèn kĩ năng nói, kĩ năng tương tác; có ý thức vận dụng vào đời sống.",
+  topics:["Hiện tượng bắt nạt (Dế Mèn phiêu lưu kí, Bắt nạt)","Tình trạng ô nhiễm môi trường (Chuyện con mèo dạy hải âu bay)","Vai trò của thế hệ trẻ trong xây dựng và bảo vệ đất nước (Đồng chí, Lá đỏ, Những ngôi sao xa xôi, Lặng lẽ Sa Pa)"],topicSrc:"Gợi ý trong SGK",
+  questions:["Vấn đề em chọn được gợi ra từ tác phẩm nào?","Ý kiến, quan điểm riêng của em về vấn đề là gì?","Lí lẽ và bằng chứng (từ tác phẩm, tài liệu và đời sống) của em là gì?"],
+  keywords:["bắt nạt","môi trường","ô nhiễm","thế hệ trẻ","đất nước","tác phẩm","nhân vật","tuổi học trò","trách nhiệm"],
+  peers:["Bắt nạt chỉ là trêu đùa thôi, ở tuổi học trò ai cũng từng như vậy.","Bảo vệ môi trường là việc của người lớn và nhà nước, học sinh chẳng làm được gì nhiều.","Thế hệ trẻ bây giờ không cần hi sinh như những người lính trong Đồng chí, chỉ cần học tốt là đủ.","Đọc Những ngôi sao xa xôi, mình thấy tinh thần lạc quan, dũng cảm của thế hệ trẻ thật đáng học tập."]},
+ {id:8,tap:2,bai:"Nhà văn và trang viết",kind:"trinhbay",tiet:"116",tuan:29,sgk:"SGK Ngữ văn 8, tập hai, tr. 81–82",
+  de:"Trình bày ý kiến về một vấn đề xã hội (văn học trong đời sống hiện nay)",
+  mucDich:"Thuyết phục người nghe đồng tình với ý kiến của em về vai trò của văn học trong đời sống hiện nay.",
+  nguoiNghe:"Những người yêu thích văn học, có nhu cầu tìm hiểu vai trò của văn học trong đời sống.",
+  yccd:"Trình bày được ý kiến về vấn đề văn học trong đời sống hiện nay; biết trao đổi, tương tác trong vai trò người nói và người nghe, biết bảo vệ ý kiến của bản thân và tôn trọng sự khác biệt.",
+  nls:"Năng lực số: lựa chọn phương tiện truyền thông trực quan số cho bài nói. AI: tối ưu bài nói bằng slide hình ảnh hoặc video ngắn minh hoạ do phần mềm AI gợi ý.",
+  topics:["Văn học có còn quan trọng trong đời sống hay không?","Trước sự phổ biến của các phương tiện nghe nhìn, văn học có gặp thách thức không?","Văn học đem đến cho người đọc nhận thức gì về đời sống, con người?","Vì sao văn học có khả năng đánh thức rung cảm trước cái đẹp?"],topicSrc:"Câu hỏi gợi ý trong SGK",
+  questions:["Vai trò, vị trí của văn học trong đời sống hiện nay là gì?","Văn học có những cơ hội và thách thức nào?","Em có những luận điểm, lí lẽ, bằng chứng nào?","Người nghe có thể phản biện điều gì? Em sẽ trao đổi lại ra sao?"],
+  keywords:["văn học","tác phẩm","đọc","người đọc","tâm hồn","đời sống","hiện nay","nghe nhìn","thách thức","vai trò","cái đẹp","nhà văn"]},
+ {id:9,tap:2,bai:"Hôm nay và ngày mai",kind:"thaoluan",tiet:"133",tuan:34,sgk:"SGK Ngữ văn 8, tập hai, tr. 109–110",
+  de:"Thảo luận về một vấn đề trong đời sống phù hợp với lứa tuổi (tổ chức hợp lí nề nếp sinh hoạt của bản thân)",
+  mucDich:"Giúp mỗi người xây dựng lộ trình làm chủ bản thân, tự hoàn thiện bản thân, bắt đầu từ những việc đơn giản thường ngày.",
+  nguoiNghe:"Những người quan tâm đến vấn đề được thảo luận, muốn học hỏi cách đóng góp ý kiến trong một cuộc thảo luận.",
+  yccd:"Hiểu được đặc điểm riêng và ý nghĩa của vấn đề được chọn thảo luận; biết cách tham gia thảo luận (tổ chức, nêu ý kiến, trao đổi, rút kinh nghiệm) một cách văn minh.",
+  topics:["Có nên lập thời gian biểu cho sinh hoạt hằng ngày của bản thân không?","Có cần tham gia làm việc nhà?","Thói quen nào cần từ bỏ, thói quen nào cần hình thành?","Chơi có cần thiết không, chơi những gì và thời gian chơi bố trí thế nào?","Nên xây dựng kế hoạch giao tiếp xã hội như thế nào ngay từ hôm nay?"],topicSrc:"Gợi ý trong SGK",
+  questions:["Vấn đề em muốn thảo luận là gì? Vì sao nó quan trọng với lứa tuổi em?","Ý kiến của em xuất phát từ trải nghiệm riêng hay từ quan sát những “mô hình” trong đời sống?","Em có tư liệu minh hoạ nào (truyện kể, tranh ảnh, đoạn phim...)?"],
+  keywords:["nề nếp","sinh hoạt","thời gian biểu","việc nhà","thói quen","chơi","giấc ngủ","kế hoạch","làm chủ","bản thân","hợp lí"],
+  peers:["Học sinh không cần thời gian biểu, cứ học khi nào thích là được.","Học sinh chỉ cần học, không cần làm việc nhà.","Chơi điện tử là phí thời gian, học sinh không nên chơi gì cả.","Mình nghĩ tự dọn dẹp góc học tập mỗi ngày giúp mình học tốt hơn."]},
+ {id:10,tap:2,bai:"Sách – người bạn đồng hành",kind:"gioithieu",tiet:"138",tuan:35,sgk:"SGK Ngữ văn 8, tập hai, tr. 127",
+  de:"Về đích: Ngày hội với sách",
+  mucDich:"Giới thiệu cuốn sách yêu thích để thu hút sự chú ý đối với tác phẩm, gợi hứng thú đọc sách; hoặc giới thiệu tác phẩm của em tới người nghe (đọc diễn cảm, ngâm thơ...).",
+  nguoiNghe:"Những người quan tâm đến kết quả dự án đọc sách hoặc muốn có thêm kinh nghiệm tổ chức dự án đọc sách.",
+  yccd:"Thực hành, phát triển kĩ năng nói và nghe: trình bày, trao đổi sản phẩm; yêu thích đọc sách, biết vận dụng những điều đã học vào thực tế.",
+  topics:["Giới thiệu cuốn sách em yêu thích","Giới thiệu tác phẩm em đã viết"],topicSrc:"Hai lựa chọn trong SGK",
+  questions:["Tên cuốn sách (hoặc tác phẩm của em), hoàn cảnh ra đời là gì?","Đặc điểm nổi bật về nghệ thuật và nội dung là gì?","Cuốn sách ảnh hưởng tới em ra sao, sức hút với độc giả thế nào? (Nếu giới thiệu tác phẩm của em: nguồn cảm hứng sáng tác là gì?)"],
+  keywords:["cuốn sách","đọc sách","tác giả","tác phẩm","nội dung","nghệ thuật","hoàn cảnh","cảm hứng","ảnh hưởng","yêu thích"]}
+];
+
+/* =========================================================
+   BỘ CHẤM TẦNG 1 (chạy ngay trên máy, không gửi giọng nói đi đâu)
+   ========================================================= */
+const MARK = {
+  open:["xin chào","kính chào","chào các bạn","chào thầy cô","em xin","tôi xin","hôm nay","em muốn trình bày","em xin trình bày","em xin giới thiệu","mình xin","mình muốn","sau đây","em sẽ trình bày"],
+  body:["thứ nhất","thứ hai","thứ ba","đầu tiên","trước hết","tiếp theo","bên cạnh đó","ngoài ra","mặt khác","không chỉ","hơn nữa","sau đó","một là","hai là"],
+  close:["tóm lại","nói tóm lại","cuối cùng","như vậy","kết luận","tổng kết","vì thế","cảm ơn","xin cảm ơn","em xin hết","em xin kết thúc"],
+  reason:["vì","bởi vì","bởi","do đó","cho nên","nên","vì vậy","chính vì","vì thế","lí do","bởi lẽ","nhờ"],
+  evidence:["ví dụ","chẳng hạn","như là","thực tế","theo","số liệu","em đã từng","mình đã từng","ở quê em","bằng chứng","minh chứng","khi em","có lần","năm","phần trăm"],
+  opinion:["theo em","em nghĩ","em cho rằng","em thấy","ý kiến của em","quan điểm","theo mình","mình nghĩ","tôi cho rằng","theo tôi","em tin"],
+  invite:["các bạn hãy","các bạn nên","nên đọc","mời các bạn","hãy đọc","hãy tìm đọc","đáng đọc"],
+  book:["tác giả","nhà xuất bản","xuất bản","nhân vật","nội dung","cốt truyện","chương","chi tiết","kể về","viết về"],
+  feel:["em thích","em ấn tượng","ấn tượng","bài học","ý nghĩa","xúc động","cảm động","yêu thích","em nhớ"],
+  recall:["bạn vừa nói","bạn nói","ý kiến của bạn","bạn cho rằng","như bạn nói","bạn nghĩ","bạn vừa nêu","quan điểm của bạn"],
+  agree:["đồng ý","đồng tình","tán thành","nhất trí","rất đúng","mình cũng nghĩ"],
+  disagree:["không đồng ý","chưa đồng ý","có ý kiến khác","nghĩ khác","chưa hẳn","chưa đúng","không hẳn","phản đối","thì chưa"],
+  polite:["cảm ơn","tôn trọng","xin phép","theo mình","mình nghĩ","bạn ơi","mình xin","có lẽ","mình thấy"],
+  rude:["vớ vẩn","ngu","dở hơi","sai bét","nhảm","điên","im đi","dốt"]
+};
+const FILLERS = ["ờ","ừ","ừm","ơ","à","ạ à","hừm","kiểu là","kiểu như","thì là","là là","nói chung là","đại loại là","thực ra là","cái này","cái kia","thế thì","rồi thì"];
+
+function norm(s){return " "+String(s).toLowerCase().replace(/[.,!?;:"“”'()\[\]…\-–—\n\r]+/g," ").replace(/\s+/g," ").trim()+" ";}
+function countPhrases(t,list){let n=0,found=[];for(const p of list){const needle=" "+p+" ";let i=t.indexOf(needle),c=0;while(i!==-1){c++;i=t.indexOf(needle,i+needle.length-1)}if(c){n+=c;found.push(p)}}return {n,found};}
+function words(t){return t.trim().split(/\s+/).filter(Boolean);}
+function clamp(x,a=0,b=10){return Math.max(a,Math.min(b,x));}
+function r1(x){return Math.round(x*10)/10;}
+
+function scoreSpeech({text,seconds,lesson,topic,mode,peerText,typed}){
+  const t=norm(text), w=words(t), nw=w.length;
+  const kind=lesson.kind;
+  const sec = seconds>0 ? seconds : Math.round(nw/150*60);
+  const fill=countPhrases(t,FILLERS);
+  // từ lặp liền nhau ("em em", "là là")
+  let rep=0;for(let i=1;i<w.length;i++){if(w[i]===w[i-1]&&w[i].length>1)rep++;}
+  const wpm = sec>0 ? Math.round(nw/sec*60) : 0;
+  const per100 = nw? (fill.n+rep)/nw*100 : 0;
+  const crit=[];
+  const isReply = kind==="thaoluan" && mode==="reply";
+  const isSum = kind==="thaoluan" && mode==="summary";
+  const tgt = isReply ? [30,90] : isSum ? [40,120] : KINDS[kind].target;
+
+  // Thời lượng
+  let sDur; if(sec<tgt[0]) sDur=clamp(sec/tgt[0]*10); else if(sec<=tgt[1]) sDur=10; else sDur=clamp(10-(sec-tgt[1])/30*2,6);
+  crit.push({key:"dur",name:"Thời lượng",v:sDur});
+
+  // Trôi chảy
+  const sFlu=clamp(10-per100*1.4);
+  crit.push({key:"flu",name:"Trôi chảy",v:sFlu});
+
+  // Tốc độ (âm tiết/phút)
+  let sPace; if(wpm>=110&&wpm<=190) sPace=10; else if(wpm<110) sPace=clamp(10-(110-wpm)/12); else sPace=clamp(10-(wpm-190)/12);
+  crit.push({key:"pace",name:"Tốc độ nói",v:sPace});
+
+  const kw = (lesson.keywords||[]).concat(topic? norm(topic).trim().split(" ").filter(x=>x.length>1):[]);
+  const kwHit=countPhrases(t,[...new Set(kw)]);
+  const info={};
+
+  if(isSum){
+    const STOP=new Set(["mình","bạn","là","của","và","thì","không","cũng","cho","với","những","các","một","được","này","đó","nên","rồi","học","sinh","có","để","khi","việc","người","chỉ","như","nghĩ","cần"]);
+    const ops=String(peerText||"").split("|").map(x=>norm(x).trim().split(" ").filter(w=>w.length>1&&!STOP.has(w)));
+    let covered=0;const covers=[];
+    for(const o of ops){const u=[...new Set(o)];const hit=u.filter(x=>t.includes(" "+x+" ")).length;const ok=u.length&&hit/u.length>=.3;covers.push(ok);if(ok)covered++;}
+    const sm=countPhrases(t,["thứ nhất","thứ hai","thứ ba","đầu tiên","tiếp theo","bạn thứ nhất","bạn thứ hai","bạn thứ ba","một bạn","có bạn","bạn khác","bạn còn lại","bạn an","bạn bình","bạn chi","cho rằng","ý kiến","đa số","một số bạn"]);
+    const cc=countPhrases(t,["tóm lại","như vậy","kết luận","thống nhất","nhóm mình","nhóm em","chúng ta","cuối cùng","nói chung"]);
+    crit.push({key:"cover",name:"Nắm ý chính các bạn",v:ops.length?covered/ops.length*10:0});
+    crit.push({key:"sumstruct",name:"Trình bày lại mạch lạc",v:clamp(Math.min(sm.n,5)*2)});
+    crit.push({key:"conclude",name:"Kết luận chung",v:clamp(cc.n?6+Math.min(cc.n,2)*2:1)});
+    Object.assign(info,{covered,total:ops.length,covers});
+  } else if(isReply){
+    const pw=norm(peerText||"").trim().split(" ").filter(x=>x.length>2);
+    const overlap=[...new Set(pw)].filter(x=>t.includes(" "+x+" ")).length;
+    const rc=countPhrases(t,MARK.recall), ag=countPhrases(t,MARK.agree), dg=countPhrases(t,MARK.disagree);
+    const rs=countPhrases(t,MARK.reason), ev=countPhrases(t,MARK.evidence), po=countPhrases(t,MARK.polite), ru=countPhrases(t,MARK.rude);
+    crit.push({key:"listen",name:"Lắng nghe ý bạn",v:clamp((rc.n?5:0)+Math.min(overlap,5))});
+    crit.push({key:"stance",name:"Nêu rõ quan điểm",v:clamp((ag.n||dg.n)?7+Math.min(countPhrases(t,MARK.opinion).n,3):countPhrases(t,MARK.opinion).n?5:1)});
+    crit.push({key:"reason",name:"Lí lẽ, bằng chứng",v:clamp(Math.min(rs.n,3)*2.2+Math.min(ev.n,2)*1.7)});
+    crit.push({key:"polite",name:"Lời lẽ lịch sự",v:clamp(5+Math.min(po.n,3)*1.7-ru.n*4)});
+    Object.assign(info,{recall:rc.n,agree:ag.n,disagree:dg.n,reason:rs.n,evidence:ev.n,polite:po.n,rude:ru.found,overlap});
+  } else {
+    const op=countPhrases(t,MARK.open), bo=countPhrases(t,MARK.body), cl=countPhrases(t,MARK.close);
+    // kết luận nên nằm ở phần cuối
+    const tail=norm(w.slice(Math.floor(nw*0.6)).join(" "));
+    const clTail=countPhrases(tail,MARK.close).n>0;
+    const head=norm(w.slice(0,Math.max(12,Math.floor(nw*0.25))).join(" "));
+    const opHead=countPhrases(head,MARK.open).n>0;
+    const sStruct=clamp((opHead?3.4:op.n?2:0)+Math.min(bo.n,3)*1.1+(clTail?3.3:cl.n?1.5:0));
+    crit.push({key:"struct",name:"Bố cục 3 phần",v:sStruct});
+    info.open=opHead; info.body=bo.n; info.close=clTail;
+    if(kind==="trinhbay"||kind==="thaoluan"){
+      const rs=countPhrases(t,MARK.reason), ev=countPhrases(t,MARK.evidence), opn=countPhrases(t,MARK.opinion);
+      crit.push({key:"reason",name:"Lí lẽ, bằng chứng",v:clamp(Math.min(rs.n,4)*1.5+Math.min(ev.n,3)*1.4)});
+      crit.push({key:"opinion",name:"Nêu rõ ý kiến",v:clamp(opn.n?6+Math.min(opn.n,4):1)});
+      Object.assign(info,{reason:rs.n,evidence:ev.n,opinion:opn.n});
+    } else {
+      const bk=countPhrases(t,MARK.book), fe=countPhrases(t,MARK.feel), iv=countPhrases(t,MARK.invite);
+      crit.push({key:"bookinfo",name:"Thông tin về sách",v:clamp(Math.min(bk.n,5)*2)});
+      crit.push({key:"feel",name:"Cảm nhận, lời mời đọc",v:clamp(Math.min(fe.n,3)*2.2+(iv.n?3.4:0))});
+      Object.assign(info,{book:bk.n,feel:fe.n,invite:iv.n});
+    }
+    crit.push({key:"topic",name:"Bám sát đề",v:clamp(Math.min(kwHit.n,8)*1.25)});
+  }
+  // trọng số
+  const W={cover:1.8,sumstruct:1,conclude:1.2,dur:1,flu:1.2,pace:.6,struct:1.4,reason:1.5,opinion:1,topic:1.1,bookinfo:1.4,feel:1.2,listen:1.6,stance:1.2,polite:1};
+  let sw=0,s=0;for(const c of crit){const k=W[c.key]||1;sw+=k;s+=c.v*k;c.v=r1(c.v)}
+  const total=r1(s/sw);
+  return {total,crit,metrics:{sec,nw,wpm,fill:fill.n,rep,fillFound:fill.found,kwFound:kwHit.found},info,estimated:!(seconds>0),isReply,isSum};
+}
+
+function buildFeedback(res,lesson){
+  const praise=[],fix=[];
+  const by=Object.fromEntries(res.crit.map(c=>[c.key,c.v]));
+  const m=res.metrics, i=res.info, tg=res.isReply?[30,90]:res.isSum?[40,120]:KINDS[lesson.kind].target;
+  const P=(k,txt)=>{if(by[k]!==undefined&&by[k]>=(k==="pace"?9.5:7.5))praise.push({k,txt})};
+  const all=[];
+  const F=(k,txt)=>{if(by[k]===undefined)return;all.push({k,v:by[k],txt});if(by[k]<6.5)fix.push({k,v:by[k],txt})};
+  P("dur",`Em nói được ${fmtSec(m.sec)}, vừa đủ thời lượng.`);
+  F("dur", m.sec<tg[0]?`Bài nói mới được ${fmtSec(m.sec)}. Hãy nói thêm một ý hoặc một ví dụ để đạt ít nhất ${fmtSec(tg[0])}.`:`Bài nói hơi dài (${fmtSec(m.sec)}). Hãy chọn ý chính, lược bớt ý trùng lặp.`);
+  P("flu",m.fill?`Em chỉ dùng ${m.fill} từ đệm, lời nói khá trôi chảy.`:`Lời nói trôi chảy, gần như không có từ đệm.`);
+  F("flu",`Em dùng ${m.fill} từ đệm${m.fillFound.length?` (${m.fillFound.slice(0,4).map(x=>"“"+x+"”").join(", ")})`:""}${m.rep?` và lặp từ ${m.rep} lần`:""}. Khi cần suy nghĩ, em hãy dừng lại một nhịp thay vì nói “ờ”.`);
+  P("pace",`Tốc độ nói vừa phải (khoảng ${m.wpm} tiếng/phút), người nghe dễ theo dõi.`);
+  F("pace",m.wpm<110?`Em nói hơi chậm (${m.wpm} tiếng/phút). Thử nói liền mạch hơn, ngắt nghỉ ở dấu câu.`:`Em nói hơi nhanh (${m.wpm} tiếng/phút). Hãy chậm lại để người nghe kịp hiểu.`);
+  if(by.struct!==undefined){
+    P("struct","Bài nói có bố cục rõ ràng: Mở đầu – Triển khai – Kết luận.");
+    if(by.struct<6.5){
+      const miss=[]; if(!i.open)miss.push("lời mở đầu giới thiệu vấn đề"); if(i.body<2)miss.push("các từ nối ý như “thứ nhất”, “bên cạnh đó”"); if(!i.close)miss.push("phần kết luận (ví dụ “Tóm lại...”)");
+      fix.push({k:"struct",v:by.struct,txt:`Bài nói còn thiếu ${miss.join(", ")}.`});
+    }
+  }
+  P("reason","Em đã đưa ra lí lẽ và bằng chứng để làm rõ ý kiến.");
+  F("reason", (i.evidence||0)===0?"Em mới nêu lí lẽ, chưa có bằng chứng. Hãy thêm một ví dụ thực tế, như “Chẳng hạn, ở quê em...”.":"Hãy giải thích rõ hơn vì sao, bằng các từ như “bởi vì”, “chính vì vậy”.");
+  P("opinion","Em nêu ý kiến riêng rất rõ ràng.");
+  F("opinion","Người nghe chưa thấy rõ ý kiến của em. Hãy nói thẳng: “Theo em, ...”.");
+  P("topic",`Em bám sát đề, dùng tốt các từ khoá${m.kwFound.length?` như ${m.kwFound.slice(0,3).map(x=>"“"+x+"”").join(", ")}`:""}.`);
+  F("topic","Bài nói chưa bám sát đề. Hãy nhắc lại tên vấn đề và nói về giá trị, hiện trạng hoặc cách giữ gìn.");
+  P("bookinfo","Em giới thiệu đủ thông tin về cuốn sách.");
+  F("bookinfo","Hãy nói rõ hơn về cuốn sách: tên, tác giả, nội dung chính, nhân vật.");
+  P("feel","Em chia sẻ cảm nhận chân thành và có lời mời đọc hấp dẫn.");
+  F("feel","Hãy nói thêm em thích điều gì nhất, và mời các bạn: “Các bạn hãy tìm đọc...”.");
+  P("cover",`Em nắm được ý chính của ${i.covered}/${i.total} bạn. Nghe rất chăm chú!`);
+  F("cover",`Em mới nêu được ý của ${i.covered||0}/${i.total||3} bạn. Hãy nghe lại, ghi nhanh từ khoá của từng bạn rồi tóm tắt.`);
+  P("sumstruct","Em trình bày lại các ý kiến theo trình tự rõ ràng.");
+  F("sumstruct","Hãy trình bày lần lượt: “Bạn thứ nhất cho rằng..., bạn thứ hai lại nghĩ..., còn bạn thứ ba...”.");
+  P("conclude","Em đã nêu được kết luận chung của nhóm.");
+  F("conclude","Cuối phần tóm tắt, hãy nêu kết luận: “Tóm lại, nhóm mình thống nhất rằng...”.");
+  P("listen","Em đã lắng nghe và nhắc lại ý của bạn trước khi phản hồi. Rất tôn trọng!");
+  F("listen","Trước khi phản hồi, hãy nhắc lại ý của bạn: “Bạn vừa cho rằng..., mình...”.");
+  P("stance","Em thể hiện rõ mình đồng tình hay chưa đồng tình.");
+  F("stance","Hãy nói rõ em đồng tình hay chưa đồng tình với bạn.");
+  P("polite","Lời lẽ của em lịch sự, cầu thị.");
+  F("polite",i.rude&&i.rude.length?`Tránh dùng từ như ${i.rude.map(x=>"“"+x+"”").join(", ")}. Hãy nói: “Mình tôn trọng ý kiến của bạn, nhưng...”.`:"Thêm các cách nói lịch sự như “Mình tôn trọng ý kiến của bạn, nhưng...”, “Cảm ơn bạn”.");
+  fix.sort((a,b)=>a.v-b.v);
+  if(!fix.length&&all.length){
+    all.sort((a,b)=>a.v-b.v);const lo=all[0];
+    const up={dur:"Thử giữ thời lượng ổn định và nhấn giọng ở các ý chính.",flu:"Thử nói không có từ đệm nào, dừng một nhịp khi cần suy nghĩ.",pace:"Thử điều chỉnh tốc độ, chậm lại ở các ý quan trọng.",struct:"Thử dùng thêm từ nối ý để phần Triển khai mạch lạc hơn.",reason:"Thử thêm một bằng chứng thực tế nữa để thuyết phục hơn.",opinion:"Thử nêu ý kiến của em sắc nét hơn ngay từ phần Mở đầu.",topic:"Thử nói sâu hơn về một khía cạnh: hiện trạng, giá trị hoặc hướng bảo tồn.",bookinfo:"Thử kể thêm một chi tiết đặc sắc của cuốn sách.",feel:"Thử chia sẻ một câu văn em thích nhất trong sách.",listen:"Thử tóm tắt ý bạn ngắn gọn hơn trước khi phản hồi.",cover:"Thử nêu thêm lí do mà mỗi bạn đưa ra.",sumstruct:"Thử dùng tên hoặc thứ tự từng bạn để người nghe dễ theo dõi.",conclude:"Thử nêu thêm việc làm cụ thể mà nhóm thống nhất.",stance:"Thử nói rõ hơn em đồng tình ở điểm nào, chưa đồng tình ở điểm nào.",polite:"Thử kết thúc bằng lời cảm ơn bạn đã chia sẻ."}[lo.k];
+    if(up)fix.push({txt:"Để hay hơn nữa: "+up});
+  }
+  const PRI=["cover","listen","struct","reason","opinion","topic","bookinfo","feel","stance","polite","sumstruct","conclude","flu","dur","pace"];
+  praise.sort((a,b)=>PRI.indexOf(a.k)-PRI.indexOf(b.k));
+  return {praise:praise.slice(0,3).map(x=>x.txt),fix:fix.slice(0,2).map(x=>x.txt)};
+}
+function scoreDrop(total){
+  const lv=(1-total/10)*112+14;
+  return `<svg class="drop" viewBox="0 0 120 140" role="img" aria-label="Giọt điểm ${total} trên 10">
+    <defs><clipPath id="dropClip"><path d="M60 6 C60 6 14 62 14 92 a46 46 0 0 0 92 0 C106 62 60 6 60 6Z"/></clipPath></defs>
+    <path d="M60 6 C60 6 14 62 14 92 a46 46 0 0 0 92 0 C106 62 60 6 60 6Z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="2"/>
+    <g clip-path="url(#dropClip)"><g transform="translate(0 ${lv.toFixed(1)})"><g class="lv"><path class="wv" d="M0 6 Q15 0 30 6 T60 6 T90 6 T120 6 T150 6 T180 6 V160 H0Z" fill="url(#gDrop)"/></g></g></g>
+    <path d="M60 2 C58 -6 50 -8 45 -4 C50 -4 55 -2 60 4Z" fill="#3FA36B"/>
+  </svg>`;
+}
+function rainDrops(){
+  if(REDUCED)return;
+  const c=document.createElement("canvas");c.id="rain";document.body.appendChild(c);
+  const W=c.width=innerWidth,H=c.height=innerHeight,g=c.getContext("2d");
+  const cols=["#1E6FA8","#17A2A2","#3FA36B","#5BB7E8"];
+  const ds=Array.from({length:46},()=>({x:Math.random()*W,y:-20-Math.random()*H*.6,v:3+Math.random()*4,s:5+Math.random()*7,c:cols[Math.floor(Math.random()*4)]}));
+  const t0=performance.now();
+  (function f(t){g.clearRect(0,0,W,H);for(const d of ds){d.y+=d.v;g.fillStyle=d.c;g.beginPath();g.moveTo(d.x,d.y-d.s*1.6);g.bezierCurveTo(d.x+d.s,d.y,d.x+d.s,d.y+d.s,d.x,d.y+d.s);g.bezierCurveTo(d.x-d.s,d.y+d.s,d.x-d.s,d.y,d.x,d.y-d.s*1.6);g.fill();}
+    if(t-t0<2200)requestAnimationFrame(f);else c.remove();})(t0);
+}
+function fmtSec(s){s=Math.round(s);const m=Math.floor(s/60),x=s%60;return m?`${m} phút ${x?x+" giây":""}`.trim():`${x} giây`;}
+
+/* =========================================================
+   LƯU TRÊN MÁY CỦA EM (không gửi đi đâu)
+   ========================================================= */
+const store={
+  get(k,d){try{const v=localStorage.getItem("tc_"+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem("tc_"+k,JSON.stringify(v))}catch(e){}}
+};
+let ME=Object.assign({mode:"lop",stt:"",name:""},store.get("me",{}));
+let HISTORY=store.get("history",[]);   // {lessonId,topic,mode,total,crit,metrics,date,text}
+let DRAFTS=store.get("drafts",{});
+
+function streak(){
+  const days=[...new Set(HISTORY.map(h=>h.date.slice(0,10)))].sort().reverse();
+  if(!days.length)return 0;
+  let n=0,d=new Date();
+  const iso=x=>x.toISOString().slice(0,10);
+  if(days[0]!==iso(d)){d.setDate(d.getDate()-1);if(days[0]!==iso(d))return 0;}
+  for(const day of days){if(day===iso(d)){n++;d.setDate(d.getDate()-1)}else break;}
+  return n;
+}
+const BADGES=[
+  {e:"💧",name:"Giọt lành",need:"Luyện nói lần đầu",ok:()=>HISTORY.length>=1},
+  {e:"🌊",name:"Suối trong",need:"Luyện 5 lần",ok:()=>HISTORY.length>=5},
+  {e:"🏞️",name:"Sông dài",need:"10 lần, có bài đạt 7 điểm",ok:()=>HISTORY.length>=10&&HISTORY.some(h=>h.total>=7)},
+  {e:"🌏",name:"Biển lớn",need:"20 lần, có bài đạt 8,5 điểm",ok:()=>HISTORY.length>=20&&HISTORY.some(h=>h.total>=8.5)}
+];
+
+/* =========================================================
+   BÉ GIỌT – linh vật (giọt nước có mầm lá)
+   ========================================================= */
+function mascot(mood="happy",cls="mascot",alive=true){
+  const mouth={happy:'<path d="M48 82 Q60 94 72 82" stroke="#14507C" stroke-width="4" fill="none" stroke-linecap="round"/>',
+    wow:'<ellipse cx="60" cy="86" rx="7" ry="8" fill="#14507C"/>',
+    cheer:'<path d="M46 80 Q60 98 74 80 Z" fill="#14507C"/><path d="M52 88 Q60 93 68 88" fill="#E07A5F"/>',
+    think:'<path d="M50 86 Q60 82 70 86" stroke="#14507C" stroke-width="4" fill="none" stroke-linecap="round"/>'}[mood];
+  return `<svg class="${cls} ${alive?"alive":""}" viewBox="0 0 120 132" role="img" aria-label="Bé Giọt">
+    <path d="M60 16 C60 16 18 62 18 86 a42 42 0 0 0 84 0 C102 62 60 16 60 16Z" fill="url(#gDrop)"/>
+    <ellipse cx="42" cy="66" rx="7" ry="12" fill="#FFFFFF" opacity=".35" transform="rotate(25 42 66)"/>
+    <g class="leaf"><path d="M60 18 C58 6 46 2 38 8 C46 9 54 12 60 22Z" fill="#3FA36B"/>
+    <path d="M60 18 C64 8 76 6 82 12 C74 12 66 15 61 23Z" fill="#5CC08A"/></g>
+    <g class="eyes"><circle cx="46" cy="72" r="7" fill="#FFFFFF"/><circle cx="74" cy="72" r="7" fill="#FFFFFF"/>
+    <circle cx="47.5" cy="73" r="3.6" fill="#14507C"/><circle cx="75.5" cy="73" r="3.6" fill="#14507C"/></g>
+    <circle cx="38" cy="84" r="5" fill="#F4A6A0" opacity=".55"/><circle cx="82" cy="84" r="5" fill="#F4A6A0" opacity=".55"/>
+    ${mouth}</svg>`;
+}
+
+const ICONS={
+ trinhbay:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4a1 1 0 0 0 1 1h3l5 4V5L7 9H4a1 1 0 0 0-1 1Z"/><path d="M16 8.5a5 5 0 0 1 0 7"/><path d="M19 5.5a9 9 0 0 1 0 13"/></svg>',
+ gioithieu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5C4.5 4 8 4 12 6c4-2 7.5-2 10-.5V19c-2.5-1.5-6-1.5-10 .5-4-2-7.5-2-10-.5Z"/><path d="M12 6v13.5"/></svg>',
+ thaoluan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h10a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H9l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><path d="M18 9h2a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1v3l-4-3h-3"/></svg>'
+};
+const SV=(d)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const LSTYLE={
+ 1:{c:"#2B5D8C",i:SV('<path d="M5 21V3"/><path d="M5 4h12l-2.5 4L17 12H5"/>')},
+ 2:{c:"#1E6FA8",i:SV('<path d="M2 15 12 4l10 11Z"/><path d="M4.5 15c2.5 2.2 12.5 2.2 15 0"/><path d="M8.5 15 12 7l3.5 8"/><path d="M9 19c1.8 1 4.2 1 6 0"/>')},
+ 3:{c:"#0F7C7C",i:SV('<path d="m2 17 6-9 4 6 3-4 7 7Z"/><path d="M3 21c3-1.5 6 1.5 9 0s6 1.5 9 0"/>')},
+ 4:{c:"#22887B",i:SV('<circle cx="12" cy="12" r="9"/><path d="M8 14c1.2 2 6.8 2 8 0"/><path d="M9 9.5h.01M15 9.5h.01"/>')},
+ 5:{c:"#3A8F5A",i:SV('<path d="M4 4c5-2 11-2 16 0v7a8 8 0 0 1-16 0Z"/><path d="M8 13.5c2 2 6 2 8 0"/><path d="M7.5 9 10 8.5M16.5 9 14 8.5"/>')},
+ 6:{c:"#2F7FB8",i:SV('<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7.5 18c1-3 8-3 9 0"/>')},
+ 7:{c:"#1F8A70",i:SV('<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/>')},
+ 8:{c:"#3E6FB0",i:SV('<path d="M20 3c-9 1-14 7-14 15"/><path d="M20 3c-1 7-5 11-11 12"/><path d="M4 21l2-3"/><path d="M11 11h4"/>')},
+ 9:{c:"#3E9160",i:SV('<path d="M3 17h18"/><path d="M7 17a5 5 0 0 1 10 0"/><path d="M12 5v3M4.5 9.5l2 2M19.5 9.5l-2 2"/><path d="M6 21h12"/>')},
+ 10:{c:"#17808F",i:SV('<path d="M2 5.5C4.5 4 8 4 12 6c4-2 7.5-2 10-.5V19c-2.5-1.5-6-1.5-10 .5-4-2-7.5-2-10-.5Z"/><path d="M12 6v13.5"/>')},
+ free:{c:"#17A2A2",i:SV('<path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="4"/>')}
+};
+const lsty=l=>LSTYLE[l.id]||LSTYLE.free;
+const TIPS=[
+ ["🌬️","Hít một hơi thật sâu trước khi nói. Hơi thở đều giúp giọng em vững và bớt run."],
+ ["👀","Nhìn vào mắt người nghe, lần lượt nhìn sang các bạn ở nhiều phía của lớp."],
+ ["⏸️","Khi quên ý, hãy dừng lại một nhịp thay vì nói “ờ”. Khoảng lặng ngắn khiến người nghe chú ý hơn."],
+ ["🗂️","Chỉ ghi từ khoá lên thẻ, đừng viết cả bài. Nói theo ý, đừng đọc thuộc lòng."],
+ ["🔊","Nói to vừa đủ để bạn ngồi cuối lớp nghe rõ. Nhấn giọng ở từ khoá quan trọng."],
+ ["🤝","Khi nghe bạn nói, hãy ghi tóm tắt bằng gạch đầu dòng, rồi mới đặt câu hỏi."],
+ ["💬","Phản biện lịch sự: “Mình tôn trọng ý kiến của bạn, nhưng mình nghĩ khác vì...”."],
+ ["📌","Một bằng chứng cụ thể (con số, ví dụ, trải nghiệm) thuyết phục hơn nhiều lời nói chung chung."],
+ ["😊","Mỉm cười khi mở đầu. Nụ cười giúp em tự tin và người nghe thấy gần gũi."],
+ ["🎯","Câu kết nên ngắn và mạnh: khẳng định lại ý chính, kèm một lời nhắn gửi."]
+];
+function tipToday(){const d=new Date();const n=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);return TIPS[n%TIPS.length];}
+
+/* =========================================================
+   GIAO DIỆN
+   ========================================================= */
+const app=document.getElementById("app");
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let VIEW={name:"home"};
+function go(name,params={}){stopRec();VIEW={name,...params};render();window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.go===({home:"home",lesson:"home",journey:"journey",about:"about"}[name])?"page":"false"));}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(t._h);t._h=setTimeout(()=>t.hidden=true,2600);}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>go(b.dataset.go));
+document.getElementById("brandBtn").onclick=()=>go("home");
+
+function render(){
+  if(VIEW.name==="home")renderHome();
+  else if(VIEW.name==="lesson")renderLesson();
+  else if(VIEW.name==="journey")renderJourney();
+  else renderAbout();
+}
+
+function renderHome(){
+  const st=streak(), best=HISTORY.length?Math.max(...HISTORY.map(h=>h.total)):0;
+  const greet = ME.name?`Chào ${esc(ME.name)}! Hôm nay mình cùng luyện nói trôi chảy, nghe thấm sâu nhé! 💧`:`Chào em! Hôm nay mình cùng luyện nói trôi chảy, nghe thấm sâu nhé! 💧`;
+  const doneIds=new Set(HISTORY.map(h=>h.lessonId));
+  const groups=["trinhbay","gioithieu","thaoluan"].map(k=>{
+    const ls=LESSONS.filter(l=>l.kind===k);
+    return `<p class="kind-h">${KINDS[k].name}</p><div class="lessons">${ls.map(l=>`
+      <button class="lesson ${l.id===CONFIG.currentLesson?"is-cur":""}" data-l="${l.id}" style="--lc:${lsty(l).c}">
+        <span class="band"><span class="ic">${lsty(l).i}</span><span class="bt"><b>Bài ${l.id}</b><span>${esc(l.bai)}</span></span></span>
+        <svg class="bandwave" viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 H200 V4 C170 10 140 0 100 5 S30 10 0 3Z" fill="var(--lc)"/></svg>
+        <span class="t">${esc(l.de.replace(/^.*?\(/,"").replace(/\)$/,"")).replace(/^./,c=>c.toUpperCase())}</span>
+        <span class="meta">${l.id===CONFIG.currentLesson?'<span class="chip star">⭐ Cô giao</span>':""}<span class="chip">${KINDS[l.kind].short}</span>${doneIds.has(l.id)?'<span class="chip done">✓ Đã luyện</span>':""}</span>
+      </button>`).join("")}</div>`;}).join("");
+  app.innerHTML=`
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <h1>Trôi chảy cùng cô H₂O</h1>
+        <p class="slogan">Nói trôi chảy – Nghe thấm sâu</p>
+        <p class="bubble">${greet}</p>
+      </div>
+      ${mascot("happy","mascot bob")}
+    </div>
+    <svg class="wave" viewBox="0 0 400 28" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 C50 0 100 28 150 14 S250 0 300 14 S370 26 400 12 V28 H0Z" fill="var(--bg)"/></svg>
+  </section>
+  <div class="stack" style="margin-top:16px">
+    <section class="card stack">
+      <div class="mode" role="group" aria-label="Em là ai" style="justify-content:flex-start">
+        <button data-me="lop" aria-pressed="${ME.mode==="lop"}">🏫 Học sinh lớp cô Thủy</button>
+        <button data-me="tudo" aria-pressed="${ME.mode==="tudo"}">🌱 Bạn tự luyện</button>
+      </div>
+      ${ME.mode==="lop"?`<div class="who">
+        <div><label for="stt">Số thứ tự</label><input id="stt" type="number" inputmode="numeric" min="1" max="60" value="${esc(ME.stt)}" placeholder="VD: 12"></div>
+        <div><label for="nm">Tên gọi <span class="muted small">(không bắt buộc)</span></label><input id="nm" type="text" maxlength="30" value="${esc(ME.name)}" placeholder="VD: Minh Anh"></div>
+      </div>
+      <p class="small muted">Số thứ tự trong danh sách lớp giúp cô ghép đúng kết quả luyện tập của em. Máy ghi nhớ trên thiết bị của em.</p>`:
+      `<div><label for="nm">Tên gọi hoặc biệt danh <span class="muted small">(không bắt buộc)</span></label><input id="nm" type="text" maxlength="30" value="${esc(ME.name)}" placeholder="VD: Bạn Sóc Nhỏ"></div>
+      <p class="small muted">Em luyện tự do, không cần đăng kí. Kết quả và lịch sử luyện tập được lưu ngay trên thiết bị của em.</p>`}
+      <div class="stats">
+        <div class="stat"><b>${HISTORY.length}</b><span>lần luyện</span></div>
+        <div class="stat"><b>${st}🔥</b><span>ngày liên tiếp</span></div>
+        <div class="stat"><b>${best?String(best).replace(".",","):"–"}</b><span>điểm cao nhất</span></div>
+      </div>
+    </section>
+    ${(()=>{const t=tipToday();return `<section class="tip"><span class="ico" aria-hidden="true">${t[0]}</span><div><p class="lbl">MẸO NÓI HAY HÔM NAY</p><p>${t[1]}</p></div></section>`})()}
+    ${(()=>{const f=LESSONS.find(l=>l.id===CONFIG.currentLesson);return f?`
+    <section class="featured">
+      <div class="stack" style="gap:10px">
+        <span class="chip star" style="align-self:flex-start">⭐ Bài cô giao tuần này</span>
+        <h3>Bài ${f.id}: ${esc(f.de)}</h3>
+        <div class="row"><button class="btn leaf" data-l="${f.id}">Bắt đầu luyện</button><span class="small muted">${esc(f.sgk||"")}</span></div>
+      </div>
+      ${mascot("cheer","mascot bob")}
+    </section>`:""})()}
+    <div class="section-h"><h2>10 bài Nói và nghe</h2><span class="small muted">Ngữ văn 8</span></div>
+    ${groups}
+    <section class="card stack">
+      <h3>Chủ đề tự do</h3>
+      <p class="muted small">Em muốn luyện nói về một vấn đề khác? Gõ chủ đề và chọn kiểu bài nói.</p>
+      <div><label for="freeT">Chủ đề của em</label><input id="freeT" type="text" placeholder="VD: Có nên mặc đồng phục khi đi học?"></div>
+      <div><label for="freeK">Kiểu bài nói</label><select id="freeK">${Object.entries(KINDS).map(([k,v])=>`<option value="${k}">${v.name}</option>`).join("")}</select></div>
+      <div><button class="btn water" id="freeGo">Luyện chủ đề này</button></div>
+    </section>
+  </div>
+  <footer class="foot">Sản phẩm của ${esc(CONFIG.teacher)} · ${esc(CONFIG.school)}</footer>`;
+  const save=()=>{const se=document.getElementById("stt");ME.stt=se?se.value.trim():ME.stt;ME.name=document.getElementById("nm").value.trim();store.set("me",ME)};
+  const sttEl=document.getElementById("stt");if(sttEl)sttEl.onchange=save;document.getElementById("nm").onchange=save;
+  app.querySelectorAll("[data-me]").forEach(b=>b.onclick=()=>{save();ME.mode=b.dataset.me;store.set("me",ME);renderHome()});
+  app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{save();go("lesson",{id:+b.dataset.l,step:"prep"})});
+  document.getElementById("freeGo").onclick=()=>{save();const t=document.getElementById("freeT").value.trim();if(!t){toast("Em hãy gõ chủ đề trước nhé");return;}
+    go("lesson",{id:"free",free:{topic:t,kind:document.getElementById("freeK").value},step:"prep"})};
+}
+
+function getLesson(){
+  if(VIEW.id==="free"){const k=VIEW.free.kind;return {id:"free",bai:"Chủ đề tự do",kind:k,de:VIEW.free.topic,mucDich:"Trình bày, trao đổi về chủ đề em tự chọn một cách rõ ràng, thuyết phục.",nguoiNghe:"Thầy cô và các bạn.",topics:[VIEW.free.topic],questions:["Vấn đề em muốn nói là gì? Vì sao em quan tâm?","Ý kiến của em là gì?","Em có lí lẽ, bằng chứng nào?","Em muốn người nghe làm gì hoặc nghĩ gì sau khi nghe?"],keywords:norm(VIEW.free.topic).trim().split(" ").filter(x=>x.length>2),peers:k==="thaoluan"?["Mình nghĩ vấn đề này không quan trọng lắm với học sinh.","Mình đồng ý đây là vấn đề cần bàn, nhưng mỗi người một cách nghĩ thôi."]:null};}
+  return LESSONS.find(l=>l.id===VIEW.id);
+}
+function draftKey(l){return "L"+l.id;}
+
+function renderLesson(){
+  const l=getLesson(); const step=VIEW.step||"prep"; const dk=draftKey(l);
+  const d=DRAFTS[dk]||(DRAFTS[dk]={topic:l.id==="free"?l.de:"",answers:{},outline:{mo:"",trien:"",ket:""}});
+  if(l.id==="free")d.topic=l.de;
+  app.innerHTML=`
+  <button class="back" id="backBtn">← Danh sách bài</button>
+  <div class="lhead" style="--lc:${lsty(l).c}">
+    <div class="lh-in"><span class="ic">${lsty(l).i}</span><div class="stack" style="gap:4px;min-width:0">
+      <span class="num">${l.id==="free"?"Chủ đề tự do":"Bài "+l.id+" · "+esc(l.bai)} · ${KINDS[l.kind].short}</span>
+      <h2>${esc(l.de)}</h2>${l.sgk?`<span class="small" style="opacity:.85">${esc(l.sgk)}</span>`:""}</div></div>
+    <svg class="wave" viewBox="0 0 400 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0 10 C60 0 120 20 200 10 S330 0 400 10 V20 H0Z" fill="var(--bg)"/></svg>
+  </div>
+  <div class="steps" role="tablist" style="margin-top:14px">
+    <button role="tab" data-s="prep" aria-selected="${step==="prep"}">1. Chuẩn bị</button>
+    <button role="tab" data-s="talk" aria-selected="${step==="talk"}">2. Luyện nói</button>
+    <button role="tab" data-s="result" aria-selected="${step==="result"}" ${VIEW.result?"":"disabled"}>3. Kết quả</button>
+  </div>
+  <div id="stepBody" class="stack" style="margin-top:16px"></div>`;
+  document.getElementById("backBtn").onclick=()=>go("home");
+  app.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{if(b.disabled)return;stopRec();VIEW.step=b.dataset.s;renderLesson()});
+  const body=document.getElementById("stepBody");
+  if(step==="prep")renderPrep(body,l,d);else if(step==="talk")renderTalk(body,l,d);else renderResult(body,l,d);
+}
+
+function renderPrep(body,l,d){
+  const saveD=()=>{DRAFTS[draftKey(l)]=d;store.set("drafts",DRAFTS)};
+  body.innerHTML=`
+    <div class="purpose"><div><b>${l.kind==="thaoluan"?"Mục đích thảo luận":"Mục đích nói"}</b>${esc(l.mucDich)}</div><div><b>Người nghe</b>${esc(l.nguoiNghe)}</div></div>
+    ${l.yccd?`<p class="note">🎯 <b>Em cần đạt:</b> ${esc(l.yccd)}</p>`:""}
+    ${l.id!=="free"?`<section class="card stack">
+      <h3>Chọn đề tài</h3>
+      ${l.topicSrc?`<p class="src">${esc(l.topicSrc)}</p>`:""}
+      <div class="topics">${l.topics.map(t=>`<button class="topic" aria-pressed="${d.topic===t}" data-t="${esc(t)}">${esc(t)}</button>`).join("")}</div>
+      ${l.extraTopics?`<p class="src">${esc(l.extraSrc||"Gợi ý thêm")}</p><div class="topics">${l.extraTopics.map(t=>`<button class="topic" aria-pressed="${d.topic===t}" data-t="${esc(t)}">${esc(t)}</button>`).join("")}</div>`:""}
+      <div><label for="ownT">Hoặc tự chọn đề tài của em</label><input id="ownT" type="text" value="${esc(l.topics.concat(l.extraTopics||[]).includes(d.topic)?"":d.topic)}" placeholder="VD: Bánh cuốn Thanh Trì"></div>
+    </section>`:""}
+    ${l.roles?`<section class="card stack"><h3>Vai trong cuộc thảo luận</h3><ul class="fb">${l.roles.map(r=>`<li><span class="ic">${r.e}</span><span><b>${esc(r.name)}:</b> ${esc(r.task)}</span></li>`).join("")}</ul><p class="small muted">Ở phần Luyện nói, em tập vai <b>thành viên</b> (nêu ý kiến, phản hồi bạn) và vai <b>thư kí</b> (tóm tắt thảo luận).</p></section>`:""}
+    <section class="card stack">
+      <div class="row" style="flex-wrap:nowrap;align-items:flex-start">${mascot("think","")} <p class="small" style="flex:1"><b>Bé Giọt gợi ý:</b> Em hãy tự trả lời các câu hỏi dưới đây bằng lời của mình. Không cần viết thành bài, chỉ cần vài ý ngắn.</p></div>
+      ${l.questions.map((q,i)=>`<div class="q"><p>${i+1}. ${esc(q)}</p><textarea id="qa${i}" data-q="${i}" placeholder="Ý của em...">${esc(d.answers[i]||"")}</textarea></div>`).join("")}
+    </section>
+    <section class="card stack">
+      <h3>Dàn ý của em</h3>
+      <div class="outline">
+        <div class="part"><label for="o1">Mở đầu</label><textarea id="o1" data-o="mo" placeholder="Giới thiệu vấn đề và nêu khái quát ý kiến của em">${esc(d.outline.mo)}</textarea></div>
+        <div class="part"><label for="o2">Triển khai</label><textarea id="o2" data-o="trien" placeholder="Các ý chính, lí lẽ, bằng chứng">${esc(d.outline.trien)}</textarea></div>
+        <div class="part"><label for="o3">Kết luận</label><textarea id="o3" data-o="ket" placeholder="Khẳng định lại ý nghĩa, lời nhắn gửi">${esc(d.outline.ket)}</textarea></div>
+      </div>
+      <p class="small muted">Gợi ý: lựa chọn vài từ ngữ then chốt phù hợp với vấn đề (SGK). Dàn ý sẽ hiện nhỏ phía trên khi em luyện nói.</p>
+    </section>
+    <div><button class="btn big water" id="toTalk">Sẵn sàng luyện nói →</button></div>`;
+  const svg=body.querySelector(".card .row svg"); if(svg){svg.setAttribute("width","56");svg.setAttribute("height","62");svg.style.flex="none"}
+  body.querySelectorAll(".topic").forEach(b=>b.onclick=()=>{d.topic=b.dataset.t;document.getElementById("ownT").value="";saveD();body.querySelectorAll(".topic").forEach(x=>x.setAttribute("aria-pressed",x===b))});
+  const own=document.getElementById("ownT"); if(own) own.oninput=()=>{if(own.value.trim()){d.topic=own.value.trim();body.querySelectorAll(".topic").forEach(x=>x.setAttribute("aria-pressed","false"))}saveD()};
+  body.querySelectorAll("[data-q]").forEach(t=>t.oninput=()=>{d.answers[t.dataset.q]=t.value;saveD()});
+  body.querySelectorAll("[data-o]").forEach(t=>t.oninput=()=>{d.outline[t.dataset.o]=t.value;saveD()});
+  document.getElementById("toTalk").onclick=()=>{if(!d.topic){toast("Em chọn đề tài trước nhé");return;}VIEW.step="talk";renderLesson()};
+}
+
+/* ---------- Nhận dạng giọng nói ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let rec=null,recOn=false,finalText="",t0=0,tick=null,elapsed=0;
+function stopRec(){recOn=false;if(rec){try{rec.stop()}catch(e){}}clearInterval(tick);stopMeter();}
+/* ---------- Sóng nước theo giọng nói ---------- */
+const IS_MOBILE=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const REDUCED=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+let meter={ctx:null,an:null,stream:null,raf:0,level:0,rings:[],last:0,buf:null};
+async function startMeter(){
+  if(meter.raf)return;
+  meter.level=0;meter.rings=[];meter.raf=1;
+  if(!IS_MOBILE&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+    try{meter.stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      const AC=window.AudioContext||window.webkitAudioContext;meter.ctx=new AC();
+      const src=meter.ctx.createMediaStreamSource(meter.stream);meter.an=meter.ctx.createAnalyser();meter.an.fftSize=512;src.connect(meter.an);meter.buf=new Uint8Array(meter.an.fftSize);
+    }catch(e){meter.an=null}
+  }
+  cancelAnimationFrame(meter.raf);meter.raf=requestAnimationFrame(drawRipple);
+}
+function stopMeter(){cancelAnimationFrame(meter.raf);meter.raf=0;try{meter.stream&&meter.stream.getTracks().forEach(t=>t.stop())}catch(e){}try{meter.ctx&&meter.ctx.close()}catch(e){}meter.stream=meter.ctx=meter.an=null;
+  const c=document.getElementById("ripple");if(c)c.getContext("2d").clearRect(0,0,c.width,c.height);const v=document.getElementById("vol");if(v)v.textContent="";}
+function bumpLevel(x){meter.level=Math.max(meter.level,x)}
+function drawRipple(ts){
+  const c=document.getElementById("ripple");if(!c){meter.raf=0;return;}
+  const g=c.getContext("2d"),W=c.width,H=c.height,cx=W/2,cy=H/2;
+  let amp;
+  if(meter.an){meter.an.getByteTimeDomainData(meter.buf);let sum=0;for(const v of meter.buf){const x=(v-128)/128;sum+=x*x}amp=Math.min(1,Math.sqrt(sum/meter.buf.length)*5);
+    const vEl=document.getElementById("vol");if(vEl)vEl.textContent=amp<.12?"🔈 Giọng em hơi nhỏ, nói to hơn một chút nhé":amp<.45?"🔉 Âm lượng vừa phải":"🔊 Giọng em rõ ràng, tự tin!";}
+  else{amp=meter.level;meter.level*=.94;}
+  if(!REDUCED&&amp>.08&&ts-meter.last>170){meter.rings.push({r:112,max:130+amp*120,a:.55});meter.last=ts;}
+  g.clearRect(0,0,W,H);
+  const col=getComputedStyle(document.documentElement).getPropertyValue("--water").trim()||"#1E6FA8";
+  g.lineWidth=4;
+  meter.rings=meter.rings.filter(r=>r.a>0.02);
+  for(const r of meter.rings){r.r+=2.4;r.a=Math.max(0,.55*(1-(r.r-112)/(r.max-112)));g.globalAlpha=r.a;g.strokeStyle=col;g.beginPath();g.arc(cx,cy,r.r,0,Math.PI*2);g.stroke();}
+  g.globalAlpha=.18+amp*.35;g.fillStyle=col;g.beginPath();g.arc(cx,cy,112+amp*22,0,Math.PI*2);g.fill();g.globalAlpha=1;
+  meter.raf=requestAnimationFrame(drawRipple);
+}
+
+function renderTalk(body,l,d){
+  const isTL=l.kind==="thaoluan";
+  VIEW.mode=VIEW.mode||(isTL?"reply":"solo");
+  const mode=isTL?VIEW.mode:"solo";
+  const reply=mode==="reply", summ=mode==="summary";
+  const pool=(l.topicPeers&&l.topicPeers[d.topic])||l.peers||[];
+  if(VIEW.peerIdx===undefined)VIEW.peerIdx=0;
+  const three=pool.length?[0,1,2].map(k=>pool[(VIEW.peerIdx+k)%pool.length]):[];
+  const peer=reply?pool[VIEW.peerIdx%pool.length]:summ?three.join(" | "):"";
+  const hide=!!VIEW.hideTxt;
+  const tg=reply?[30,90]:summ?[40,120]:KINDS[l.kind].target;
+  const ol=d.outline;
+  const NAMES=["An","Bình","Chi"];
+  body.innerHTML=`
+    ${isTL?`<div class="mode" role="group" aria-label="Chế độ luyện">
+      <button data-m="reply" aria-pressed="${reply}">🗣️ Phản hồi bạn</button>
+      <button data-m="solo" aria-pressed="${mode==="solo"}">🎤 Nêu ý kiến</button>
+      <button data-m="summary" aria-pressed="${summ}">📝 Tóm tắt thảo luận</button></div>`:""}
+    ${isTL?`<p class="small muted" style="text-align:center">Đề tài: <b>${esc(d.topic)}</b></p>`:""}
+    <section class="card mic-area">
+      ${reply?`<div class="peer"><div class="av">B</div><div><p class="small muted" style="margin-bottom:4px">Bạn cùng nhóm nói:</p><p class="say ${hide?"blur":""}">“${esc(peer)}”</p>
+        <div class="row" style="margin-top:8px"><button class="btn ghost" id="speakPeer">🔊 Nghe bạn nói</button><button class="btn ghost" id="nextPeer">Ý kiến khác ↻</button><button class="btn ghost" id="hideTxt" aria-pressed="${hide}">${hide?"👁️ Hiện chữ":"👂 Ẩn chữ, luyện nghe"}</button></div></div></div>
+        <p class="note">Hãy <b>nhắc lại ý của bạn</b>, nói rõ em <b>đồng tình hay chưa đồng tình</b>, kèm <b>lí do</b>, bằng lời lẽ lịch sự.</p>`:
+      summ?`<div class="stack" style="width:100%;gap:10px">${three.map((o,k)=>`<div class="peer"><div class="av" style="background:${["var(--water)","var(--leaf)","var(--jade)"][k]}">${NAMES[k][0]}</div><div><p class="small muted" style="margin-bottom:4px">Bạn ${NAMES[k]}:</p><p class="say ${hide?"blur":""}">“${esc(o)}”</p></div></div>`).join("")}
+        <div class="row"><button class="btn ghost" id="speakAll">🔊 Nghe cả nhóm</button><button class="btn ghost" id="nextPeer">Nhóm ý kiến khác ↻</button><button class="btn ghost" id="hideTxt" aria-pressed="${hide}">${hide?"👁️ Hiện chữ":"👂 Ẩn chữ, luyện nghe"}</button></div></div>
+        <p class="note">Em là <b>thư kí</b> của nhóm. Hãy <b>tóm tắt ý chính của từng bạn</b>, rồi nêu <b>kết luận chung</b>: “Tóm lại, nhóm mình thống nhất rằng...”.</p>`:
+      `<div class="peek"><b>Đề tài:</b> ${esc(d.topic)}${ol.mo||ol.trien||ol.ket?`<br><b>Mở đầu:</b> ${esc(ol.mo)||"…"}<br><b>Triển khai:</b> ${esc(ol.trien)||"…"}<br><b>Kết luận:</b> ${esc(ol.ket)||"…"}`:""}</div>`}
+      <div class="timer" id="timer">0:00</div>
+      <p class="target">Mục tiêu: ${fmtSec(tg[0])} – ${fmtSec(tg[1])}</p>
+      <div class="mic-wrap"><canvas id="ripple" width="520" height="520" aria-hidden="true"></canvas>
+      <button class="micbtn" id="mic" aria-label="Bắt đầu nói"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z"/></svg></button></div>
+      <p class="vol" id="vol"></p>
+      ${location.protocol==="file:"?'<p class="note warn">Em đang mở web từ tệp trên máy. Chrome có thể chặn micro trong trường hợp này. Khi web được đưa lên đường link https, micro sẽ hoạt động.</p>':""}
+      <p class="small muted" id="micHint">${SR?"Bấm vào micro và bắt đầu nói":"Thiết bị này chưa hỗ trợ nhận dạng giọng nói. Em hãy dùng trình duyệt Chrome, hoặc gõ bài nói ở ô bên dưới."}</p>
+      <div class="live" id="live" aria-live="polite"><span class="muted">Lời em nói sẽ hiện ở đây…</span></div>
+      <button class="btn big" id="doneBtn" disabled>Nói xong – Xem kết quả</button>
+    </section>
+    <details class="card" id="typeBox" ${SR?"":"open"}>
+      <summary>Không dùng được micro? Gõ hoặc dán bài nói</summary>
+      <div class="stack" style="margin-top:10px">
+        <textarea id="typed" placeholder="Gõ lại những gì em đã nói..."></textarea>
+        <div class="row"><label for="typedSec" style="margin:0">Thời gian em đã nói (giây, nếu biết):</label><input id="typedSec" type="number" min="0" style="max-width:110px"></div>
+        <button class="btn water" id="typedGo">Chấm bài đã gõ</button>
+        <p class="small muted">Khi gõ, máy ước tính thời gian và không đếm được từ đệm chính xác.</p>
+      </div>
+    </details>
+    <p class="note">🔒 Giọng nói của em được chuyển thành chữ ngay khi nói và <b>không được lưu thành file ghi âm</b>. Máy có thể bỏ sót một số từ đệm như “ờ”, “à”.</p>`;
+  if(isTL)body.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{stopRec();VIEW.mode=b.dataset.m;renderLesson()});
+  if(reply||summ){
+    document.getElementById("nextPeer").onclick=()=>{VIEW.peerIdx+=summ?3:1;renderLesson()};
+    document.getElementById("hideTxt").onclick=()=>{VIEW.hideTxt=!VIEW.hideTxt;renderLesson()};
+  }
+  if(reply)document.getElementById("speakPeer").onclick=()=>speak([peer]);
+  if(summ)document.getElementById("speakAll").onclick=()=>speak(three.map((o,k)=>`Bạn ${NAMES[k]}: ${o}`));
+  const micB=document.getElementById("mic"),live=document.getElementById("live"),timer=document.getElementById("timer"),done=document.getElementById("doneBtn"),hint=document.getElementById("micHint");
+  finalText="";elapsed=0;
+  const show=(interim="")=>{live.innerHTML=(finalText||interim)?esc(finalText)+(interim?`<span class="interim"> ${esc(interim)}</span>`:""):'<span class="muted">Lời em nói sẽ hiện ở đây…</span>'};
+  micB.onclick=()=>{
+    if(!SR){document.getElementById("typeBox").open=true;document.getElementById("typed").focus();return;}
+    if(recOn){stopRec();micB.classList.remove("on");micB.setAttribute("aria-label","Nói tiếp");hint.textContent="Đã tạm dừng. Bấm micro để nói tiếp, hoặc xem kết quả.";done.disabled=!finalText.trim();return;}
+    try{
+      rec=new SR();rec.lang="vi-VN";rec.continuous=true;rec.interimResults=true;
+      rec.onresult=e=>{bumpLevel(.7);let interim="";for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)finalText+=(finalText?" ":"")+r[0].transcript.trim();else interim+=r[0].transcript}show(interim);done.disabled=!finalText.trim()};
+      rec.onerror=e=>{
+        const MSG={"not-allowed":location.protocol==="file:"?"Chrome chặn micro khi mở tệp trực tiếp trên máy. Hãy mở web bằng đường link https (GitHub Pages), hoặc gõ bài nói ở ô bên dưới.":"Máy chưa được phép dùng micro. Bấm biểu tượng 🔒 cạnh thanh địa chỉ → cho phép Micrô, rồi tải lại trang.",
+          "service-not-allowed":"Trình duyệt này chưa cho phép nhận dạng giọng nói. Em hãy dùng Google Chrome.",
+          "audio-capture":"Máy không tìm thấy micro. Em kiểm tra micro hoặc tai nghe có micro nhé.",
+          "network":"Nhận dạng giọng nói cần có mạng Internet. Em kiểm tra kết nối mạng nhé."};
+        if(e.error==="no-speech"||e.error==="aborted")return;
+        recOn=false;stopMeter();micB.classList.remove("on");clearInterval(tick);
+        hint.textContent=(MSG[e.error]||"Micro gặp lỗi ("+e.error+"). Em thử tải lại trang, hoặc gõ bài nói ở ô bên dưới.");
+        document.getElementById("typeBox").open=true;};
+      rec.onstart=()=>{startMeter();};
+      rec.onend=()=>{if(recOn){try{rec.start()}catch(e){}}};
+      recOn=true;rec.start();micB.classList.add("on");micB.setAttribute("aria-label","Tạm dừng");hint.textContent="Đang nghe… Bấm lần nữa để tạm dừng.";
+      t0=Date.now()-elapsed*1000;clearInterval(tick);tick=setInterval(()=>{elapsed=(Date.now()-t0)/1000;const s=Math.floor(elapsed);timer.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`},250);
+    }catch(err){hint.textContent="Không mở được micro. Em hãy gõ bài nói ở ô bên dưới.";document.getElementById("typeBox").open=true;}
+  };
+  done.onclick=()=>{stopRec();finish(l,d,finalText,elapsed,false,peer)};
+  document.getElementById("typedGo").onclick=()=>{const tx=document.getElementById("typed").value.trim();if(words(tx).length<5){toast("Bài nói còn ngắn quá, em gõ thêm nhé");return;}finish(l,d,tx,+document.getElementById("typedSec").value||0,true,peer)};
+}
+function speak(list){
+  try{const v=speechSynthesis.getVoices().find(v=>/^vi/i.test(v.lang));if(!v)toast("Máy chưa có giọng đọc tiếng Việt, em hãy đọc lời của các bạn nhé");
+    speechSynthesis.cancel();for(const text of list){const u=new SpeechSynthesisUtterance(text);u.lang="vi-VN";u.rate=.95;if(v)u.voice=v;speechSynthesis.speak(u);}}
+  catch(e){toast("Máy chưa đọc được, em hãy đọc lời của các bạn nhé")}
+}
+
+function finish(l,d,text,seconds,typed,peer){
+  const mode=VIEW.mode||"solo";
+  const res=scoreSpeech({text,seconds,lesson:l,topic:d.topic,mode,peerText:peer,typed});
+  const prev=[...HISTORY].reverse().find(h=>h.lessonId===l.id&&h.mode===mode);
+  const entry={lessonId:l.id,lessonName:(l.id==="free"?"Tự do: "+l.de:"Bài "+l.id)+(mode==="summary"?" · tóm tắt":mode==="reply"?" · phản hồi":""),topic:d.topic,mode,total:res.total,crit:res.crit,metrics:res.metrics,date:new Date().toISOString(),text,peer:peer||"",attempt:HISTORY.filter(h=>h.lessonId===l.id).length+1,sent:false};
+  const before=BADGES.filter(b=>b.ok()).length;
+  HISTORY.push(entry);store.set("history",HISTORY);
+  const got=BADGES.filter(b=>b.ok());const newBadge=got.length>before?got[got.length-1]:null;
+  VIEW.result={res,entry,prev,typed,newBadge,fresh:true};VIEW.step="result";renderLesson();
+}
+
+function renderResult(body,l,d){
+  const {res,entry,prev,newBadge}=VIEW.result; const fb=buildFeedback(res,l);
+  const improved=prev&&res.total>prev.total;
+  const mood=res.total>=8?"cheer":res.total>=6.5?"happy":res.total>=5?"wow":"think";
+  const line=res.total>=8?"Tuyệt vời! Lời em trôi chảy như sông dài rồi!":res.total>=6.5?"Em làm tốt lắm! Sửa thêm một chút là trôi chảy hơn nữa.":res.total>=5?"Em đã có nền tảng. Luyện thêm một lần nữa nhé!":"Không sao đâu, giọt nước nhỏ chảy mãi sẽ thành sông. Mình thử lại nhé!";
+  const dl=prev?r1(res.total-prev.total):null;
+  const m=res.metrics, pm=prev?prev.metrics:null;
+  const delta=(a,b,good="up")=>{if(b==null)return"";const x=a-b;if(!x)return"";const up=x>0;const ok=(good==="up")===up;return `<span class="${ok?"delta-up":"delta-down"}"> ${up?"▲":"▼"}${Math.abs(r1(x))}</span>`};
+  const hl=esc(entry.text).replace(new RegExp("(^|\\s)("+FILLERS.map(f=>f.replace(/\s/g,"\\s")).join("|")+")(?=\\s|$|[,.!?])","gi"),'$1<mark class="f">$2</mark>');
+  const SELF= entry.mode==="summary"?["Em nghe hết ý kiến của các bạn","Em nêu được ý chính của từng bạn","Em trình bày lại theo trình tự rõ ràng","Em nêu được kết luận chung của nhóm","Em giữ thái độ khách quan, tôn trọng các ý kiến"]:
+    l.kind==="thaoluan"&&entry.mode==="solo"&&l.evaluate?l.evaluate:
+    l.kind==="thaoluan"&&entry.mode==="reply"?["Em đã lắng nghe hết ý kiến của bạn","Em nhắc lại được ý của bạn","Em nói rõ đồng tình hay phản biện","Em đưa ra lí do thuyết phục","Em dùng lời lẽ tôn trọng, lịch sự"]:
+    ["Em giới thiệu rõ vấn đề và ý kiến ở phần Mở đầu","Em đưa ra lí lẽ, bằng chứng làm cơ sở cho ý kiến","Em dùng ngôn ngữ cơ thể (cử chỉ, nét mặt) phù hợp","Em điều chỉnh ngữ điệu, giọng nói cho phù hợp","Em khẳng định lại ý nghĩa ở phần Kết luận"];
+  body.innerHTML=`
+    ${newBadge?`<div class="celebrate"><span class="e">${newBadge.e}</span><span>Chúc mừng! Em vừa nhận huy hiệu <b>${newBadge.name}</b>.</span></div>`:""}
+    <section class="card stack">
+      <div class="score-top">${scoreDrop(res.total)}<div>
+        <div class="big-score">${String(res.total).replace(".",",")}<small> / 10</small></div>
+        <p style="font-weight:600">${line}</p>
+        ${dl!==null?`<p class="small">${dl>0?`<span class="delta-up">▲ Tăng ${String(dl).replace(".",",")} điểm</span> so với lần trước 👏`:dl<0?`<span class="muted">Thấp hơn lần trước ${String(-dl).replace(".",",")} điểm. Không sao, mỗi lần nói là một lần luyện!</span>`:`<span class="muted">Bằng điểm lần trước</span>`}</p>`:`<p class="small muted">Lần luyện đầu tiên của bài này</p>`}
+      </div></div>
+      <div class="crit">${res.crit.map(c=>`<div class="crit-row"><span class="name">${c.name}</span><span class="bar"><i style="width:${c.v*10}%"></i></span><span class="v">${String(c.v).replace(".",",")}</span></div>`).join("")}</div>
+    </section>
+    <section class="card stack">
+      <h3>Bé Giọt nhận xét</h3>
+      <ul class="fb">${fb.praise.map(p=>`<li><span class="ic">🌱</span><span>${esc(p)}</span></li>`).join("")}${fb.fix.map(p=>`<li><span class="ic">💧</span><span>${esc(p)}</span></li>`).join("")}</ul>
+      ${!fb.praise.length&&!fb.fix.length?'<p class="muted">Bài nói khá cân đối. Em thử nói lại với giọng tự tin hơn nhé!</p>':""}
+    </section>
+    <section class="card stack">
+      <h3>Số liệu bài nói</h3>
+      <div class="metrics">
+        <div><b>${fmtSec(m.sec)}</b><span>thời gian${res.estimated?" (ước tính)":""}</span></div>
+        <div><b>${m.nw}${delta(m.nw,pm&&pm.nw)}</b><span>số tiếng đã nói</span></div>
+        <div><b>${m.fill}${delta(m.fill,pm&&pm.fill,"down")}</b><span>từ đệm</span></div>
+        <div><b>${m.wpm}</b><span>tiếng/phút</span></div>
+      </div>
+      <details><summary>Xem lại lời em đã nói</summary><p class="transcript" style="margin-top:8px">${hl}</p><p class="small muted">Từ đệm được gạch chân màu cam.</p></details>
+    </section>
+    <section class="card stack">
+      <h3>Em tự đánh giá</h3>
+      <div class="check">${SELF.map((s,i)=>`<label><input type="checkbox" id="sf${i}"> ${esc(s)}</label>`).join("")}</div>
+    </section>
+    <div class="row">
+      <button class="btn water" id="again">🎤 Nói lại</button>
+      ${ME.mode==="lop"?'<button class="btn leaf" id="send">📨 Gửi cho cô</button>':""}
+      <button class="btn ghost" id="home2">Về danh sách bài</button>
+    </div>
+    <p class="small muted" id="sendNote">${entry.sent?"Đã gửi cho cô ✅":""}</p>`;
+  if(VIEW.result.fresh){VIEW.result.fresh=false;if(newBadge||improved||res.total>=8)rainDrops();}
+  document.getElementById("again").onclick=()=>{VIEW.step="talk";renderLesson()};
+  document.getElementById("home2").onclick=()=>go("home");
+  const sb=document.getElementById("send");if(sb)sb.onclick=()=>sendToTeacher(entry,l);
+}
+
+/* ---------- Gửi kết quả cho cô qua Google Form ---------- */
+async function sendToTeacher(entry,l){
+  const note=document.getElementById("sendNote");
+  if(!ME.stt){toast("Em hãy nhập số thứ tự ở trang chủ trước nhé");return;}
+  const f=getFormConfig();
+  if(!f.action){note.textContent="Cô chưa mở hộp thư nhận bài. Kết quả đã được lưu trên máy của em, em có thể gửi lại sau.";return;}
+  const self=[...document.querySelectorAll('.check input')].filter(x=>x.checked).length;
+  const by=Object.fromEntries(entry.crit.map(c=>[c.key,c.v]));
+  const vals={stt:ME.stt,name:ME.name,topic:`${entry.lessonName} – ${entry.topic}${entry.mode==="reply"?" (phản hồi bạn)":entry.mode==="summary"?" (tóm tắt thảo luận)":""}`,attempt:entry.attempt,sec:Math.round(entry.metrics.sec),words:entry.metrics.nw,fill:entry.metrics.fill,wpm:entry.metrics.wpm,
+    struct:by.struct??by.listen??by.cover??"",reason:by.reason??by.sumstruct??"",self:`${self}/${document.querySelectorAll('.check input').length} · tổng ${entry.total}`,reflect:"",text:entry.text};
+  const fd=new URLSearchParams();for(const [k,id] of Object.entries(f.entries)){if(vals[k]!==undefined)fd.append(id,vals[k])}
+  try{await fetch(f.action,{method:"POST",mode:"no-cors",body:fd});entry.sent=true;store.set("history",HISTORY);note.textContent="Đã gửi cho cô ✅";toast("Đã gửi cho cô ✅");}
+  catch(e){note.textContent="Chưa gửi được (có thể do mất mạng). Em thử lại sau nhé.";}
+}
+function getFormConfig(){return CONFIG.resultForm;}
+
+/* ---------- Hành trình ---------- */
+function renderJourney(){
+  const pts=HISTORY.slice(-12);
+  const W=600,H=120,p=24;
+  const x=i=>pts.length<2?W/2:p+i*(W-2*p)/(pts.length-1), y=v=>H-p-(v/10)*(H-2*p);
+  const path=pts.map((h,i)=>`${i?"L":"M"}${x(i).toFixed(1)} ${y(h.total).toFixed(1)}`).join(" ");
+  app.innerHTML=`
+  <div class="stack" style="margin-top:20px">
+    <h2>Hành trình của em</h2>
+    <section class="card">${riverMap()}</section>
+    <section class="card stack">
+      <h3>Điểm các lần luyện gần đây</h3>
+      ${pts.length?`<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Biểu đồ điểm">
+        ${[0,5,10].map(v=>`<line x1="${p}" x2="${W-p}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="2" y="${y(v)+4}" font-size="11" fill="var(--ink-soft)">${v}</text>`).join("")}
+        ${pts.length>1?`<path d="${path} L${x(pts.length-1)} ${H-p} L${x(0)} ${H-p}Z" fill="var(--jade)" opacity=".12"/><path d="${path}" fill="none" stroke="var(--water)" stroke-width="3" vector-effect="non-scaling-stroke"/>`:""}
+        ${pts.map((h,i)=>`<circle cx="${x(i)}" cy="${y(h.total)}" r="${i===pts.length-1?6:4}" fill="${i===pts.length-1?"var(--leaf)":"var(--water)"}"/>`).join("")}
+      </svg>`:'<p class="muted">Em chưa luyện bài nào. Chọn một bài và bắt đầu nhé!</p>'}
+    </section>
+    <section class="card stack">
+      <h3>Lịch sử luyện nói</h3>
+      ${HISTORY.length?`<div class="scroll-x"><table class="hist"><thead><tr><th>Ngày</th><th>Bài</th><th>Đề tài</th><th class="n">Điểm</th><th class="n">Từ đệm</th></tr></thead><tbody>
+        ${[...HISTORY].reverse().slice(0,30).map(h=>`<tr><td>${new Date(h.date).toLocaleDateString("vi-VN")}</td><td>${esc(h.lessonName)}</td><td>${esc(h.topic)}</td><td class="n">${String(h.total).replace(".",",")}</td><td class="n">${h.metrics.fill}</td></tr>`).join("")}
+      </tbody></table></div>`:'<p class="muted">Chưa có dữ liệu.</p>'}
+      <p class="small muted">Lịch sử được lưu trên thiết bị này.</p>
+    </section>
+    <section class="card stack">
+      <h3>📦 Mang hành trình sang máy khác</h3>
+      <p class="muted small">Đổi điện thoại hoặc máy tính? Tạo mã chuyển ở máy cũ, rồi dán vào máy mới. Huy hiệu, chuỗi ngày luyện và lịch sử sẽ hiện lại đầy đủ.</p>
+      <div class="row"><button class="btn water" id="mkCode" ${HISTORY.length?"":"disabled"}>Tạo mã chuyển</button></div>
+      <div id="codeOut" hidden class="stack">
+        <textarea id="codeTxt" readonly aria-label="Mã chuyển hành trình"></textarea>
+        <div class="row"><button class="btn ghost" id="cpCode">Sao chép mã</button><span class="small muted">Gửi mã này cho chính em (qua Zalo, ghi chú...) để dán ở máy mới.</span></div>
+      </div>
+      <details><summary>Em đang ở máy mới? Dán mã vào đây</summary>
+        <div class="stack" style="margin-top:10px">
+          <textarea id="codeIn" placeholder="Dán mã chuyển hành trình..."></textarea>
+          <div><button class="btn leaf" id="useCode">Khôi phục hành trình</button></div>
+        </div>
+      </details>
+    </section>
+  </div>`;
+  document.getElementById("mkCode").onclick=()=>{
+    const data={v:1,me:ME,h:HISTORY.map(h=>({l:h.lessonId,n:h.lessonName,tp:h.topic,m:h.mode,t:h.total,d:h.date,a:h.attempt,s:h.sent?1:0,mt:{sec:Math.round(h.metrics.sec),nw:h.metrics.nw,wpm:h.metrics.wpm,fill:h.metrics.fill}}))};
+    const code="H2O-"+btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    document.getElementById("codeTxt").value=code;document.getElementById("codeOut").hidden=false;
+  };
+  document.getElementById("cpCode").onclick=()=>{const ta=document.getElementById("codeTxt");
+    navigator.clipboard.writeText(ta.value).then(()=>toast("Đã sao chép mã ✅")).catch(()=>{ta.focus();ta.select();toast("Em hãy bôi đen và sao chép mã nhé")})};
+  document.getElementById("useCode").onclick=()=>{
+    try{
+      const raw=document.getElementById("codeIn").value.trim().replace(/^H2O-/,"");
+      const data=JSON.parse(decodeURIComponent(escape(atob(raw))));
+      const have=new Set(HISTORY.map(h=>h.date));
+      const add=data.h.filter(x=>!have.has(x.d)).map(x=>({lessonId:x.l,lessonName:x.n,topic:x.tp,mode:x.m,total:x.t,date:x.d,attempt:x.a,sent:!!x.s,crit:[],metrics:{sec:x.mt.sec,nw:x.mt.nw,wpm:x.mt.wpm,fill:x.mt.fill,fillFound:[],kwFound:[]},text:""}));
+      HISTORY=HISTORY.concat(add).sort((a,b)=>a.date.localeCompare(b.date));store.set("history",HISTORY);
+      if(data.me&&!ME.stt&&!ME.name){ME=Object.assign(ME,data.me);store.set("me",ME)}
+      toast(`Đã khôi phục ${add.length} lần luyện ✅`);renderJourney();
+    }catch(e){toast("Mã chưa đúng. Em kiểm tra lại đã dán đủ mã chưa nhé")}
+  };
+}
+
+function riverMap(){
+  const narrow=innerWidth<560;
+  const ST=narrow?[[70,50],[260,210],[70,370],[260,530]]:[[80,190],[240,70],[420,170],[580,60]];
+  const n=BADGES.filter(b=>b.ok()).length; const at=Math.max(0,n-1);
+  const d=narrow?"M70 50 C70 150 260 110 260 210 S70 270 70 370 S260 430 260 530":"M80 190 C160 190 160 70 240 70 S340 170 420 170 S510 60 580 60";
+  const frac=n===0?0:[0,0.36,0.7,1][at];
+  const pos=n===0?[ST[0][0],ST[0][1]]:ST[at];
+  const lab=(i)=>{const [x,y]=ST[i];
+    if(narrow){const L=x<150;const tx=L?x+30:x-30,an=L?"start":"end";return `<text x="${tx}" y="${y-2}" text-anchor="${an}" style="font-size:18px">${BADGES[i].e} ${BADGES[i].name}</text><text class="need" x="${tx}" y="${y+18}" text-anchor="${an}" style="font-size:13px">${BADGES[i].need}</text>`}
+    const up=i%2===1;const an=i===0?"start":i===3?"end":"middle";const tx=i===0?x-20:i===3?x+20:x;return `<text x="${tx}" y="${up?y-38:y+40}" text-anchor="${an}">${BADGES[i].e} ${BADGES[i].name}</text><text class="need" x="${tx}" y="${up?y-22:y+56}" text-anchor="${an}">${BADGES[i].need}</text>`};
+  return `<svg class="river" viewBox="${narrow?"0 0 330 580":"0 0 640 260"}" style="${narrow?"max-width:360px;margin:0 auto":""}" role="img" aria-label="Dòng sông hành trình: em đã đạt ${n} trên 4 chặng">
+    <path d="${d}" fill="none" stroke="var(--surface-2)" stroke-width="26" stroke-linecap="round"/>
+    <path id="riverDone" d="${d}" fill="none" stroke="url(#gDrop)" stroke-width="26" stroke-linecap="round" pathLength="1" stroke-dasharray="${frac} 1" ${frac?"":'stroke-opacity="0"'}/>
+    <path d="${d}" fill="none" stroke="var(--bg)" stroke-width="2" stroke-dasharray="6 10" opacity=".7"/>
+    ${ST.map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="15" fill="${i<n?"var(--leaf)":"var(--surface)"}" stroke="${i<n?"var(--leaf)":"var(--line)"}" stroke-width="3"/>${i<n?`<path d="M${x-6} ${y} l4 4 l8 -8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>`:""}${lab(i)}`).join("")}
+    <g transform="translate(${narrow?(pos[0]<150?pos[0]-60:pos[0]+18):pos[0]-21} ${narrow?pos[1]-24:pos[1]-62})">${mascot("happy","",true).replace('<svg ','<svg width="42" height="46" ')}</g>
+  </svg>
+  <p class="small muted" style="margin-top:6px">${n===4?"Em đã ra tới biển lớn! 🌏":n?`Em đang ở chặng <b>${BADGES[at].name}</b>. Chặng tiếp theo: <b>${BADGES[at+1].name}</b> – ${BADGES[at+1].need.toLowerCase()}.`:"Luyện nói lần đầu để bắt đầu hành trình nhé!"}</p>`;
+}
+
+/* ---------- Giới thiệu ---------- */
+function renderAbout(){
+  app.innerHTML=`
+  <div class="stack" style="margin-top:20px">
+    <h2>Giới thiệu</h2>
+    <section class="card stack">
+      <div class="row" style="flex-wrap:nowrap;align-items:center">${mascot("happy","")}<div>
+        <h3>Trôi chảy cùng cô H₂O</h3>
+        <p class="muted">Trợ lí AI luyện Nói và nghe Ngữ văn 8</p></div></div>
+      <p>Trang web giúp học sinh lớp 8 tự luyện kĩ năng nói và nghe theo các bài học trong sách giáo khoa Ngữ văn 8: chuẩn bị, luyện nói, nhận phản hồi ngay và theo dõi sự tiến bộ của mình.</p>
+      <p><b>Tác giả:</b> ${esc(CONFIG.teacher)} – ${esc(CONFIG.school)}</p>
+      <p class="small muted"><b>Vì sao là H₂O?</b> Học sinh gọi cô Thủy là “Ms. H₂O”, công thức hoá học của nước. Giống như nước, nói cần trôi chảy, nghe cần thấm sâu. Mỗi giọt nước nhỏ em tích luỹ mỗi ngày sẽ góp thành suối trong, chảy thành sông dài, rồi hoà vào biển lớn của sự tự tin.</p>
+    </section>
+    <section class="card stack">
+      <h3>An toàn và minh bạch</h3>
+      <ul class="fb">
+        <li><span class="ic">🔒</span><span>Không cần tài khoản. Học sinh lớp cô Thủy chỉ dùng số thứ tự; bạn tự luyện không cần nhập thông tin gì.</span></li>
+        <li><span class="ic">🎙️</span><span>Giọng nói được chuyển thành chữ ngay khi nói (bằng công nghệ nhận dạng giọng nói có sẵn của trình duyệt) và không được lưu thành file ghi âm.</span></li>
+        <li><span class="ic">🤖</span><span>Trang web được thiết kế với sự hỗ trợ của công cụ AI (Claude). Phần nhận xét sâu do AI gợi ý, cô giáo xem lại và quyết định.</span></li>
+        <li><span class="ic">💾</span><span>Lịch sử luyện tập được lưu ngay trên thiết bị của em và chỉ đến tay cô khi em bấm “Gửi cho cô”.</span></li>
+      </ul>
+    </section>
+    <section class="card stack">
+      <h3>💌 Lời nhắn gửi cô</h3>
+      <p class="muted">Học sinh, phụ huynh và thầy cô có góp ý hay lời nhắn, xin gửi cho cô Thủy tại đây.</p>
+      <div>${CONFIG.messageForm?`<a class="btn leaf" href="${esc(CONFIG.messageForm)}" target="_blank" rel="noopener">💌 Lời nhắn gửi cô</a>`:`<button class="btn leaf" disabled>💌 Lời nhắn gửi cô</button> <span class="small muted">(sắp mở)</span>`}</div>
+    </section>
+    <section class="card stack">
+      <h3>Hướng dẫn nhanh</h3>
+      <ol style="margin:0;padding-left:20px" class="stack">
+        <li>Ở trang chủ, chọn “Học sinh lớp cô Thủy” (nhập số thứ tự) hoặc “Bạn tự luyện”.</li>
+        <li>Chọn chủ đề, tự trả lời câu hỏi gợi ý và lập dàn ý.</li>
+        <li>Bấm micro và nói. Nên dùng trình duyệt Chrome và ngồi nơi yên tĩnh.</li>
+        <li>Xem nhận xét, nói lại để tiến bộ. Học sinh lớp cô Thủy bấm “Gửi cho cô”.</li>
+      </ol>
+    </section>
+    <p class="small muted">Giấy phép: Creative Commons CC BY-NC-SA 4.0. Được dùng và chỉnh sửa miễn phí cho mục đích giáo dục, ghi rõ tác giả gốc, không dùng để kinh doanh.</p>
+  </div>`;
+  const svg=app.querySelector(".card .row svg");if(svg){svg.setAttribute("width","72");svg.setAttribute("height","80");svg.style.flex="none"}
+}
+
+render();
+</script>
+
+</body>
+</html>
