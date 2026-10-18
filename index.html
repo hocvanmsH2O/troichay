@@ -162,6 +162,18 @@ a.btn{text-decoration:none}.btn{display:inline-flex;align-items:center;justify-c
 .scaf ol,.scaf ul.kw{margin:0 0 10px;padding-left:22px;display:flex;flex-direction:column;gap:6px}
 .scaf .frame{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
 .btn.ghost.sm{min-height:38px;padding:7px 14px;font-size:.9rem}
+.olcard{width:100%;text-align:left;background:var(--surface-2);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px}
+.olhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.olseg{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
+.olseg button{border:0;background:transparent;color:var(--ink-soft);padding:6px 11px;font-weight:600;font-size:.82rem}
+.olseg button+button{border-left:1.5px solid var(--line)}
+.olseg button[aria-pressed="true"]{background:var(--leaf);color:var(--on-accent)}
+.olpart{display:grid;grid-template-columns:92px 1fr;gap:8px;padding:6px 0;border-top:1px dashed var(--line)}
+.olpart:first-child{border-top:0}
+.oln{font-weight:700;color:var(--water-deep);font-size:.9rem}
+.olt{white-space:pre-line;font-size:1rem;line-height:1.55}
+.olnone{font-size:1rem;padding:6px 0}
+@media (max-width:420px){.olpart{grid-template-columns:1fr;gap:2px}}
 .note{font-size:.85rem;background:var(--surface-2);border-radius:12px;padding:10px 12px;color:var(--ink-soft)}
 .note.warn{border-left:4px solid var(--coral)}
 details summary{cursor:pointer;font-weight:600;color:var(--water)}
@@ -973,6 +985,18 @@ function drawRipple(ts){
   meter.raf=requestAnimationFrame(drawRipple);
 }
 
+function olBody(ol,v){
+  const has=ol&&(ol.mo||ol.trien||ol.ket);
+  if(!has)return `<p class="small">Em chưa lập dàn ý. Có dàn ý, em sẽ nói mạch lạc hơn nhiều đấy! <button type="button" class="btn ghost sm" id="olBack">← Quay lại lập dàn ý</button></p>`;
+  if(v==="none")return `<p class="olnone">🎯 Em thử <b>nói độc lập, không nhìn dàn ý</b> nhé. Bé Giọt tin em làm được! Quên ý thì bấm “Dàn ý đầy đủ” để xem lại.</p>`;
+  const key=t=>String(t||"").split("\n").map(x=>x.trim()).filter(Boolean).map(x=>{const w=x.split(/\s+/);return w.length>5?w.slice(0,5).join(" ")+"…":x}).join("\n");
+  const f=v==="key"?key:(t=>t);
+  return [["Mở đầu",ol.mo],["Triển khai",ol.trien],["Kết luận",ol.ket]].map(([n,t])=>`<div class="olpart"><span class="oln">${n}</span><div class="olt">${esc(f(t))||"…"}</div></div>`).join("");
+}
+function wireOutline(body,d){
+  body.querySelectorAll("[data-olv]").forEach(b=>b.onclick=()=>{VIEW.olv=b.dataset.olv;body.querySelectorAll("[data-olv]").forEach(x=>x.setAttribute("aria-pressed",x===b));const ob=document.getElementById("olBody");if(ob){ob.innerHTML=olBody(d.outline,VIEW.olv);wireBack()}});
+  const wireBack=()=>{const bk=document.getElementById("olBack");if(bk)bk.onclick=()=>{stopRec();VIEW.step="prep";renderLesson()}};wireBack();
+}
 function renderTalk(body,l,d){
   const isTL=l.kind==="thaoluan";
   VIEW.mode=VIEW.mode||(isTL?"reply":"solo");
@@ -999,7 +1023,7 @@ function renderTalk(body,l,d){
       summ?`<div class="stack" style="width:100%;gap:10px">${three.map((o,k)=>`<div class="peer"><div class="av" style="background:${["var(--water)","var(--leaf)","var(--jade)"][k]}">${NAMES[k][0]}</div><div><p class="small muted" style="margin-bottom:4px">Bạn ${NAMES[k]}:</p><p class="say ${hide?"blur":""}">“${esc(o)}”</p></div></div>`).join("")}
         <div class="row"><button class="btn ghost" id="speakAll">🔊 Nghe cả nhóm</button><button class="btn ghost" id="nextPeer">Nhóm ý kiến khác ↻</button><button class="btn ghost" id="hideTxt" aria-pressed="${hide}">${hide?"👁️ Hiện chữ":"👂 Ẩn chữ, luyện nghe"}</button></div></div>
         <p class="note">Em là <b>thư kí</b> của nhóm. Hãy <b>tóm tắt ý chính của từng bạn</b>, rồi nêu <b>kết luận chung</b>: “Tóm lại, nhóm mình thống nhất rằng...”.</p>`:
-      `<div class="peek"><b>Đề tài:</b> ${esc(d.topic)}${ol.mo||ol.trien||ol.ket?`<br><b>Mở đầu:</b> ${esc(ol.mo)||"…"}<br><b>Triển khai:</b> ${esc(ol.trien)||"…"}<br><b>Kết luận:</b> ${esc(ol.ket)||"…"}`:""}</div>`}
+      `<div class="olcard"><div class="olhead"><b>📝 Dàn ý của em</b><div class="olseg" role="group" aria-label="Cách xem dàn ý">${[["full","Dàn ý đầy đủ"],["key","Ý chính gợi nhớ"],["none","Nói độc lập"]].map(([k,t])=>`<button type="button" data-olv="${k}" aria-pressed="${(VIEW.olv||"full")===k}">${t}</button>`).join("")}</div></div><p class="small muted" style="margin:2px 0 6px"><b>Đề tài:</b> ${esc(d.topic)}</p><div id="olBody">${olBody(ol,VIEW.olv||"full")}</div></div>`}
       <div class="timer" id="timer">0:00</div>
       <p class="target">Mục tiêu: ${fmtSec(tg[0])} – ${fmtSec(tg[1])}</p>
       <div class="mic-wrap"><canvas id="ripple" width="520" height="520" aria-hidden="true"></canvas>
@@ -1027,6 +1051,7 @@ function renderTalk(body,l,d){
   }
   if(reply)document.getElementById("speakPeer").onclick=()=>speak([peer]);
   if(summ)document.getElementById("speakAll").onclick=()=>speak(three.map((o,k)=>`Bạn ${NAMES[k]}: ${o}`));
+  wireOutline(body,d);
   const micB=document.getElementById("mic"),live=document.getElementById("live"),timer=document.getElementById("timer"),done=document.getElementById("doneBtn"),hint=document.getElementById("micHint");
   finalText="";elapsed=0;longPauses=0;lastHeard=0;
   const show=(interim="")=>{live.innerHTML=(finalText||interim)?esc(finalText)+(interim?`<span class="interim"> ${esc(interim)}</span>`:""):'<span class="muted">Lời em nói sẽ hiện ở đây…</span>'};
