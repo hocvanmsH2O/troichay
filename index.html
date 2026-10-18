@@ -338,7 +338,8 @@ const CONFIG = {
   school: "Trường THCS Ngô Quyền, phường Bạch Mai, Hà Nội",
   currentLesson: 2,          // bài cô đang giao
   // Form 2 – Kết quả luyện nói (điền sau khi cô gửi link điền sẵn)
-  resultForm: { action: "", entries: {} },
+  // Form 2 – dán NGUYÊN link "điền sẵn" (đã điền a1…a15) vào giữa hai dấu nháy
+  resultFormPrefill: "https://docs.google.com/forms/d/e/1FAIpQLSf1BLvYyfStHs2Hybzk9J2dXXrCHMJ9OzEl-4rMHHJ9yKQ4Ew/viewform?usp=pp_url&entry.258404169=a1&entry.451545606=a2&entry.729878886=a3&entry.1778649753=a4&entry.2986352=a5&entry.1851901489=a6&entry.1576782141=a7&entry.1130844428=a8&entry.990073648=a9&entry.1062449800=a10&entry.1289394333=a11&entry.1242629578=a12&entry.811582381=a13&entry.2104506719=a14&entry.1117889094=a15",
   // Form 3 – Lời nhắn gửi cô (link xem form)
   messageForm: "",
   // Trang giáo viên (chỉ cô Thủy mở được)
@@ -489,7 +490,7 @@ function words(t){return t.trim().split(/\s+/).filter(Boolean);}
 function clamp(x,a=0,b=10){return Math.max(a,Math.min(b,x));}
 function r1(x){return Math.round(x*10)/10;}
 
-function scoreSpeech({text,seconds,lesson,topic,mode,peerText,typed}){
+function scoreSpeech({text,seconds,lesson,topic,mode,peerText,typed,pauses}){
   const t=norm(text), w=words(t), nw=w.length;
   const kind=lesson.kind;
   const sec = seconds>0 ? seconds : Math.round(nw/150*60);
@@ -508,7 +509,8 @@ function scoreSpeech({text,seconds,lesson,topic,mode,peerText,typed}){
   crit.push({key:"dur",name:"Thời lượng",v:sDur});
 
   // Trôi chảy
-  const sFlu=clamp(10-per100*1.4);
+  const lp=Number.isFinite(pauses)?pauses:0;
+  const sFlu=clamp(10-per100*1.4-Math.max(0,lp-1)*0.6);
   crit.push({key:"flu",name:"Trôi chảy",v:sFlu});
 
   // Tốc độ (âm tiết/phút)
@@ -567,7 +569,7 @@ function scoreSpeech({text,seconds,lesson,topic,mode,peerText,typed}){
   const W={cover:1.8,sumstruct:1,conclude:1.2,dur:1,flu:1.2,pace:.6,struct:1.4,reason:1.5,opinion:1,topic:1.1,bookinfo:1.4,feel:1.2,listen:1.6,stance:1.2,polite:1};
   let sw=0,s=0;for(const c of crit){const k=W[c.key]||1;sw+=k;s+=c.v*k;c.v=r1(c.v)}
   const total=r1(s/sw);
-  return {total,crit,metrics:{sec,nw,wpm,fill:fill.n,rep,fillFound:fill.found,kwFound:kwHit.found},info,estimated:!(seconds>0),isReply,isSum};
+  return {total,crit,metrics:{sec,nw,wpm,fill:fill.n,rep,pauses:Number.isFinite(pauses)?pauses:null,fillFound:fill.found,kwFound:kwHit.found},info,estimated:!(seconds>0),isReply,isSum};
 }
 
 function buildFeedback(res,lesson){
@@ -580,6 +582,7 @@ function buildFeedback(res,lesson){
   P("dur",`Em nói được ${fmtSec(m.sec)}, vừa đủ thời lượng.`);
   F("dur", m.sec<tg[0]?`Bài nói mới được ${fmtSec(m.sec)}. Hãy nói thêm một ý hoặc một ví dụ để đạt ít nhất ${fmtSec(tg[0])}.`:`Bài nói hơi dài (${fmtSec(m.sec)}). Hãy chọn ý chính, lược bớt ý trùng lặp.`);
   P("flu",m.fill?`Em chỉ dùng ${m.fill} từ đệm, lời nói khá trôi chảy.`:`Lời nói trôi chảy, gần như không có từ đệm.`);
+  if(m.pauses>=3)fix.push({k:"flu",v:by.flu-0.01,txt:`Em có ${m.pauses} lần ngừng lâu (trên 3 giây). Hãy nhìn dàn ý và nối ý bằng các từ như “tiếp theo”, “bên cạnh đó” để lời nói liền mạch hơn.`});
   F("flu",`Em dùng ${m.fill} từ đệm${m.fillFound.length?` (${m.fillFound.slice(0,4).map(x=>"“"+x+"”").join(", ")})`:""}${m.rep?` và lặp từ ${m.rep} lần`:""}. Khi cần suy nghĩ, em hãy dừng lại một nhịp thay vì nói “ờ”.`);
   P("pace",`Tốc độ nói vừa phải (khoảng ${m.wpm} tiếng/phút), người nghe dễ theo dõi.`);
   F("pace",m.wpm<110?`Em nói hơi chậm (${m.wpm} tiếng/phút). Thử nói liền mạch hơn, ngắt nghỉ ở dấu câu.`:`Em nói hơi nhanh (${m.wpm} tiếng/phút). Hãy chậm lại để người nghe kịp hiểu.`);
@@ -890,7 +893,7 @@ function renderPrep(body,l,d){
 
 /* ---------- Nhận dạng giọng nói ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-let rec=null,recOn=false,finalText="",t0=0,tick=null,elapsed=0;
+let rec=null,recOn=false,finalText="",t0=0,tick=null,elapsed=0,lastHeard=0,longPauses=0;
 function stopRec(){recOn=false;if(rec){try{rec.stop()}catch(e){}}clearInterval(tick);stopMeter();}
 /* ---------- Sóng nước theo giọng nói ---------- */
 const IS_MOBILE=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -982,14 +985,14 @@ function renderTalk(body,l,d){
   if(reply)document.getElementById("speakPeer").onclick=()=>speak([peer]);
   if(summ)document.getElementById("speakAll").onclick=()=>speak(three.map((o,k)=>`Bạn ${NAMES[k]}: ${o}`));
   const micB=document.getElementById("mic"),live=document.getElementById("live"),timer=document.getElementById("timer"),done=document.getElementById("doneBtn"),hint=document.getElementById("micHint");
-  finalText="";elapsed=0;
+  finalText="";elapsed=0;longPauses=0;lastHeard=0;
   const show=(interim="")=>{live.innerHTML=(finalText||interim)?esc(finalText)+(interim?`<span class="interim"> ${esc(interim)}</span>`:""):'<span class="muted">Lời em nói sẽ hiện ở đây…</span>'};
   micB.onclick=()=>{
     if(!SR){document.getElementById("typeBox").open=true;document.getElementById("typed").focus();return;}
-    if(recOn){stopRec();micB.classList.remove("on");micB.setAttribute("aria-label","Nói tiếp");hint.textContent="Đã tạm dừng. Bấm micro để nói tiếp, hoặc xem kết quả.";done.disabled=!finalText.trim();return;}
+    if(recOn){stopRec();lastHeard=0;micB.classList.remove("on");micB.setAttribute("aria-label","Nói tiếp");hint.textContent="Đã tạm dừng. Bấm micro để nói tiếp, hoặc xem kết quả.";done.disabled=!finalText.trim();return;}
     try{
       rec=new SR();rec.lang="vi-VN";rec.continuous=true;rec.interimResults=true;
-      rec.onresult=e=>{bumpLevel(.7);let interim="";for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)finalText+=(finalText?" ":"")+r[0].transcript.trim();else interim+=r[0].transcript}show(interim);done.disabled=!finalText.trim()};
+      rec.onresult=e=>{bumpLevel(.7);const now=Date.now();if(lastHeard&&now-lastHeard>3000&&finalText)longPauses++;lastHeard=now;let interim="";for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)finalText+=(finalText?" ":"")+r[0].transcript.trim();else interim+=r[0].transcript}show(interim);done.disabled=!finalText.trim()};
       rec.onerror=e=>{
         const MSG={"not-allowed":location.protocol==="file:"?"Chrome chặn micro khi mở tệp trực tiếp trên máy. Hãy mở web bằng đường link https (GitHub Pages), hoặc gõ bài nói ở ô bên dưới.":"Máy chưa được phép dùng micro. Bấm biểu tượng 🔒 cạnh thanh địa chỉ → cho phép Micrô, rồi tải lại trang.",
           "service-not-allowed":"Trình duyệt này chưa cho phép nhận dạng giọng nói. Em hãy dùng Google Chrome.",
@@ -1001,11 +1004,11 @@ function renderTalk(body,l,d){
         document.getElementById("typeBox").open=true;};
       rec.onstart=()=>{startMeter();};
       rec.onend=()=>{if(recOn){try{rec.start()}catch(e){}}};
-      recOn=true;rec.start();micB.classList.add("on");micB.setAttribute("aria-label","Tạm dừng");hint.textContent="Đang nghe… Bấm lần nữa để tạm dừng.";
+      recOn=true;lastHeard=Date.now();rec.start();micB.classList.add("on");micB.setAttribute("aria-label","Tạm dừng");hint.textContent="Đang nghe… Bấm lần nữa để tạm dừng.";
       t0=Date.now()-elapsed*1000;clearInterval(tick);tick=setInterval(()=>{elapsed=(Date.now()-t0)/1000;const s=Math.floor(elapsed);timer.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`},250);
     }catch(err){hint.textContent="Không mở được micro. Em hãy gõ bài nói ở ô bên dưới.";document.getElementById("typeBox").open=true;}
   };
-  done.onclick=()=>{stopRec();finish(l,d,finalText,elapsed,false,peer)};
+  done.onclick=()=>{stopRec();finish(l,d,finalText,elapsed,false,peer,longPauses)};
   document.getElementById("typedGo").onclick=()=>{const tx=document.getElementById("typed").value.trim();if(words(tx).length<5){toast("Bài nói còn ngắn quá, em gõ thêm nhé");return;}finish(l,d,tx,+document.getElementById("typedSec").value||0,true,peer)};
 }
 function speak(list){
@@ -1014,9 +1017,9 @@ function speak(list){
   catch(e){toast("Máy chưa đọc được, em hãy đọc lời của các bạn nhé")}
 }
 
-function finish(l,d,text,seconds,typed,peer){
+function finish(l,d,text,seconds,typed,peer,pauses){
   const mode=VIEW.mode||"solo";
-  const res=scoreSpeech({text,seconds,lesson:l,topic:d.topic,mode,peerText:peer,typed});
+  const res=scoreSpeech({text,seconds,lesson:l,topic:d.topic,mode,peerText:peer,typed,pauses:typed?undefined:pauses});
   const prev=[...HISTORY].reverse().find(h=>h.lessonId===l.id&&h.mode===mode);
   const entry={lessonId:l.id,lessonName:(l.id==="free"?"Tự do: "+l.de:l.id==="custom"?"Cô giao: "+l.de.slice(0,40):"Bài "+l.id)+(mode==="summary"?" · tóm tắt":mode==="reply"?" · phản hồi":""),topic:d.topic,mode,total:res.total,crit:res.crit,metrics:res.metrics,date:new Date().toISOString(),text,peer:peer||"",attempt:HISTORY.filter(h=>h.lessonId===l.id).length+1,sent:false};
   const before=BADGES.filter(b=>b.ok()).length;
@@ -1061,6 +1064,7 @@ function renderResult(body,l,d){
         <div><b>${m.fill}${delta(m.fill,pm&&pm.fill,"down")}</b><span>từ đệm</span></div>
         <div><b>${m.wpm}</b><span>tiếng/phút</span></div>
       </div>
+      ${m.pauses!=null?`<p class="small muted">⏸️ Số lần ngừng lâu (trên 3 giây): <b>${m.pauses}</b>${pm&&pm.pauses!=null?delta(m.pauses,pm.pauses,"down"):""}</p>`:""}
       <details><summary>Xem lại lời em đã nói</summary><p class="transcript" style="margin-top:8px">${hl}</p><p class="small muted">Từ đệm được gạch chân màu cam.</p></details>
     </section>
     <section class="card stack">
@@ -1096,13 +1100,23 @@ async function sendToTeacher(entry,l){
   if(!f.action){note.textContent="Cô chưa mở hộp thư nhận bài. Kết quả đã được lưu trên máy của em, em có thể gửi lại sau.";return;}
   const self=[...document.querySelectorAll('.check input')].filter(x=>x.checked).length;
   const by=Object.fromEntries(entry.crit.map(c=>[c.key,c.v]));
-  const vals={stt:ME.stt,name:ME.name,topic:`${entry.lessonName} – ${entry.topic}${entry.mode==="reply"?" (phản hồi bạn)":entry.mode==="summary"?" (tóm tắt thảo luận)":""}`,attempt:entry.attempt,sec:Math.round(entry.metrics.sec),words:entry.metrics.nw,fill:entry.metrics.fill,wpm:entry.metrics.wpm,
-    struct:by.struct??by.listen??by.cover??"",reason:by.reason??by.sumstruct??"",self:`${self}/${document.querySelectorAll('.check input').length} · tổng ${entry.total}`,reflect:"",text:entry.text};
+  const MODE_VI={solo:l.kind==="thaoluan"?"Nêu ý kiến":"Trình bày",reply:"Phản hồi bạn",summary:"Tóm tắt thảo luận"};
+  const vals={stt:ME.stt,name:ME.name||"",lesson:l.id==="free"?"Tự do":l.id==="custom"?"Cô giao":"Bài "+l.id,mode:MODE_VI[entry.mode]||entry.mode,topic:entry.topic,attempt:entry.attempt,
+    total:String(entry.total).replace(".",","),crit:entry.crit.map(c=>c.name+": "+String(c.v).replace(".",",")).join("; "),
+    sec:Math.round(entry.metrics.sec),words:entry.metrics.nw,fill:entry.metrics.fill,wpm:entry.metrics.wpm,pauses:entry.metrics.pauses??"",
+    self:`${self}/${document.querySelectorAll('.check input').length}`,text:entry.text};
   const fd=new URLSearchParams();for(const [k,id] of Object.entries(f.entries)){if(vals[k]!==undefined)fd.append(id,vals[k])}
   try{await fetch(f.action,{method:"POST",mode:"no-cors",body:fd});entry.sent=true;store.set("history",HISTORY);note.textContent="Đã gửi cho cô ✅";toast("Đã gửi cho cô ✅");}
   catch(e){note.textContent="Chưa gửi được (có thể do mất mạng). Em thử lại sau nhé.";}
 }
-function getFormConfig(){return CONFIG.resultForm;}
+const FORM_KEYS=["stt","name","lesson","mode","topic","attempt","total","crit","sec","words","fill","wpm","pauses","self","text"];
+function getFormConfig(){
+  const link=CONFIG.resultFormPrefill||"";if(!link)return {action:"",entries:{}};
+  try{const u=new URL(link);const entries={};
+    for(const [k,v] of u.searchParams){const m=/^a(\d{1,2})$/i.exec(v.trim());if(k.startsWith("entry.")&&m){const key=FORM_KEYS[+m[1]-1];if(key)entries[key]=k}}
+    return {action:u.origin+u.pathname.replace(/\/viewform$/,"/formResponse"),entries};
+  }catch(e){return {action:"",entries:{}}}
+}
 
 /* ---------- Hành trình ---------- */
 function renderJourney(){
