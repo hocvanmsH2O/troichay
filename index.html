@@ -345,6 +345,18 @@ h2{color:var(--h-ink)}
 .topic[aria-pressed="true"]{background:linear-gradient(180deg,#5FC8FF,#1679E8);color:#fff;border-color:transparent;box-shadow:inset 0 2px 0 rgba(255,255,255,.5)}
 @media (hover:hover) and (min-width:900px){header.top,.hero,.card,.lesson,.tip{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}}
 @media (prefers-reduced-motion: reduce){.bubbles i{animation-duration:60s!important}}
+
+.hdr-r{display:flex;align-items:center;gap:8px}
+.sndBtn{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--glass-b,var(--line));background:radial-gradient(circle at 35% 30%,#fff,rgba(255,255,255,.6) 60%,rgba(170,220,255,.5));font-size:1.05rem;display:grid;place-items:center;box-shadow:0 3px 8px rgba(6,62,140,.15);padding:0}
+.sndBtn[aria-pressed="false"]{filter:grayscale(1);opacity:.7}
+@media (max-width:440px){.role .rl{display:none}.sndBtn{width:36px;height:36px;font-size:.95rem}.hdr-r{gap:6px}}
+.musicbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.musicbar .btn[aria-pressed="true"]{background:linear-gradient(180deg,#5FC8FF,#1679E8);color:#fff}
+.langBtn{height:40px;min-width:44px;border-radius:999px;border:1.5px solid var(--glass-b,var(--line));background:radial-gradient(circle at 35% 30%,#fff,rgba(255,255,255,.6) 60%,rgba(170,220,255,.5));font-weight:800;color:var(--h-ink,var(--water-deep));padding:0 10px;font-size:.85rem;box-shadow:0 3px 8px rgba(6,62,140,.15)}
+@media (max-width:440px){.langBtn{height:36px;min-width:38px;padding:0 8px}}
+.top-in .brand{min-width:0;flex:1 1 0}.top-in .brand>div{min-width:0}.top-in .brand b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hdr-r{flex:none}
+.bi{display:inline-flex;flex-direction:column;line-height:1.2;gap:1px}.bi .en{font-size:.74em;font-weight:500;opacity:.78;font-style:italic;letter-spacing:.01em}
+h1 .bi .en,h2 .bi .en{font-size:.5em}.btn .bi,nav.tabs .bi,.steps .bi{align-items:center;text-align:center}
 </style>
 
 <div class="bubbles" aria-hidden="true"><i style="left:4%;width:70px;height:70px;animation-duration:26s;animation-delay:-3s"></i><i style="left:12%;width:26px;height:26px;animation-duration:17s;animation-delay:-9s"></i><i style="left:22%;width:44px;height:44px;animation-duration:22s;animation-delay:-14s"></i><i style="left:35%;width:18px;height:18px;animation-duration:13s;animation-delay:-2s"></i><i style="left:48%;width:90px;height:90px;animation-duration:34s;animation-delay:-20s"></i><i style="left:60%;width:30px;height:30px;animation-duration:19s;animation-delay:-6s"></i><i style="left:72%;width:56px;height:56px;animation-duration:28s;animation-delay:-11s"></i><i style="left:83%;width:22px;height:22px;animation-duration:15s;animation-delay:-4s"></i><i style="left:90%;width:110px;height:110px;animation-duration:40s;animation-delay:-25s"></i><i style="left:95%;width:36px;height:36px;animation-duration:21s;animation-delay:-16s"></i></div>
@@ -354,13 +366,14 @@ h2{color:var(--h-ink)}
       <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div><b>Trôi chảy cùng cô H₂O</b><span>Nói trôi chảy – Nghe thấm sâu</span></div>
     </button>
+    <div class="hdr-r"><button class="sndBtn" id="sndBtn" type="button" aria-pressed="true" aria-label="Bật/tắt âm thanh" title="Bật/tắt âm thanh">🔊</button>
     <details class="role" id="roleMenu">
-      <summary aria-label="Chọn trang">🎒 Học sinh</summary>
+      <summary aria-label="Chọn trang">🎒 <span class="rl">Học sinh</span></summary>
       <div class="menu">
         <a href="#" aria-current="page" id="roleStu"><span class="e">🎒</span><span><b>Trang học sinh</b><span class="d">Luyện nói và nghe, xem hành trình</span></span></a>
         <a href="https://claude.ai/artifact/MVhBwUArejvWZRKQXCrfEC" target="_blank" rel="noopener"><span class="e">📚</span><span><b>Góc Văn cô H₂O</b><span class="d">Trang giáo viên: AI nhận xét, báo cáo, tạo chủ đề. Chỉ cô Thủy mở được.</span></span></a>
       </div>
-    </details>
+    </details></div>
     <nav class="tabs" aria-label="Điều hướng">
       <button data-go="home" aria-current="page">Bài học</button>
       <button data-go="journey">Hành trình</button>
@@ -828,7 +841,7 @@ function tipToday(){const d=new Date();const n=Math.floor((d-new Date(d.getFullY
 const app=document.getElementById("app");
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let VIEW={name:"home"};
-function go(name,params={}){stopRec();VIEW={name,...params};render();window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
+function go(name,params={}){stopRec();try{MUSIC.stop()}catch(e){}VIEW={name,...params};render();window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
   document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.go===({home:"home",lesson:"home",journey:"journey",about:"about"}[name])?"page":"false"));}
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(t._h);t._h=setTimeout(()=>t.hidden=true,2600);}
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>go(b.dataset.go));
@@ -949,12 +962,15 @@ function renderLesson(){
   document.getElementById("backBtn").onclick=()=>go("home");
   app.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{if(b.disabled)return;stopRec();VIEW.step=b.dataset.s;renderLesson()});
   const body=document.getElementById("stepBody");
+  if(step!=="prep"){try{MUSIC.stop()}catch(e){}}
+  if(VIEW.jingled!==String(l.id)){VIEW.jingled=String(l.id);try{MUSIC.jingle(l.id)}catch(e){}}
   if(step==="prep")renderPrep(body,l,d);else if(step==="talk")renderTalk(body,l,d);else renderResult(body,l,d);
 }
 
 function renderPrep(body,l,d){
   const saveD=()=>{DRAFTS[draftKey(l)]=d;store.set("drafts",DRAFTS)};
   body.innerHTML=`
+    <div class="musicbar"><button type="button" class="btn ghost sm" id="bgBtn" aria-pressed="${MUSIC.playing}">${MUSIC.playing?"⏸ Tắt nhạc nền":"🎧 Bật nhạc nền khi tìm ý"}</button><span class="small muted">Giai điệu riêng của bài này, tự tắt khi em bấm micro.</span></div>
     <div class="purpose"><div><b>${l.kind==="thaoluan"?"Mục đích thảo luận":"Mục đích nói"}</b>${esc(l.mucDich)}</div><div><b>Người nghe</b>${esc(l.nguoiNghe)}</div></div>
     ${l.yccd?`<p class="note">🎯 <b>Em cần đạt:</b> ${esc(l.yccd)}</p>`:""}
     ${l.id!=="free"?`<section class="card stack">
@@ -981,6 +997,7 @@ function renderPrep(body,l,d){
     </section>
     <div><button class="btn big water" id="toTalk">Sẵn sàng luyện nói →</button></div>`;
   const svg=body.querySelector(".card .row svg"); if(svg){svg.setAttribute("width","56");svg.setAttribute("height","62");svg.style.flex="none"}
+  {const bb=document.getElementById("bgBtn");if(bb)bb.onclick=()=>{if(MUSIC.playing){MUSIC.stop();return}if(!SFX.on){toast("Em bật nút 🔊 ở góc trên trước nhé");return}if(MUSIC.start(l.id)){bb.setAttribute("aria-pressed","true");bb.textContent="⏸ Tắt nhạc nền"}}}
   const scafBox=document.getElementById("scafBox");
   const drawScaf=()=>{scafBox.innerHTML=scafHTML(l,d);
     scafBox.querySelectorAll("details.tier").forEach(el=>el.ontoggle=()=>{if(el.open){const t=+el.dataset.tier;if(t>(d.tier||0)){d.tier=t;saveD()}}});
@@ -994,6 +1011,66 @@ function renderPrep(body,l,d){
   document.getElementById("toTalk").onclick=()=>{if(!d.topic){toast("Em chọn đề tài trước nhé");return;}VIEW.step="talk";renderLesson()};
 }
 
+
+/* ---------- Âm thanh nước (tạo trực tiếp bằng Web Audio, không cần tệp) ---------- */
+const SFX=(()=>{let ctx=null,on=true;try{on=localStorage.getItem("h2o_snd")!=="0"}catch(e){}
+  const ac=()=>{if(!ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A()}if(ctx.state==="suspended")ctx.resume();return ctx};
+  const tone=(f1,f2,dur,type="sine",vol=.14,delay=0)=>{const c=ac();if(!c)return;const t=c.currentTime+delay,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g).connect(c.destination);o.start(t);o.stop(t+dur+.02)};
+  const ok=()=>on&&!(typeof recOn!=="undefined"&&recOn);
+  return {
+    get on(){return on},set(v){on=v;try{localStorage.setItem("h2o_snd",v?"1":"0")}catch(e){}},
+    pop(){if(ok())tone(520,1100,.09,"sine",.10)},                         /* bong bóng vỡ khi bấm nút */
+    drip(){if(on){tone(1500,480,.16,"sine",.16);tone(900,1300,.08,"sine",.06,.12)}}, /* giọt nước khi nói xong */
+    chime(){if(ok())[523,659,784].forEach((f,i)=>tone(f,f*1.01,.35,"triangle",.10,i*.11))}, /* có kết quả */
+    cheer(){if(ok())[523,659,784,1047,1319].forEach((f,i)=>tone(f,f*1.01,.42,"triangle",.11,i*.09))} /* huy hiệu, điểm cao */
+  };
+})();
+document.addEventListener("click",e=>{const b=e.target.closest("button,summary,a.btn");if(!b||b.id==="sndBtn"||b.id==="mic"||b.disabled)return;if(b.id==="doneBtn"){SFX.drip();return}SFX.pop()},true);
+{const sb=document.getElementById("sndBtn");const paint=()=>{sb.setAttribute("aria-pressed",SFX.on);sb.textContent=SFX.on?"🔊":"🔇"};paint();sb.onclick=()=>{SFX.set(!SFX.on);paint();if(!SFX.on){try{MUSIC.stop()}catch(e){}}if(SFX.on)SFX.drip();toast(SFX.on?"Đã bật âm thanh 💧":"Đã tắt âm thanh")};}
+
+/* ---------- Nhạc theo bài: nhạc hiệu khi mở bài + nhạc nền tuỳ chọn khi tìm ý (giai điệu tự sinh, không dùng bản thu của ai) ---------- */
+const MUS={
+ 1:{b:196,sc:[0,2,5,7,9],ins:"tri",t:.42,j:[0,2,3,4,7],drum:1},      /* lịch sử: trống trận, ngũ cung trầm */
+ 2:{b:262,sc:[0,2,5,7,9],ins:"pluck",t:.5,j:[4,3,2,3,1,0]},          /* văn hoá truyền thống: tiếng đàn tranh */
+ 3:{b:220,sc:[0,4,7,9,12],ins:"tri",t:.38,j:[0,2,1,3,4],drum:1},     /* lời sông núi: hào hùng */
+ 4:{b:330,sc:[0,2,4,7,9],ins:"sq",t:.2,j:[0,2,4,2,5,4]},             /* tiếng cười: nảy tưng tưng */
+ 5:{b:294,sc:[0,3,5,7,10],ins:"sq",t:.24,j:[0,1,3,1,4]},             /* chuyện hài: tinh nghịch */
+ 6:{b:262,sc:[0,4,7,11,14],ins:"sine",t:.55,j:[0,1,2,4]},            /* chân dung cuộc sống: ấm áp */
+ 7:{b:294,sc:[0,2,4,7,9],ins:"tri",t:.45,j:[0,1,2,3,5]},             /* tin yêu, ước vọng: vươn lên */
+ 8:{b:523,sc:[0,2,4,7,9],ins:"box",t:.5,j:[4,2,3,1,0]},              /* nhà văn, trang viết: hộp nhạc */
+ 9:{b:349,sc:[0,2,4,7,9],ins:"tri",t:.3,j:[0,2,4,5,4,7]},            /* hôm nay và ngày mai: buổi sáng */
+ 10:{b:262,sc:[0,4,7,12,16],ins:"box",t:.28,j:[0,1,2,3,4]},          /* ngày hội với sách: rộn ràng */
+ free:{b:262,sc:[0,2,5,7,9],ins:"pluck",t:.5,j:[0,2,4,3]}
+};
+const MUSIC=(()=>{let ctx=null,out=null,timer=null,next=0,step=0,pos=3,cur=null;
+  const ac=()=>{if(!ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=new A();
+      out=ctx.createGain();out.gain.value=1;const lp=ctx.createBiquadFilter();lp.type="lowpass";lp.frequency.value=3200;
+      const dl=ctx.createDelay(1);dl.delayTime.value=.33;const fb=ctx.createGain();fb.gain.value=.28;const wet=ctx.createGain();wet.gain.value=.35;
+      out.connect(lp);lp.connect(ctx.destination);lp.connect(dl);dl.connect(fb);fb.connect(dl);dl.connect(wet);wet.connect(ctx.destination);}
+    if(ctx.state==="suspended")ctx.resume();return ctx};
+  const fq=(m,i)=>{const n=m.sc.length,o=Math.floor(i/n),k=((i%n)+n)%n;return m.b*Math.pow(2,(m.sc[k]+12*o)/12)};
+  const play=(m,f,t,vol,len)=>{const c=ctx,g=c.createGain(),o=c.createOscillator();let d=len||.9;
+    o.type={tri:"triangle",pluck:"triangle",sq:"square",sine:"sine",box:"sine"}[m.ins];
+    if(m.ins==="pluck"){o.frequency.setValueAtTime(f*1.035,t);o.frequency.exponentialRampToValueAtTime(f,t+.08);d=len||1.3}else o.frequency.setValueAtTime(f,t);
+    if(m.ins==="sq")vol*=.32;
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g).connect(out);o.start(t);o.stop(t+d+.05);
+    if(m.ins==="box"){const o2=c.createOscillator(),g2=c.createGain();o2.type="sine";o2.frequency.value=f*3;g2.gain.setValueAtTime(vol*.18,t);g2.gain.exponentialRampToValueAtTime(.0001,t+d*.6);o2.connect(g2).connect(out);o2.start(t);o2.stop(t+d);}};
+  const drum=(t,v)=>{const c=ctx,o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(110,t);o.frequency.exponentialRampToValueAtTime(45,t+.25);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.3);o.connect(g).connect(out);o.start(t);o.stop(t+.32)};
+  const tick=()=>{if(!ctx||!cur)return;while(next<ctx.currentTime+.4){const m=cur,t=next;
+      if(step%8===0)play(m,fq(m,-5)/2*2,t,.05,2.2);                   /* nốt trầm giữ nền */
+      if(Math.random()>.32){pos=Math.max(0,Math.min(9,pos+[-2,-1,-1,0,1,1,2][Math.floor(Math.random()*7)]));play(m,fq(m,pos),t,.045)}
+      if(m.drum&&step%4===0)drum(t,.05);
+      if(Math.random()<.04)play({ins:"sine"},1400+Math.random()*500,t+.1,.025,.18);   /* giọt nước lách tách */
+      next+=m.t*2;step++;}};
+  return {
+    playing:false,
+    jingle(id){if(!SFX.on)return;const c=ac();if(!c)return;const m=MUS[id]||MUS.free;let t=c.currentTime+.05;
+      m.j.forEach((i,k)=>{play(m,fq(m,i+5),t,.12,k===m.j.length-1?1.6:.9);if(m.drum&&k%2===0)drum(t,.09);t+=m.t*.9});},
+    start(id){if(!SFX.on)return false;const c=ac();if(!c)return false;cur=MUS[id]||MUS.free;next=c.currentTime+.1;step=0;pos=3;clearInterval(timer);timer=setInterval(tick,100);this.playing=true;return true},
+    stop(){clearInterval(timer);timer=null;cur=null;this.playing=false;const b=document.getElementById("bgBtn");if(b){b.setAttribute("aria-pressed","false");b.textContent="🎧 Bật nhạc nền khi tìm ý"}}
+  };
+})();
 /* ---------- Nhận dạng giọng nói ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 let rec=null,recOn=false,finalText="",t0=0,tick=null,elapsed=0,lastHeard=0,longPauses=0;
@@ -1120,7 +1197,7 @@ function renderTalk(body,l,d){
         document.getElementById("typeBox").open=true;};
       rec.onstart=()=>{startMeter();};
       rec.onend=()=>{if(recOn){try{rec.start()}catch(e){}}};
-      recOn=true;lastHeard=Date.now();rec.start();micB.classList.add("on");micB.setAttribute("aria-label","Tạm dừng");hint.textContent="Đang nghe… Bấm lần nữa để tạm dừng.";
+      try{MUSIC.stop()}catch(e){}recOn=true;lastHeard=Date.now();rec.start();micB.classList.add("on");micB.setAttribute("aria-label","Tạm dừng");hint.textContent="Đang nghe… Bấm lần nữa để tạm dừng.";
       t0=Date.now()-elapsed*1000;clearInterval(tick);tick=setInterval(()=>{elapsed=(Date.now()-t0)/1000;const s=Math.floor(elapsed);timer.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`},250);
     }catch(err){hint.textContent="Không mở được micro. Em hãy gõ bài nói ở ô bên dưới.";document.getElementById("typeBox").open=true;}
   };
@@ -1202,7 +1279,7 @@ function renderResult(body,l,d){
     const ta=document.getElementById("cpTbox");
     navigator.clipboard.writeText(pkg).then(()=>toast("Đã chép ✅ Cô dán vào trang giáo viên nhé")).catch(()=>{ta.hidden=false;ta.value=pkg;ta.focus();ta.select();toast("Bôi đen rồi bấm Ctrl+C để chép nhé")});
   };
-  if(VIEW.result.fresh){VIEW.result.fresh=false;if(newBadge||improved||res.total>=8)rainDrops();}
+  if(VIEW.result.fresh){VIEW.result.fresh=false;if(newBadge||improved||res.total>=8){rainDrops();SFX.cheer()}else SFX.chime();}
   document.getElementById("again").onclick=()=>{VIEW.step="talk";renderLesson()};
   document.getElementById("home2").onclick=()=>go("home");
   const sb=document.getElementById("send");if(sb)sb.onclick=()=>sendToTeacher(entry,l);
@@ -1357,6 +1434,208 @@ function renderAbout(){
 }
 
 render();
+const I18N_EN={
+"Trôi chảy cùng cô H₂O":"Speak Fluently with Ms. H₂O",
+"Nói trôi chảy – Nghe thấm sâu":"Speak fluently – Listen deeply",
+"Học sinh":"Students",
+"Trang học sinh":"Student page",
+"Luyện nói và nghe, xem hành trình":"Practise speaking and listening, see your journey",
+"Góc Văn cô H₂O":"Ms. H₂O's Literature Corner",
+"Trang giáo viên: AI nhận xét, báo cáo, tạo chủ đề. Chỉ cô Thủy mở được.":"Teacher page: AI feedback, reports, new topics. Only Ms. Thủy can open it.",
+"Bài học":"Lessons","Hành trình":"Journey","Giới thiệu":"About",
+"Chào em! Hôm nay mình cùng luyện nói trôi chảy, nghe thấm sâu nhé! 💧":"Hi there! Let's practise speaking fluently and listening deeply today! 💧",
+"Chào":"Hi","! Hôm nay mình cùng luyện nói trôi chảy, nghe thấm sâu nhé! 💧":"! Let's practise speaking fluently and listening deeply today! 💧",
+"🏫 Học sinh lớp cô Thủy":"🏫 Ms. Thủy's class","🌱 Bạn tự luyện":"🌱 Self-learner",
+"Số thứ tự":"Class number","Tên gọi":"Name","(không bắt buộc)":"(optional)",
+"Số thứ tự trong danh sách lớp giúp cô ghép đúng kết quả luyện tập của em. Máy ghi nhớ trên thiết bị của em.":"Your number in the class list helps your teacher match your practice results. It is remembered on this device.",
+"Tên gọi hoặc biệt danh":"Name or nickname",
+"Em luyện tự do, không cần đăng kí. Kết quả và lịch sử luyện tập được lưu ngay trên thiết bị của em.":"Practise freely, no sign-up needed. Your results and history are saved on your own device.",
+"VD: 12":"e.g. 12","VD: Minh Anh":"e.g. Minh Anh","VD: Bạn Sóc Nhỏ":"e.g. Little Squirrel",
+"VD: Có nên mặc đồng phục khi đi học?":"e.g. Should students wear uniforms?","VD: Bánh cuốn Thanh Trì":"e.g. Thanh Trì rice rolls",
+"lần luyện":"practices","ngày liên tiếp":"days in a row","điểm cao nhất":"best score",
+"MẸO NÓI HAY HÔM NAY":"TODAY'S SPEAKING TIP",
+"Khi quên ý, hãy dừng lại một nhịp thay vì nói “ờ”. Khoảng lặng ngắn khiến người nghe chú ý hơn.":"When you forget an idea, pause for a beat instead of saying “uh”. A short silence makes listeners pay more attention.",
+"Hít một hơi thật sâu trước khi nói. Hơi thở đều giúp giọng em vững và bớt run.":"Take a deep breath before you speak. Steady breathing keeps your voice firm and calm.",
+"Nhìn vào mắt người nghe, lần lượt nhìn sang các bạn ở nhiều phía của lớp.":"Look your listeners in the eye, turning to classmates on every side of the room.",
+"Chỉ ghi từ khoá lên thẻ, đừng viết cả bài. Nói theo ý, đừng đọc thuộc lòng.":"Write only key words on your card, not the whole talk. Speak from ideas, don't recite.",
+"Nói to vừa đủ để bạn ngồi cuối lớp nghe rõ. Nhấn giọng ở từ khoá quan trọng.":"Speak loudly enough for the back row to hear. Stress the important key words.",
+"Khi nghe bạn nói, hãy ghi tóm tắt bằng gạch đầu dòng, rồi mới đặt câu hỏi.":"While a classmate speaks, jot bullet-point notes, then ask your question.",
+"Phản biện lịch sự: “Mình tôn trọng ý kiến của bạn, nhưng mình nghĩ khác vì...”.":"Disagree politely: “I respect your opinion, but I see it differently because...”.",
+"Một bằng chứng cụ thể (con số, ví dụ, trải nghiệm) thuyết phục hơn nhiều lời nói chung chung.":"One concrete piece of evidence (a number, an example, an experience) persuades more than general talk.",
+"Mỉm cười khi mở đầu. Nụ cười giúp em tự tin và người nghe thấy gần gũi.":"Smile when you begin. A smile makes you confident and your listeners feel close.",
+"Câu kết nên ngắn và mạnh: khẳng định lại ý chính, kèm một lời nhắn gửi.":"End short and strong: restate your main idea and add a message.",
+"⭐ Bài cô giao tuần này":"⭐ This week's lesson","Bắt đầu luyện":"Start practising",
+"10 bài Nói và nghe":"10 Speaking & Listening lessons","Ngữ văn 8":"Literature 8",
+"Trình bày ý kiến về một vấn đề xã hội":"Presenting an opinion on a social issue","Trình bày ý kiến":"Opinion talk",
+"Giới thiệu sách":"Book introduction","Thảo luận một vấn đề trong đời sống":"Discussing a real-life issue","Thảo luận":"Discussion",
+"⭐ Cô giao":"⭐ Assigned","✓ Đã luyện":"✓ Practised",
+"Chủ đề tự do":"Free topic","Em muốn luyện nói về một vấn đề khác? Gõ chủ đề và chọn kiểu bài nói.":"Want to talk about something else? Type a topic and choose a talk type.",
+"Chủ đề của em":"Your topic","Kiểu bài nói":"Talk type","Luyện chủ đề này":"Practise this topic","Em hãy gõ chủ đề trước nhé":"Please type a topic first",
+"Chủ đề cô giao":"Teacher's topic","✍️ Chủ đề cô vừa giao":"✍️ New topic from your teacher",
+"Sản phẩm của":"Created by","Sản phẩm của Cô Nguyễn Thị Thủy (Ms. H₂O) · Trường THCS Ngô Quyền, phường Bạch Mai, Hà Nội":"Created by Ms. Nguyễn Thị Thủy (Ms. H₂O) · Ngô Quyền Lower Secondary School, Bạch Mai Ward, Hà Nội",
+"Cô Nguyễn Thị Thủy (Ms. H₂O)":"Ms. Nguyễn Thị Thủy (Ms. H₂O)","Trường THCS Ngô Quyền, phường Bạch Mai, Hà Nội":"Ngô Quyền Lower Secondary School, Bạch Mai Ward, Hà Nội",
+"Cô Nguyễn Thị Thủy (Ms. H₂O) – Trường THCS Ngô Quyền, phường Bạch Mai, Hà Nội":"Ms. Nguyễn Thị Thủy (Ms. H₂O) – Ngô Quyền Lower Secondary School, Bạch Mai Ward, Hà Nội",
+"Về trang chủ":"Home","Bật/tắt âm thanh":"Sound on/off","Chọn trang":"Choose page","Điều hướng":"Navigation","Bé Giọt":"Droplet","Em là ai":"Who are you","Chuyển ngôn ngữ":"Switch language",
+"Hành trình của em":"Your journey","Luyện nói lần đầu để bắt đầu hành trình nhé!":"Do your first practice to start the journey!",
+"Em đã ra tới biển lớn! 🌏":"You have reached the great ocean! 🌏","Em đang ở chặng":"You are at stage",". Chặng tiếp theo:":". Next stage:",
+"Điểm các lần luyện gần đây":"Recent practice scores","Em chưa luyện bài nào. Chọn một bài và bắt đầu nhé!":"No practice yet. Pick a lesson and start!",
+"Lịch sử luyện nói":"Practice history","Chưa có dữ liệu.":"No data yet.","Lịch sử được lưu trên thiết bị này.":"History is saved on this device.","Biểu đồ điểm":"Score chart",
+"📦 Mang hành trình sang máy khác":"📦 Move your journey to another device",
+"Đổi điện thoại hoặc máy tính? Tạo mã chuyển ở máy cũ, rồi dán vào máy mới. Huy hiệu, chuỗi ngày luyện và lịch sử sẽ hiện lại đầy đủ.":"New phone or computer? Create a transfer code on the old device and paste it on the new one. Badges, streaks and history will all come back.",
+"Tạo mã chuyển":"Create transfer code","Sao chép mã":"Copy code","Gửi mã này cho chính em (qua Zalo, ghi chú...) để dán ở máy mới.":"Send this code to yourself (via Zalo, notes...) to paste on the new device.",
+"Em đang ở máy mới? Dán mã vào đây":"On a new device? Paste the code here","Khôi phục hành trình":"Restore journey","Mã chuyển hành trình":"Journey transfer code","Dán mã chuyển hành trình...":"Paste your transfer code...",
+"Đã sao chép mã ✅":"Code copied ✅","Em hãy bôi đen và sao chép mã nhé":"Please select and copy the code","Mã chưa đúng. Em kiểm tra lại đã dán đủ mã chưa nhé":"That code isn't right. Check that you pasted all of it",
+"Giọt lành":"Pure Drop","Suối trong":"Clear Stream","Sông dài":"Long River","Biển lớn":"Great Ocean",
+"Luyện nói lần đầu":"First practice","Luyện 5 lần":"5 practices","10 lần, có bài đạt 7 điểm":"10 practices, one scoring 7+","20 lần, có bài đạt 8,5 điểm":"20 practices, one scoring 8.5+",
+"Trợ lí AI luyện Nói và nghe Ngữ văn 8":"AI assistant for Literature 8 Speaking & Listening",
+"Trang web giúp học sinh lớp 8 tự luyện kĩ năng nói và nghe theo các bài học trong sách giáo khoa Ngữ văn 8: chuẩn bị, luyện nói, nhận phản hồi ngay và theo dõi sự tiến bộ của mình.":"This site helps Grade 8 students practise speaking and listening with the lessons in the Literature 8 textbook: prepare, speak, get instant feedback and track their progress.",
+"Tác giả:":"Author:","Vì sao là H₂O?":"Why H₂O?",
+"Học sinh gọi cô Thủy là “Ms. H₂O”, công thức hoá học của nước. Giống như nước, nói cần trôi chảy, nghe cần thấm sâu. Mỗi giọt nước nhỏ em tích luỹ mỗi ngày sẽ góp thành suối trong, chảy thành sông dài, rồi hoà vào biển lớn của sự tự tin.":"Students call Ms. Thủy “Ms. H₂O”, the chemical formula of water. Like water, speaking should flow and listening should sink in deeply. Every small drop you gather each day becomes a clear stream, then a long river, flowing into the great ocean of confidence.",
+"An toàn và minh bạch":"Safe and transparent",
+"Không cần tài khoản. Học sinh lớp cô Thủy chỉ dùng số thứ tự; bạn tự luyện không cần nhập thông tin gì.":"No account needed. Ms. Thủy's students only use their class number; self-learners enter nothing.",
+"Giọng nói được chuyển thành chữ ngay khi nói (bằng công nghệ nhận dạng giọng nói có sẵn của trình duyệt) và không được lưu thành file ghi âm.":"Your voice is turned into text as you speak (using the browser's built-in speech recognition) and is never saved as a recording.",
+"Trang web được thiết kế với sự hỗ trợ của công cụ AI (Claude). Phần nhận xét sâu do AI gợi ý, cô giáo xem lại và quyết định.":"This site was designed with the help of an AI tool (Claude). Detailed feedback is suggested by AI; the teacher reviews and decides.",
+"Lịch sử luyện tập được lưu ngay trên thiết bị của em và chỉ đến tay cô khi em bấm “Gửi cho cô”.":"Your practice history stays on your device and only reaches your teacher when you press “Send to teacher”.",
+"💌 Lời nhắn gửi cô":"💌 Message to the teacher","Lời nhắn gửi cô":"Message to the teacher","(sắp mở)":"(coming soon)",
+"Học sinh, phụ huynh và thầy cô có góp ý hay lời nhắn, xin gửi cho cô Thủy tại đây.":"Students, parents and teachers can send feedback or messages to Ms. Thủy here.",
+"Hướng dẫn nhanh":"Quick guide",
+"Ở trang chủ, chọn “Học sinh lớp cô Thủy” (nhập số thứ tự) hoặc “Bạn tự luyện”.":"On the home page, choose “Ms. Thủy's class” (enter your number) or “Self-learner”.",
+"Chọn chủ đề, tự trả lời câu hỏi gợi ý và lập dàn ý.":"Choose a topic, answer the guiding questions and make an outline.",
+"Bấm micro và nói. Nên dùng trình duyệt Chrome và ngồi nơi yên tĩnh.":"Press the mic and speak. Use Chrome and sit somewhere quiet.",
+"Xem nhận xét, nói lại để tiến bộ. Học sinh lớp cô Thủy bấm “Gửi cho cô”.":"Read the feedback and try again to improve. Ms. Thủy's students press “Send to teacher”.",
+"Giấy phép: Creative Commons CC BY-NC-SA 4.0. Được dùng và chỉnh sửa miễn phí cho mục đích giáo dục, ghi rõ tác giả gốc, không dùng để kinh doanh.":"License: Creative Commons CC BY-NC-SA 4.0. Free to use and adapt for education, with credit to the author, not for commercial use.",
+"← Danh sách bài":"← All lessons","1. Chuẩn bị":"1. Prepare","2. Luyện nói":"2. Speak","3. Kết quả":"3. Results",
+"🎧 Bật nhạc nền khi tìm ý":"🎧 Play background music","⏸ Tắt nhạc nền":"⏸ Stop music","Giai điệu riêng của bài này, tự tắt khi em bấm micro.":"This lesson's own melody. It stops when you press the mic.","Em bật nút 🔊 ở góc trên trước nhé":"Turn on 🔊 at the top first",
+"Mục đích nói":"Purpose","Mục đích thảo luận":"Purpose of the discussion","Người nghe":"Audience","Em cần đạt:":"Learning goal:",
+"Chọn đề tài":"Choose a topic","Gợi ý trong SGK":"From the textbook","Gợi ý gần gũi với Hà Nội":"Close to home in Hà Nội","Gợi ý thêm":"More ideas","Đề tài cô gợi ý":"Suggested by your teacher",
+"Hoặc tự chọn đề tài của em":"Or choose your own topic","Em chọn đề tài trước nhé":"Please choose a topic first",
+"🪜 Bé Giọt gợi ý theo bậc":"🪜 Droplet's step-by-step hints","Em chọn một đề tài ở trên, Bé Giọt sẽ gợi ý riêng cho đề tài đó.":"Choose a topic above and Droplet will give hints just for it.",
+"Đề tài:":"Topic:",". Cần đến đâu, em mở đến đó. Gợi ý chỉ để tìm ý, em hãy":". Open only as much as you need. Hints help you find ideas, so please","Cần đến đâu, em mở đến đó. Gợi ý chỉ để tìm ý, em hãy":"Open only as much as you need. Hints help you find ideas, so please",
+"nói bằng lời của em":"say it in your own words","nhé!":"!","(gợi ý chung cho đề tài em tự chọn)":"(general hints for your own topic)",
+"💧 Bậc 1 · Câu hỏi gợi mở":"💧 Step 1 · Guiding questions","🌊 Bậc 2 · Ý chính và từ khoá":"🌊 Step 2 · Main ideas & key words","🏞️ Bậc 3 · Khung dàn ý":"🏞️ Step 3 · Outline frame",
+"Mở đầu:":"Opening:","Câu chuyển ý:":"Linking phrases:","Kết luận:":"Conclusion:","📥 Chép khung vào dàn ý":"📥 Copy frame into my outline",
+"Đã chép khung vào ô còn trống. Em sửa thành lời của em nhé!":"Frame copied into the empty boxes. Now rewrite it in your own words!","Các ô dàn ý đã có chữ, Bé Giọt không ghi đè đâu.":"Your outline boxes already have text, so Droplet won't overwrite them.",
+"Bé Giọt gợi ý:":"Droplet's tip:","Em hãy tự trả lời các câu hỏi dưới đây bằng lời của mình. Không cần viết thành bài, chỉ cần vài ý ngắn.":"Answer the questions below in your own words. No need to write a full text, just a few short ideas.",
+"Ý của em...":"Your ideas...","Dàn ý của em":"Your outline","Mở đầu":"Opening","Triển khai":"Body","Kết luận":"Conclusion",
+"Giới thiệu vấn đề và nêu khái quát ý kiến của em":"Introduce the issue and state your overall opinion","Các ý chính, lí lẽ, bằng chứng":"Main points, reasons, evidence","Khẳng định lại ý nghĩa, lời nhắn gửi":"Restate the meaning and your message",
+"Gợi ý: lựa chọn vài từ ngữ then chốt phù hợp với vấn đề (SGK). Dàn ý sẽ hiện nhỏ phía trên khi em luyện nói.":"Tip: choose a few key words that fit the issue (textbook). Your outline will appear above while you speak.",
+"Sẵn sàng luyện nói →":"Ready to speak →",
+"Vai trong cuộc thảo luận":"Roles in the discussion","Người điều hành:":"Moderator:","Thư kí:":"Secretary:","Thành viên:":"Member:",
+"Ở phần Luyện nói, em tập vai":"In the Speak step you practise the role of","thành viên":"member","(nêu ý kiến, phản hồi bạn) và vai":"(giving opinions, responding to classmates) and the role of","thư kí":"secretary","(tóm tắt thảo luận).":"(summarising the discussion).",
+"📝 Dàn ý của em":"📝 Your outline","Cách xem dàn ý":"Outline view","Dàn ý đầy đủ":"Full outline","Ý chính gợi nhớ":"Key prompts","Nói độc lập":"No notes",
+"Em chưa lập dàn ý. Có dàn ý, em sẽ nói mạch lạc hơn nhiều đấy!":"You haven't made an outline yet. With one, you'll speak much more clearly!","← Quay lại lập dàn ý":"← Back to make an outline",
+"🎯 Em thử":"🎯 Try to","nói độc lập, không nhìn dàn ý":"speak on your own, without your outline","nhé. Bé Giọt tin em làm được! Quên ý thì bấm “Dàn ý đầy đủ” để xem lại.":". Droplet believes in you! If you forget, press “Full outline” to look again.",
+"🗣️ Phản hồi bạn":"🗣️ Respond to a classmate","🎤 Nêu ý kiến":"🎤 Give your opinion","📝 Tóm tắt thảo luận":"📝 Summarise the discussion","Chế độ luyện":"Practice mode",
+"Bạn cùng nhóm nói:":"Your groupmate says:","🔊 Nghe bạn nói":"🔊 Listen","Ý kiến khác ↻":"Another opinion ↻","👂 Ẩn chữ, luyện nghe":"👂 Hide text, practise listening","👁️ Hiện chữ":"👁️ Show text",
+"Hãy":"Please","nhắc lại ý của bạn":"restate your classmate's idea",", nói rõ em":", say clearly whether you","đồng tình hay chưa đồng tình":"agree or disagree",", kèm":", give","lí do":"reasons",", bằng lời lẽ lịch sự.":", and speak politely.",
+"Bạn An:":"An:","Bạn Bình:":"Bình:","Bạn Chi:":"Chi:","🔊 Nghe cả nhóm":"🔊 Listen to the group","Nhóm ý kiến khác ↻":"Another group ↻",
+"Em là":"You are the","của nhóm. Hãy":"of the group. Please","tóm tắt ý chính của từng bạn":"summarise each classmate's main idea",", rồi nêu":", then give the","kết luận chung":"overall conclusion",": “Tóm lại, nhóm mình thống nhất rằng...”.":": “In short, our group agrees that...”.",
+"Máy chưa có giọng đọc tiếng Việt, em hãy đọc lời của các bạn nhé":"This device has no Vietnamese voice, please read your classmates' words","Máy chưa đọc được, em hãy đọc lời của các bạn nhé":"The device can't read aloud, please read your classmates' words",
+"Mục tiêu:":"Target:","Em đang mở web từ tệp trên máy. Chrome có thể chặn micro trong trường hợp này. Khi web được đưa lên đường link https, micro sẽ hoạt động.":"You opened the site from a local file. Chrome may block the mic. It will work once the site is on an https link.",
+"Bấm vào micro và bắt đầu nói":"Press the mic and start speaking","Bắt đầu nói":"Start speaking","Lời em nói sẽ hiện ở đây…":"Your words will appear here…","Nói xong – Xem kết quả":"Done – See results",
+"Nói tiếp":"Continue","Tạm dừng":"Pause","Đang nghe… Bấm lần nữa để tạm dừng.":"Listening… Press again to pause.","Đã tạm dừng. Bấm micro để nói tiếp, hoặc xem kết quả.":"Paused. Press the mic to continue, or see your results.",
+"🔈 Giọng em hơi nhỏ, nói to hơn một chút nhé":"🔈 Your voice is a bit quiet, speak a little louder","🔉 Âm lượng vừa phải":"🔉 Good volume","🔊 Giọng em rõ ràng, tự tin!":"🔊 Clear and confident voice!",
+"Chrome chặn micro khi mở tệp trực tiếp trên máy. Hãy mở web bằng đường link https (GitHub Pages), hoặc gõ bài nói ở ô bên dưới.":"Chrome blocks the mic for local files. Open the site via its https link (GitHub Pages), or type your talk below.",
+"Máy chưa được phép dùng micro. Bấm biểu tượng 🔒 cạnh thanh địa chỉ → cho phép Micrô, rồi tải lại trang.":"Mic permission is off. Click 🔒 next to the address bar → allow Microphone, then reload.",
+"Trình duyệt này chưa cho phép nhận dạng giọng nói. Em hãy dùng Google Chrome.":"This browser doesn't support speech recognition. Please use Google Chrome.",
+"Máy không tìm thấy micro. Em kiểm tra micro hoặc tai nghe có micro nhé.":"No microphone found. Check your mic or headset.","Nhận dạng giọng nói cần có mạng Internet. Em kiểm tra kết nối mạng nhé.":"Speech recognition needs the Internet. Check your connection.",
+"Micro gặp lỗi (":"Mic error (","). Em thử tải lại trang, hoặc gõ bài nói ở ô bên dưới.":"). Try reloading, or type your talk below.","Không mở được micro. Em hãy gõ bài nói ở ô bên dưới.":"Couldn't open the mic. Please type your talk below.",
+"Không dùng được micro? Gõ hoặc dán bài nói":"Mic not working? Type or paste your talk","Thời gian em đã nói (giây, nếu biết):":"How long you spoke (seconds, if known):","Chấm bài đã gõ":"Score my typed talk",
+"Khi gõ, máy ước tính thời gian và không đếm được từ đệm chính xác.":"For typed talks the time is estimated and fillers can't be counted exactly.","Gõ lại những gì em đã nói...":"Type what you said...","Bài nói còn ngắn quá, em gõ thêm nhé":"Your talk is too short, please type more",
+"🔒 Giọng nói của em được chuyển thành chữ ngay khi nói và":"🔒 Your voice is turned into text as you speak and is","không được lưu thành file ghi âm":"never saved as a recording",". Máy có thể bỏ sót một số từ đệm như “ờ”, “à”.":". The device may miss some fillers like “ờ”, “à”.",
+"Chúc mừng! Em vừa nhận huy hiệu":"Congratulations! You just earned the badge",
+"Tuyệt vời! Lời em trôi chảy như sông dài rồi!":"Amazing! Your words flow like a long river!","Em làm tốt lắm! Sửa thêm một chút là trôi chảy hơn nữa.":"Well done! A little polish and you'll flow even better.",
+"Em đã có nền tảng. Luyện thêm một lần nữa nhé!":"You have a good base. Practise once more!","Không sao đâu, giọt nước nhỏ chảy mãi sẽ thành sông. Mình thử lại nhé!":"It's okay, small drops that keep flowing become a river. Let's try again!",
+"Lần luyện đầu tiên của bài này":"Your first practice of this lesson","▲ Tăng":"▲ Up","điểm":"points","so với lần trước 👏":"from last time 👏","Thấp hơn lần trước":"Down","điểm. Không sao, mỗi lần nói là một lần luyện!":"points from last time. That's okay, every talk is practice!","Bằng điểm lần trước":"Same score as last time",
+"Thời lượng":"Length","Trôi chảy":"Fluency","Tốc độ nói":"Speaking pace","Bố cục 3 phần":"3-part structure","Thông tin về sách":"Book information","Cảm nhận, lời mời đọc":"Impressions & invitation to read","Bám sát đề":"On topic",
+"Lí lẽ, bằng chứng":"Reasons & evidence","Nêu rõ ý kiến":"Clear opinion","Nêu rõ quan điểm":"Clear stance","Lắng nghe ý bạn":"Listening to classmates","Lời lẽ lịch sự":"Polite language","Nắm ý chính các bạn":"Grasping each idea","Trình bày lại mạch lạc":"Clear retelling","Kết luận chung":"Overall conclusion",
+"Bé Giọt nhận xét":"Droplet's feedback","Để hay hơn nữa…":"To do even better…",
+"Bài nói có bố cục rõ ràng: Mở đầu – Triển khai – Kết luận.":"Your talk has a clear structure: Opening – Body – Conclusion.",
+"Bài nói chưa bám sát đề. Hãy nhắc lại tên vấn đề và nói về giá trị, hiện trạng hoặc cách giữ gìn.":"Your talk drifted from the topic. Name the issue again and talk about its value, current state or how to preserve it.",
+"Hãy nói rõ hơn về cuốn sách: tên, tác giả, nội dung chính, nhân vật.":"Say more about the book: title, author, main content, characters.",
+"Người nghe chưa thấy rõ ý kiến của em. Hãy nói thẳng: “Theo em, ...”.":"Listeners can't yet see your opinion. Say it directly: “In my opinion, ...”.",
+"Em mới nêu lí lẽ, chưa có bằng chứng. Hãy thêm một ví dụ thực tế, như “Chẳng hạn, ở quê em...”.":"You gave reasons but no evidence yet. Add a real example, such as “For instance, in my hometown...”.",
+"Cuối phần tóm tắt, hãy nêu kết luận: “Tóm lại, nhóm mình thống nhất rằng...”.":"End your summary with a conclusion: “In short, our group agrees that...”.",
+"Em chia sẻ cảm nhận chân thành và có lời mời đọc hấp dẫn.":"You shared sincere impressions and a tempting invitation to read.","Em giới thiệu đủ thông tin về cuốn sách.":"You gave enough information about the book.",
+"Em nêu ý kiến riêng rất rõ ràng.":"You stated your own opinion very clearly.","Em thể hiện rõ mình đồng tình hay chưa đồng tình.":"You made it clear whether you agree or disagree.",
+"Em trình bày lại các ý kiến theo trình tự rõ ràng.":"You retold the opinions in a clear order.","Em đã lắng nghe và nhắc lại ý của bạn trước khi phản hồi. Rất tôn trọng!":"You listened and restated your classmate's idea before responding. Very respectful!",
+"Em đã nêu được kết luận chung của nhóm.":"You gave the group's overall conclusion.","Em đã đưa ra lí lẽ và bằng chứng để làm rõ ý kiến.":"You gave reasons and evidence to support your opinion.",
+"Hãy giải thích rõ hơn vì sao, bằng các từ như “bởi vì”, “chính vì vậy”.":"Explain why more clearly, with words like “because”, “that is why”.","Hãy nói rõ em đồng tình hay chưa đồng tình với bạn.":"Say clearly whether you agree or disagree with your classmate.",
+"Hãy nói thêm em thích điều gì nhất, và mời các bạn: “Các bạn hãy tìm đọc...”.":"Say what you liked most, and invite others: “Do read...”.",
+"Hãy trình bày lần lượt: “Bạn thứ nhất cho rằng..., bạn thứ hai lại nghĩ..., còn bạn thứ ba...”.":"Go in order: “The first classmate thinks..., the second believes..., and the third...”.",
+"Trước khi phản hồi, hãy nhắc lại ý của bạn: “Bạn vừa cho rằng..., mình...”.":"Before responding, restate your classmate's idea: “You just said that..., I...”.",
+"Lời nói trôi chảy, gần như không có từ đệm.":"Fluent speech with almost no fillers.",
+"lời mở đầu giới thiệu vấn đề":"an opening that introduces the issue","các từ nối ý như “thứ nhất”, “bên cạnh đó”":"linking words such as “firstly”, “besides”","phần kết luận (ví dụ “Tóm lại...”)":"a conclusion (e.g. “In short...”)",
+"Số liệu bài nói":"Talk statistics","thời gian":"time","thời gian (ước tính)":"time (estimated)","số tiếng đã nói":"syllables spoken","từ đệm":"fillers","tiếng/phút":"syllables/min","lần ngừng lâu":"long pauses",
+"Xem lại lời em đã nói":"Review what you said","Từ đệm được gạch chân màu cam.":"Fillers are underlined in orange.","Em tự đánh giá":"Self-assessment",
+"Em giới thiệu rõ vấn đề và ý kiến ở phần Mở đầu":"I introduced the issue and my opinion clearly in the opening","Em đưa ra lí lẽ, bằng chứng làm cơ sở cho ý kiến":"I gave reasons and evidence for my opinion","Em dùng ngôn ngữ cơ thể (cử chỉ, nét mặt) phù hợp":"I used suitable body language (gestures, facial expressions)","Em điều chỉnh ngữ điệu, giọng nói cho phù hợp":"I adjusted my intonation and voice well","Em khẳng định lại ý nghĩa ở phần Kết luận":"I restated the meaning in the conclusion",
+"Em nghe hết ý kiến của các bạn":"I listened to all my classmates' opinions","Em nêu được ý chính của từng bạn":"I stated each classmate's main idea","Em trình bày lại theo trình tự rõ ràng":"I retold them in a clear order","Em nêu được kết luận chung của nhóm":"I gave the group's overall conclusion","Em giữ thái độ khách quan, tôn trọng các ý kiến":"I stayed objective and respected all opinions",
+"Em đã lắng nghe hết ý kiến của bạn":"I listened to my classmate's whole opinion","Em nhắc lại được ý của bạn":"I restated my classmate's idea","Em nói rõ đồng tình hay phản biện":"I said clearly whether I agree or disagree","Em đưa ra lí do thuyết phục":"I gave convincing reasons","Em dùng lời lẽ tôn trọng, lịch sự":"I used respectful, polite language",
+"🎤 Nói lại":"🎤 Try again","📋 Chép cho cô":"📋 Copy for teacher","Về danh sách bài":"Back to lessons","Gói chép cho cô":"Package for teacher",
+"📨 Gửi cho cô":"📨 Send to teacher","Đã gửi cho cô ✅":"Sent to your teacher ✅","Chưa gửi được (có thể do mất mạng). Em thử lại sau nhé.":"Couldn't send (maybe no connection). Please try again later.",
+"Em hãy nhập số thứ tự ở trang chủ trước nhé":"Please enter your class number on the home page first","Cô chưa mở hộp thư nhận bài. Kết quả đã được lưu trên máy của em, em có thể gửi lại sau.":"Your teacher's inbox isn't open yet. Your result is saved on your device; you can send it later.",
+"Đã chép ✅ Cô dán vào trang giáo viên nhé":"Copied ✅ Paste it into the teacher page","Bôi đen rồi bấm Ctrl+C để chép nhé":"Select it and press Ctrl+C to copy",
+"Đã bật âm thanh 💧":"Sound on 💧","Đã tắt âm thanh":"Sound off",
+"Nêu ý kiến":"Opinion","Trình bày":"Presentation","Phản hồi bạn":"Response","Tóm tắt thảo luận":"Summary","Tự do":"Free","Cô giao":"Assigned","Tự do:":"Free:","Cô giao:":"Assigned:","· tóm tắt":"· summary","· phản hồi":"· response",
+"Câu chuyện của lịch sử":"Stories of history","Vẻ đẹp cổ điển":"Classical beauty","Lời sông núi":"Voice of the nation","Tiếng cười trào phúng trong thơ":"Satirical laughter in poetry","Những câu chuyện hài":"Funny stories","Chân dung cuộc sống":"Portraits of life","Tin yêu và ước vọng":"Faith and hope","Nhà văn và trang viết":"Writers and their pages","Hôm nay và ngày mai":"Today and tomorrow","Sách – người bạn đồng hành":"Books – our companions",
+"Cuốn truyện lịch sử":"A historical novel","Một sản phẩm văn hoá truyền thống trong cuộc sống hiện tại":"A traditional cultural product in today's life","Ý thức trách nhiệm với cộng đồng của học sinh":"Students' sense of responsibility to the community","Ý nghĩa của tiếng cười trong đời sống":"The meaning of laughter in life","Một thói xấu của con người trong xã hội hiện đại":"A bad habit in modern society","Truyện":"A story","Được gợi ra từ tác phẩm văn học đã học":"An issue raised by a literary work we studied","Văn học trong đời sống hiện nay":"Literature in today's life","Tổ chức hợp lí nề nếp sinh hoạt của bản thân":"Organising your daily routine well","Về đích: Ngày hội với sách":"Finish line: Book festival"
+};
+const I18N_PAT=[
+ [/^Bài (\d+)$/,m=>`Lesson ${m[1]}`],
+ [/^Bài (\d+) · (.+?) · (.+)$/,m=>`Lesson ${m[1]} · ${trI(m[2])} · ${trI(m[3])}`],
+ [/^Bài (\d+): (.+)$/,m=>`Lesson ${m[1]}: ${m[2]}`],
+ [/^Bài$/,()=>"Lesson"],
+ [/^Mục tiêu: (.+) – (.+)$/,m=>`Target: ${durI(m[1])} – ${durI(m[2])}`],
+ [/^(\d+ phút( \d+ giây)?|\d+ giây)$/,m=>durI(m[1])],
+ [/^Giọt điểm (.+) trên 10$/,m=>`Score drop: ${m[1]} out of 10`],
+ [/^Dòng sông hành trình: em đã đạt (\d) trên 4 chặng$/,m=>`Journey river: you have reached ${m[1]} of 4 stages`],
+ [/^– (.+)\.$/,m=>`– ${(trI(m[1].charAt(0).toUpperCase()+m[1].slice(1))).toLowerCase()}.`],
+ [/^Đã khôi phục (\d+) lần luyện ✅$/,m=>`Restored ${m[1]} practices ✅`],
+ [/^Bài nói hơi dài \((.+)\)\. Hãy chọn ý chính, lược bớt ý trùng lặp\.$/,m=>`Your talk is a bit long (${durI(m[1])}). Keep the main points and cut repetition.`],
+ [/^Bài nói mới được (.+)\. Hãy nói thêm một ý hoặc một ví dụ để đạt ít nhất (.+)\.$/,m=>`Your talk lasted only ${durI(m[1])}. Add one more point or example to reach at least ${durI(m[2])}.`],
+ [/^Em chỉ dùng (\d+) từ đệm, lời nói khá trôi chảy\.$/,m=>`You used only ${m[1]} fillers, quite fluent.`],
+ [/^Em có (\d+) lần ngừng lâu \(trên 3 giây\)\. .*$/,m=>`You had ${m[1]} long pauses (over 3 seconds). Look at your outline and link ideas with words like “next”, “besides” to keep flowing.`],
+ [/^Em mới nêu được ý của (\d+)\/(\d+) bạn\. .*$/,m=>`You covered ${m[1]}/${m[2]} classmates' ideas. Listen again, note each person's key words, then summarise.`],
+ [/^Em nói hơi chậm \((\d+) tiếng\/phút\)\. .*$/,m=>`You spoke a little slowly (${m[1]} syllables/min). Try to flow more, pausing at punctuation.`],
+ [/^Em nói hơi nhanh \((\d+) tiếng\/phút\)\. .*$/,m=>`You spoke a little fast (${m[1]} syllables/min). Slow down so listeners can follow.`],
+ [/^Em nói được (.+), vừa đủ thời lượng\.$/,m=>`You spoke for ${durI(m[1])}, just the right length.`],
+ [/^Em nắm được ý chính của (\d+)\/(\d+) bạn\. Nghe rất chăm chú!$/,m=>`You caught the main idea of ${m[1]}/${m[2]} classmates. Great listening!`],
+ [/^Tốc độ nói vừa phải \(khoảng (\d+) tiếng\/phút\), người nghe dễ theo dõi\.$/,m=>`Good pace (about ${m[1]} syllables/min), easy to follow.`],
+ [/^Em bám sát đề, dùng tốt các từ khoá( như (.+))?\.$/,m=>`You stayed on topic and used key words well${m[2]?` such as ${m[2]}`:""}.`],
+ [/^Em dùng (\d+) từ đệm( \((.+?)\))?( và lặp từ (\d+) lần)?\. Khi cần suy nghĩ, em hãy dừng lại một nhịp thay vì nói “ờ”\.$/,m=>`You used ${m[1]} fillers${m[3]?` (${m[3]})`:""}${m[5]?` and repeated words ${m[5]} times`:""}. When you need to think, pause for a beat instead of saying “uh”.`],
+ [/^Bài nói còn thiếu (.+)\.$/,m=>{let t=m[1];["lời mở đầu giới thiệu vấn đề","các từ nối ý như “thứ nhất”, “bên cạnh đó”","phần kết luận (ví dụ “Tóm lại...”)"].forEach(k=>{t=t.split(k).join(I18N_EN[k])});return `Your talk is missing ${t}.`}]
+];
+
+/* ---------- Giao diện song ngữ VI / EN: dịch phần giao diện; nội dung bài học và lời nói vẫn bằng tiếng Việt ---------- */
+let LANG="vi";try{const v=localStorage.getItem("h2o_lang");if(v==="vi"||v==="en"||v==="bi")LANG=v}catch(e){}
+const durI=t=>String(t).replace(/(\d+) phút/g,"$1 min").replace(/(\d+) giây/g,"$1 s");
+function trI(t){if(I18N_EN[t]!==undefined)return I18N_EN[t];for(const [re,fn] of I18N_PAT){const m=t.match(re);if(m)return fn(m)}return null}
+const I18N_SKIP="script,style,textarea,.transcript,.olt,.peek,[data-noi18n],.bi";
+const BI_SKIP=".stat,.chip,.num,.role summary,.toast,option,select,.timer,.target,svg,.brand";
+function soleText(n){const p=n.parentNode;for(const c of p.childNodes){if(c===n)continue;if(c.nodeType===3&&!c.nodeValue.trim())continue;if(c.nodeType===1&&/^(SVG|IMG|BR|INPUT)$/i.test(c.tagName))continue;if(c.nodeType===1&&c.classList&&c.classList.contains("e"))continue;return false}return true}
+function i18nNode(root){if(LANG==="vi"||!root)return;
+  if(root.nodeType===3){const p=root.parentElement;if(!p||p.closest(I18N_SKIP))return;const raw=root.nodeValue,t=raw.replace(/\s+/g," ").trim();if(!t)return;const r=trI(t);if(r==null||r===t)return;
+    if(LANG==="en"){root.nodeValue=raw.replace(raw.trim(),r);return}
+    if(p.closest(BI_SKIP)||!soleText(root)||t.length<2||/^\d/.test(t))return;
+    const sp=document.createElement("span");sp.className="bi";sp.appendChild(document.createTextNode(t));const en=document.createElement("span");en.className="en";en.lang="en";en.textContent=r.replace(/^[^\p{L}\p{N}“"(]+/u,"");sp.appendChild(en);
+    p.replaceChild(sp,root);return}
+  if(root.nodeType!==1)return;if(root.closest&&root.closest(I18N_SKIP))return;
+  if(LANG==="en"){const els=[root,...root.querySelectorAll("[placeholder],[aria-label],[title]")];
+    els.forEach(e=>{if(!e.getAttribute)return;["placeholder","aria-label","title"].forEach(k=>{const v=e.getAttribute(k);if(v){const r=trI(v.trim());if(r!=null&&r!==v)e.setAttribute(k,r)}})});}
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;const list=[];while(n=w.nextNode())list.push(n);list.forEach(i18nNode);}
+(function(){
+  const NAMES={vi:"VI",bi:"VI·EN",en:"EN"},NEXT={vi:"bi",bi:"en",en:"vi"},TIP={vi:"Tiếng Việt – bấm để chuyển sang song ngữ",bi:"Song ngữ Việt – Anh – bấm để chuyển sang tiếng Anh",en:"English – click for Vietnamese"};
+  const hr=document.querySelector(".hdr-r");
+  if(hr){const b=document.createElement("button");b.type="button";b.className="langBtn";b.id="langBtn";b.textContent=NAMES[LANG];b.dataset.noi18n="";
+    b.setAttribute("aria-label",TIP[LANG]);b.title=TIP[LANG];
+    b.onclick=()=>{try{localStorage.setItem("h2o_lang",NEXT[LANG])}catch(e){}location.reload()};hr.insertBefore(b,hr.firstChild);}
+  if(LANG==="vi")return;
+  if(LANG==="en"){document.documentElement.lang="en";document.title="Speak Fluently with Ms. H₂O";}
+  i18nNode(document.body);
+  new MutationObserver(ms=>{for(const m of ms){if(m.type==="characterData")i18nNode(m.target);else if(m.type==="attributes")i18nNode(m.target);else m.addedNodes.forEach(i18nNode)}})
+    .observe(document.body,{childList:true,subtree:true,characterData:true,attributes:LANG==="en",attributeFilter:LANG==="en"?["placeholder","aria-label","title"]:undefined});
+})();
+
 </script>
 
 </body>
