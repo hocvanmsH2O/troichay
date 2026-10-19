@@ -15,29 +15,29 @@
 <style>
 /* Layout: một cột như dòng nước chảy từ trên xuống; đầu trang là "mặt nước", các khối bo tròn như đá cuội. Thủy sinh Mộc: xanh nước là chính, xanh mầm là phụ. */
 :root{
-  --water:#1E6FA8;      /* Thủy – màu chính */
-  --water-deep:#14507C;
-  --leaf:#3FA36B;       /* Mộc – màu phụ */
-  --jade:#17A2A2;       /* giao thoa – nút, huy hiệu */
-  --bg:#F2F8FB;         /* nền xanh rất nhạt thay cho trắng (Kim) */
+  --water:#0B7BD8;      /* Thủy – xanh biển tươi, màu chính */
+  --water-deep:#0757A8;
+  --leaf:#1FA855;       /* Mộc – xanh lá non, màu phụ */
+  --jade:#00A7B5;       /* giao thoa – xanh ngọc, nút, huy hiệu */
+  --bg:#EEF8FF;         /* nền xanh trời rất nhạt thay cho trắng (Kim sinh Thủy) */
   --surface:#FFFFFF;
-  --surface-2:#E6F1F7;
-  --ink:#163246;        /* chữ xanh than */
-  --ink-soft:#4A6476;
-  --line:#CFE2EC;
-  --coral:#E07A5F;      /* chỉ dùng cho cảnh báo nhẹ */
+  --surface-2:#E2F3FF;
+  --ink:#0F2A44;        /* chữ xanh than */
+  --ink-soft:#3E5B74;
+  --line:#BEE0F5;
+  --coral:#FF7A59;      /* điểm nhấn vui: lửa nhỏ, cảnh báo nhẹ */
   --on-accent:#FFFFFF;
-  --shadow:0 6px 18px rgba(20,80,124,.10);
+  --shadow:0 8px 22px rgba(11,123,216,.13);
   --f-display:"Baloo 2","Be Vietnam Pro",system-ui,sans-serif;
   --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --r:18px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --water:#5BA9DE;--water-deep:#8CC6EC;--leaf:#6CC892;--jade:#3CC4C0;
+  --water:#4DB0FF;--water-deep:#8FD0FF;--leaf:#4FD688;--jade:#2ED3DC;
   --bg:#0D1B26;--surface:#132634;--surface-2:#183244;--ink:#E3F0F7;--ink-soft:#A3BCCB;--line:#244559;
   --coral:#F09A82;--on-accent:#06202E;--shadow:0 6px 18px rgba(0,0,0,.35);color-scheme:dark}}
 :root[data-theme="dark"]{
-  --water:#5BA9DE;--water-deep:#8CC6EC;--leaf:#6CC892;--jade:#3CC4C0;
+  --water:#4DB0FF;--water-deep:#8FD0FF;--leaf:#4FD688;--jade:#2ED3DC;
   --bg:#0D1B26;--surface:#132634;--surface-2:#183244;--ink:#E3F0F7;--ink-soft:#A3BCCB;--line:#244559;
   --coral:#F09A82;--on-accent:#06202E;--shadow:0 6px 18px rgba(0,0,0,.35);color-scheme:dark}
 
@@ -164,8 +164,8 @@ a.btn{text-decoration:none}.btn{display:inline-flex;align-items:center;justify-c
 .btn.ghost.sm{min-height:38px;padding:7px 14px;font-size:.9rem}
 .olcard{width:100%;text-align:left;background:var(--surface-2);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px}
 .olhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
-.olseg{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
-.olseg button{border:0;background:transparent;color:var(--ink-soft);padding:6px 11px;font-weight:600;font-size:.82rem}
+.olseg{display:flex;width:100%;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.olseg button{flex:1;border:0;background:transparent;color:var(--ink-soft);padding:8px 6px;font-weight:600;font-size:.84rem;line-height:1.25}
 .olseg button+button{border-left:1.5px solid var(--line)}
 .olseg button[aria-pressed="true"]{background:var(--leaf);color:var(--on-accent)}
 .olpart{display:grid;grid-template-columns:92px 1fr;gap:8px;padding:6px 0;border-top:1px dashed var(--line)}
@@ -237,8 +237,8 @@ mark.k{background:transparent;color:var(--leaf);font-weight:700}
 /* Thẻ bài học có biểu tượng */
 .lesson{padding:0;overflow:hidden;gap:0;border-color:color-mix(in srgb,var(--lc) 35%,var(--line))}
 .lesson:hover{border-color:var(--lc)}
-.lesson .band{display:flex;align-items:center;gap:10px;background:var(--lc);color:#fff;padding:12px 14px 6px}
-.lesson .bandwave{display:block;width:100%;height:10px;margin-top:-1px}
+.lesson .band{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,var(--lc),var(--lc2,var(--lc)));color:#fff;padding:12px 14px 6px}
+.lesson .bandwave{display:block;width:100%;height:10px;margin-top:-1px;background:linear-gradient(90deg,var(--lc),var(--lc2,var(--lc)));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M0 0 H200 V4 C170 10 140 0 100 5 S30 10 0 3Z'/%3E%3C/svg%3E") 0 0/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M0 0 H200 V4 C170 10 140 0 100 5 S30 10 0 3Z'/%3E%3C/svg%3E") 0 0/100% 100% no-repeat}
 .lesson .ic,.lhead .ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;flex:none;background:rgba(255,255,255,.18);color:#fff}
 .lesson .ic svg,.lhead .ic svg{width:25px;height:25px}
 .lesson .bt{display:flex;flex-direction:column;line-height:1.2;min-width:0}
@@ -247,7 +247,7 @@ mark.k{background:transparent;color:var(--leaf);font-weight:700}
 .lesson .t{padding:8px 14px 0}
 .lesson .meta{padding:10px 14px 14px}
 .lesson.is-cur{box-shadow:0 0 0 3px color-mix(in srgb,var(--leaf) 45%,transparent)}
-.lhead{margin-top:6px;background:var(--lc);color:#fff;border-radius:22px;overflow:hidden}
+.lhead{margin-top:6px;background:linear-gradient(120deg,var(--lc),var(--lc2,var(--lc)));color:#fff;border-radius:22px;overflow:hidden}
 .lhead .lh-in{display:flex;gap:12px;align-items:flex-start;padding:16px 16px 4px}
 .lhead h2{color:#fff;font-size:1.35rem}
 .lhead .num{font-family:var(--f-display);font-weight:700;opacity:.9}
@@ -298,8 +298,56 @@ mark.k{background:transparent;color:var(--leaf);font-weight:700}
 .role .menu span.d{font-size:.78rem;color:var(--ink-soft);line-height:1.35}
 .role .menu .e{font-size:1.2rem;line-height:1.3}
 footer.foot{margin-top:28px;font-size:.8rem;color:var(--ink-soft);text-align:center}
+
+
+/* ===== Giao diện "Bong bóng nước" (cô Thủy chọn, 19/10): kính trong, bong bóng, giọt nước bóng bẩy ===== */
+:root{--sea1:#C9F1FF;--sea2:#8FDcFF;--sea3:#5DB8FF;--glass:rgba(255,255,255,.86);--glass-b:rgba(255,255,255,.95);--h-ink:#063E8C;--coral-ink:#C94418}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hdr2:rgba(19,38,52,.97);--hg1:rgba(24,56,84,.92);--hg2:rgba(14,36,56,.85);--hgl:rgba(255,255,255,.10);--sea1:#0B2A44;--sea2:#0A2238;--sea3:#071A2C;--glass:rgba(19,38,52,.9);--glass-b:rgba(120,190,240,.25);--h-ink:#BFE6FF;--coral-ink:#FFA58C}}
+:root[data-theme="dark"]{--hdr2:rgba(19,38,52,.97);--hg1:rgba(24,56,84,.92);--hg2:rgba(14,36,56,.85);--hgl:rgba(255,255,255,.10);--sea1:#0B2A44;--sea2:#0A2238;--sea3:#071A2C;--glass:rgba(19,38,52,.9);--glass-b:rgba(120,190,240,.25);--h-ink:#BFE6FF;--coral-ink:#FFA58C}
+body{background:radial-gradient(900px 500px at 15% -5%,rgba(255,255,255,.75),transparent 60%),radial-gradient(800px 600px at 105% 35%,rgba(160,255,210,.45),transparent 60%),linear-gradient(180deg,var(--sea1) 0%,var(--sea2) 55%,var(--sea3) 100%);background-attachment:fixed}
+.deco{background:transparent!important}
+.bubbles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bubbles i{position:absolute;bottom:-160px;border-radius:50%;background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.95) 0 9%,rgba(255,255,255,.35) 20%,rgba(255,255,255,.06) 56%,rgba(255,255,255,.3) 70%,rgba(255,255,255,0) 73%);border:1.5px solid rgba(255,255,255,.6);animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-60vh) translateX(18px)}100%{transform:translateY(-125vh) translateX(-10px)}}
+main.wrap,footer.foot,header.top{position:relative;z-index:1}
+header.top{position:sticky;z-index:20;background:var(--hdr2,rgba(255,255,255,.96));border-bottom:1px solid var(--glass-b);box-shadow:0 4px 16px rgba(6,62,140,.10)}
+.brand b{color:var(--h-ink)}
+.hero{background:linear-gradient(180deg,var(--hg1,rgba(255,255,255,.78)),var(--hg2,rgba(255,255,255,.42)));color:var(--ink);border:1.5px solid rgba(255,255,255,.9);border-radius:34px;box-shadow:inset 0 2px 0 #fff,0 18px 38px rgba(6,62,140,.20);padding-bottom:22px}
+.hero::before{content:"";position:absolute;left:7%;right:7%;top:6px;height:40%;border-radius:30px;background:linear-gradient(180deg,var(--hgl,rgba(255,255,255,.85)),rgba(255,255,255,0));pointer-events:none}
+.hero>*{position:relative}
+.hero h1{color:var(--h-ink);font-size:clamp(2rem,6vw,2.8rem)}
+.hero .slogan{color:var(--water);font-weight:700}
+.hero .wave{display:none}
+.hero .bubble{box-shadow:0 8px 20px rgba(6,62,140,.14)}
+.card,.lesson,.featured,.tip{background:var(--glass);border:1.5px solid var(--glass-b);border-radius:26px;box-shadow:0 12px 28px rgba(6,62,140,.14)}
+.lesson:hover{border-color:#fff;transform:translateY(-3px)}
+.lesson .band,.lhead{position:relative}
+.lesson .band::after,.lhead::after{content:"";position:absolute;left:10px;right:10px;top:4px;height:45%;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,0));pointer-events:none}
+.lhead{border-radius:30px;box-shadow:0 14px 30px rgba(6,62,140,.22)}
+.lhead .wave{display:none}
+.lesson .ic,.lhead .ic{border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.55),rgba(255,255,255,.15) 60%);box-shadow:inset 0 2px 0 rgba(255,255,255,.6)}
+h2{color:var(--h-ink)}
+.kind-h{display:flex;align-items:center;gap:8px;color:var(--h-ink);font-size:1.05rem}
+.kind-h::before{content:"";width:14px;height:14px;border-radius:50%;flex:none;background:radial-gradient(circle at 35% 30%,#fff 0 18%,#6FD2FF 40%,#0B6BD6 100%)}
+.stats .stat{border-radius:20px;text-align:center;color:#fff;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 6px 14px rgba(6,62,140,.15)}
+.stats .stat b{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.18)}
+.stats .stat span{color:#fff;opacity:.95}
+.stats .stat:nth-child(1){background:linear-gradient(180deg,#4FC3FF,#1679E8)}
+.stats .stat:nth-child(2){background:linear-gradient(180deg,#3FE0D8,#00909C)}
+.stats .stat:nth-child(3){background:linear-gradient(180deg,#6BE89C,#159A50)}
+.btn{position:relative;border:1px solid rgba(0,0,0,.08);box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 6px 14px rgba(6,62,140,.22);text-shadow:0 1px 0 rgba(0,0,0,.15)}
+.btn:not(.ghost){background:linear-gradient(180deg,#3FE0D8 0%,#00A7B5 55%,#008E9B 100%)}
+.btn.leaf{background:linear-gradient(180deg,#5BF09C 0%,#1FB862 55%,#139A50 100%)}
+.btn.water{background:linear-gradient(180deg,#5FC8FF 0%,#1679E8 55%,#0B5FC4 100%)}
+.btn.ghost{background:rgba(255,255,255,.75);text-shadow:none;box-shadow:inset 0 1px 0 #fff,0 3px 8px rgba(6,62,140,.10)}
+.tip{border-style:solid}
+.topic{border-radius:999px}
+.topic[aria-pressed="true"]{background:linear-gradient(180deg,#5FC8FF,#1679E8);color:#fff;border-color:transparent;box-shadow:inset 0 2px 0 rgba(255,255,255,.5)}
+@media (hover:hover) and (min-width:900px){header.top,.hero,.card,.lesson,.tip{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}}
+@media (prefers-reduced-motion: reduce){.bubbles i{animation-duration:60s!important}}
 </style>
 
+<div class="bubbles" aria-hidden="true"><i style="left:4%;width:70px;height:70px;animation-duration:26s;animation-delay:-3s"></i><i style="left:12%;width:26px;height:26px;animation-duration:17s;animation-delay:-9s"></i><i style="left:22%;width:44px;height:44px;animation-duration:22s;animation-delay:-14s"></i><i style="left:35%;width:18px;height:18px;animation-duration:13s;animation-delay:-2s"></i><i style="left:48%;width:90px;height:90px;animation-duration:34s;animation-delay:-20s"></i><i style="left:60%;width:30px;height:30px;animation-duration:19s;animation-delay:-6s"></i><i style="left:72%;width:56px;height:56px;animation-duration:28s;animation-delay:-11s"></i><i style="left:83%;width:22px;height:22px;animation-duration:15s;animation-delay:-4s"></i><i style="left:90%;width:110px;height:110px;animation-duration:40s;animation-delay:-25s"></i><i style="left:95%;width:36px;height:36px;animation-duration:21s;animation-delay:-16s"></i></div>
 <header class="top">
   <div class="top-in">
     <button class="brand" id="brandBtn" aria-label="Về trang chủ">
@@ -323,7 +371,7 @@ footer.foot{margin-top:28px;font-size:.8rem;color:var(--ink-soft);text-align:cen
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <linearGradient id="gDrop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5BB7E8"/><stop offset="1" stop-color="#1E6FA8"/></linearGradient>
+    <radialGradient id="gDrop" cx="38%" cy="32%" r="78%"><stop offset="0" stop-color="#EAFBFF"/><stop offset=".3" stop-color="#7AD6FF"/><stop offset=".75" stop-color="#1A8AF0"/><stop offset="1" stop-color="#0B5FC4"/></radialGradient>
     <symbol id="logo" viewBox="0 0 64 64">
       <path d="M32 4 C32 4 12 28 12 40 a20 20 0 0 0 40 0 C52 28 32 4 32 4Z" fill="url(#gDrop)"/>
       <path d="M32 6 C30 0 24 -1 21 2 C25 2 29 4 32 8Z" fill="#3FA36B"/>
@@ -730,8 +778,8 @@ function mascot(mood="happy",cls="mascot",alive=true){
     cheer:'<path d="M46 80 Q60 98 74 80 Z" fill="#14507C"/><path d="M52 88 Q60 93 68 88" fill="#E07A5F"/>',
     think:'<path d="M50 86 Q60 82 70 86" stroke="#14507C" stroke-width="4" fill="none" stroke-linecap="round"/>'}[mood];
   return `<svg class="${cls} ${alive?"alive":""}" viewBox="0 0 120 132" role="img" aria-label="Bé Giọt">
-    <path d="M60 16 C60 16 18 62 18 86 a42 42 0 0 0 84 0 C102 62 60 16 60 16Z" fill="url(#gDrop)"/>
-    <ellipse cx="42" cy="66" rx="7" ry="12" fill="#FFFFFF" opacity=".35" transform="rotate(25 42 66)"/>
+    <path d="M60 16 C60 16 18 62 18 86 a42 42 0 0 0 84 0 C102 62 60 16 60 16Z" fill="url(#gDrop)" stroke="#FFFFFF" stroke-width="2.5" stroke-opacity=".9"/>
+    <ellipse cx="42" cy="64" rx="7.5" ry="13" fill="#FFFFFF" opacity=".75" transform="rotate(25 42 64)"/><circle cx="50" cy="46" r="3" fill="#fff" opacity=".8"/>
     <g class="leaf"><path d="M60 18 C58 6 46 2 38 8 C46 9 54 12 60 22Z" fill="#3FA36B"/>
     <path d="M60 18 C64 8 76 6 82 12 C74 12 66 15 61 23Z" fill="#5CC08A"/></g>
     <g class="eyes"><circle cx="46" cy="72" r="7" fill="#FFFFFF"/><circle cx="74" cy="72" r="7" fill="#FFFFFF"/>
@@ -747,17 +795,17 @@ const ICONS={
 };
 const SV=(d)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
 const LSTYLE={
- 1:{c:"#2B5D8C",i:SV('<path d="M5 21V3"/><path d="M5 4h12l-2.5 4L17 12H5"/>')},
- 2:{c:"#1E6FA8",i:SV('<path d="M2 15 12 4l10 11Z"/><path d="M4.5 15c2.5 2.2 12.5 2.2 15 0"/><path d="M8.5 15 12 7l3.5 8"/><path d="M9 19c1.8 1 4.2 1 6 0"/>')},
- 3:{c:"#0F7C7C",i:SV('<path d="m2 17 6-9 4 6 3-4 7 7Z"/><path d="M3 21c3-1.5 6 1.5 9 0s6 1.5 9 0"/>')},
- 4:{c:"#22887B",i:SV('<circle cx="12" cy="12" r="9"/><path d="M8 14c1.2 2 6.8 2 8 0"/><path d="M9 9.5h.01M15 9.5h.01"/>')},
- 5:{c:"#3A8F5A",i:SV('<path d="M4 4c5-2 11-2 16 0v7a8 8 0 0 1-16 0Z"/><path d="M8 13.5c2 2 6 2 8 0"/><path d="M7.5 9 10 8.5M16.5 9 14 8.5"/>')},
- 6:{c:"#2F7FB8",i:SV('<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7.5 18c1-3 8-3 9 0"/>')},
- 7:{c:"#1F8A70",i:SV('<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/>')},
- 8:{c:"#3E6FB0",i:SV('<path d="M20 3c-9 1-14 7-14 15"/><path d="M20 3c-1 7-5 11-11 12"/><path d="M4 21l2-3"/><path d="M11 11h4"/>')},
- 9:{c:"#3E9160",i:SV('<path d="M3 17h18"/><path d="M7 17a5 5 0 0 1 10 0"/><path d="M12 5v3M4.5 9.5l2 2M19.5 9.5l-2 2"/><path d="M6 21h12"/>')},
- 10:{c:"#17808F",i:SV('<path d="M2 5.5C4.5 4 8 4 12 6c4-2 7.5-2 10-.5V19c-2.5-1.5-6-1.5-10 .5-4-2-7.5-2-10-.5Z"/><path d="M12 6v13.5"/>')},
- free:{c:"#17A2A2",i:SV('<path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="4"/>')}
+ 1:{c:"#1565C0",c2:"#1E9BE8",i:SV('<path d="M5 21V3"/><path d="M5 4h12l-2.5 4L17 12H5"/>')},
+ 2:{c:"#0A6FCC",c2:"#11A9C9",i:SV('<path d="M2 15 12 4l10 11Z"/><path d="M4.5 15c2.5 2.2 12.5 2.2 15 0"/><path d="M8.5 15 12 7l3.5 8"/><path d="M9 19c1.8 1 4.2 1 6 0"/>')},
+ 3:{c:"#00838F",c2:"#13A88A",i:SV('<path d="m2 17 6-9 4 6 3-4 7 7Z"/><path d="M3 21c3-1.5 6 1.5 9 0s6 1.5 9 0"/>')},
+ 4:{c:"#00897B",c2:"#3EA94F",i:SV('<circle cx="12" cy="12" r="9"/><path d="M8 14c1.2 2 6.8 2 8 0"/><path d="M9 9.5h.01M15 9.5h.01"/>')},
+ 5:{c:"#2E7D32",c2:"#5FA834",i:SV('<path d="M4 4c5-2 11-2 16 0v7a8 8 0 0 1-16 0Z"/><path d="M8 13.5c2 2 6 2 8 0"/><path d="M7.5 9 10 8.5M16.5 9 14 8.5"/>')},
+ 6:{c:"#3F51B5",c2:"#1E88E5",i:SV('<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7.5 18c1-3 8-3 9 0"/>')},
+ 7:{c:"#00796B",c2:"#1597B8",i:SV('<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/>')},
+ 8:{c:"#5E35B1",c2:"#2F80ED",i:SV('<path d="M20 3c-9 1-14 7-14 15"/><path d="M20 3c-1 7-5 11-11 12"/><path d="M4 21l2-3"/><path d="M11 11h4"/>')},
+ 9:{c:"#2E7D32",c2:"#0F9C9C",i:SV('<path d="M3 17h18"/><path d="M7 17a5 5 0 0 1 10 0"/><path d="M12 5v3M4.5 9.5l2 2M19.5 9.5l-2 2"/><path d="M6 21h12"/>')},
+ 10:{c:"#0277BD",c2:"#2E9E5B",i:SV('<path d="M2 5.5C4.5 4 8 4 12 6c4-2 7.5-2 10-.5V19c-2.5-1.5-6-1.5-10 .5-4-2-7.5-2-10-.5Z"/><path d="M12 6v13.5"/>')},
+ free:{c:"#0F9C9C",c2:"#1E88E5",i:SV('<path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="4"/>')}
 };
 const lsty=l=>LSTYLE[l.id]||LSTYLE.free;
 const TIPS=[
@@ -802,9 +850,9 @@ function renderHome(){
   const groups=["trinhbay","gioithieu","thaoluan"].map(k=>{
     const ls=LESSONS.filter(l=>l.kind===k);
     return `<p class="kind-h">${KINDS[k].name}</p><div class="lessons">${ls.map(l=>`
-      <button class="lesson ${l.id===CONFIG.currentLesson?"is-cur":""}" data-l="${l.id}" style="--lc:${lsty(l).c}">
+      <button class="lesson ${l.id===CONFIG.currentLesson?"is-cur":""}" data-l="${l.id}" style="--lc:${lsty(l).c};--lc2:${lsty(l).c2||lsty(l).c}">
         <span class="band"><span class="ic">${lsty(l).i}</span><span class="bt"><b>Bài ${l.id}</b><span>${esc(l.bai)}</span></span></span>
-        <svg class="bandwave" viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0 H200 V4 C170 10 140 0 100 5 S30 10 0 3Z" fill="var(--lc)"/></svg>
+        <span class="bandwave" aria-hidden="true"></span>
         <span class="t">${esc(l.de.replace(/^.*?\(/,"").replace(/\)$/,"")).replace(/^./,c=>c.toUpperCase())}</span>
         <span class="meta">${l.id===CONFIG.currentLesson?'<span class="chip star">⭐ Cô giao</span>':""}<span class="chip">${KINDS[l.kind].short}</span>${doneIds.has(l.id)?'<span class="chip done">✓ Đã luyện</span>':""}</span>
       </button>`).join("")}</div>`;}).join("");
@@ -886,7 +934,7 @@ function renderLesson(){
   if(l.id==="free")d.topic=l.de;
   app.innerHTML=`
   <button class="back" id="backBtn">← Danh sách bài</button>
-  <div class="lhead" style="--lc:${lsty(l).c}">
+  <div class="lhead" style="--lc:${lsty(l).c};--lc2:${lsty(l).c2||lsty(l).c}">
     <div class="lh-in"><span class="ic">${lsty(l).i}</span><div class="stack" style="gap:4px;min-width:0">
       <span class="num">${l.id==="free"?"Chủ đề tự do":l.id==="custom"?"Chủ đề cô giao":"Bài "+l.id+" · "+esc(l.bai)} · ${KINDS[l.kind].short}</span>
       <h2>${esc(l.de)}</h2>${l.sgk?`<span class="small" style="opacity:.85">${esc(l.sgk)}</span>`:""}</div></div>
