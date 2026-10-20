@@ -1017,11 +1017,11 @@ function renderPrep(body,l,d){
       <div><label for="ownT">Hoặc tự chọn đề tài của em</label><input id="ownT" type="text" value="${esc(l.topics.concat(l.extraTopics||[]).includes(d.topic)?"":d.topic)}" placeholder="VD: Bánh cuốn Thanh Trì"></div>
     </section>`:""}
     ${l.roles?`<section class="card stack"><h3>Vai trong cuộc thảo luận</h3><ul class="fb">${l.roles.map(r=>`<li><span class="ic">${r.e}</span><span><b>${esc(r.name)}:</b> ${esc(r.task)}</span></li>`).join("")}</ul><p class="small muted">Ở phần Luyện nói, em tập vai <b>thành viên</b> (nêu ý kiến, phản hồi bạn) và vai <b>thư kí</b> (tóm tắt thảo luận).</p></section>`:""}
-    <section class="card stack scaf" id="scafBox"></section>
     <section class="card stack">
-      <div class="row" style="flex-wrap:nowrap;align-items:flex-start">${mascot("think","")} <p class="small" style="flex:1"><b>Bé Giọt gợi ý:</b> Em hãy tự trả lời các câu hỏi dưới đây bằng lời của mình. Không cần viết thành bài, chỉ cần vài ý ngắn.</p></div>
+      <div class="row" style="flex-wrap:nowrap;align-items:flex-start">${mascot("think","")} <p class="small" style="flex:1"><b>Bé Giọt gợi ý:</b> Trước tiên, em hãy tự suy nghĩ và trả lời các câu hỏi dưới đây bằng lời của mình. Không cần viết thành bài, chỉ cần vài ý ngắn. Nếu bí ý, em mở gợi ý theo bậc ở phía dưới.</p></div>
       ${l.questions.map((q,i)=>`<div class="q"><p>${i+1}. ${esc(q)}</p><textarea id="qa${i}" data-q="${i}" placeholder="Ý của em...">${esc(d.answers[i]||"")}</textarea></div>`).join("")}
     </section>
+    <section class="card stack scaf" id="scafBox"></section>
     <section class="card stack">
       <h3>Dàn ý của em</h3>
       <div class="outline">
@@ -1037,11 +1037,20 @@ function renderPrep(body,l,d){
   const scafBox=document.getElementById("scafBox");
   const drawScaf=()=>{scafBox.innerHTML=scafHTML(l,d);
     scafBox.querySelectorAll("details.tier").forEach(el=>el.ontoggle=()=>{if(el.open){const t=+el.dataset.tier;if(t>(d.tier||0)){d.tier=t;saveD()}}});
-    const cp=document.getElementById("scafCopy");if(cp)cp.onclick=()=>{const sc=getScaf(l,d.topic);if(!sc)return;const put=(id,k,v)=>{const el=document.getElementById(id);if(el&&!el.value.trim()){el.value=v;d.outline[k]=v;return 1}return 0};
-      const n=put("o1","mo",sc.m)+put("o2","trien",scafPlan(sc).map(x=>x.tr+"… ("+x.head+": "+x.kw+")").join("\n"))+put("o3","ket",sc.k);saveD();toast(n?"Đã chép khung vào ô còn trống. Em sửa thành lời của em nhé!":"Các ô dàn ý đã có chữ, Bé Giọt không ghi đè đâu.");const o=document.getElementById("o1");if(o)o.scrollIntoView({behavior:"smooth",block:"center"})};};
+    const cp=document.getElementById("scafCopy");if(cp)cp.onclick=()=>{const sc=getScaf(l,d.topic);if(!sc)return;
+      const vals={o1:["mo",sc.m],o2:["trien",scafPlan(sc).map(x=>x.tr+"… ("+x.head+": "+x.kw+")").join("\n")],o3:["ket",sc.k]};
+      const filled=Object.keys(vals).some(id=>{const el=document.getElementById(id);return el&&el.value.trim()});
+      if(filled&&!cp.dataset.sure){cp.dataset.sure="1";cp.textContent="⚠️ Bấm lần nữa để thay dàn ý đang có";toast("Ô dàn ý đã có chữ. Bấm lần nữa nếu em muốn thay bằng khung mới.");setTimeout(()=>{delete cp.dataset.sure;cp.textContent="📥 Chép khung vào dàn ý"},5000);return}
+      Object.entries(vals).forEach(([id,[k,v]])=>{const el=document.getElementById(id);if(el){el.value=v;d.outline[k]=v}});delete cp.dataset.sure;cp.textContent="📥 Chép khung vào dàn ý";
+      saveD();toast("Đã chép khung vào dàn ý. Em sửa thành lời của em nhé!");const o=document.getElementById("o1");if(o)o.scrollIntoView({behavior:"smooth",block:"center"})};};
   drawScaf();
-  body.querySelectorAll(".topic").forEach(b=>b.onclick=()=>{d.topic=b.dataset.t;d.tier=0;document.getElementById("ownT").value="";saveD();body.querySelectorAll(".topic").forEach(x=>x.setAttribute("aria-pressed",x===b));drawScaf()});
-  const own=document.getElementById("ownT"); if(own){own.oninput=()=>{if(own.value.trim()){d.topic=own.value.trim();body.querySelectorAll(".topic").forEach(x=>x.setAttribute("aria-pressed","false"))}saveD()};own.onchange=()=>drawScaf();}
+  /* mỗi đề tài có câu trả lời và dàn ý riêng */
+  const switchTopic=nt=>{nt=String(nt||"").trim();if(!nt||nt===d.topic)return;d.saved=d.saved||{};
+    if(d.topic)d.saved[d.topic]={answers:d.answers,outline:d.outline,tier:d.tier||0};
+    const sv=d.saved[nt];d.answers=sv?sv.answers:{};d.outline=sv?sv.outline:{mo:"",trien:"",ket:""};d.tier=sv?sv.tier:0;d.topic=nt;saveD();
+    const y=window.scrollY;renderPrep(body,l,d);window.scrollTo(0,y);};
+  body.querySelectorAll(".topic").forEach(b=>b.onclick=()=>switchTopic(b.dataset.t));
+  const own=document.getElementById("ownT"); if(own){own.onchange=()=>switchTopic(own.value);own.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();switchTopic(own.value)}};}
   body.querySelectorAll("[data-q]").forEach(t=>t.oninput=()=>{d.answers[t.dataset.q]=t.value;saveD()});
   body.querySelectorAll("[data-o]").forEach(t=>t.oninput=()=>{d.outline[t.dataset.o]=t.value;saveD()});
   document.getElementById("toTalk").onclick=()=>{if(!d.topic){toast("Em chọn đề tài trước nhé");return;}VIEW.step="talk";renderLesson()};
@@ -1158,7 +1167,8 @@ function olBody(ol,v){
   if(!has)return `<p class="small">Em chưa lập dàn ý. Có dàn ý, em sẽ nói mạch lạc hơn nhiều đấy! <button type="button" class="btn ghost sm" id="olBack">← Quay lại lập dàn ý</button></p>`;
   if(v==="none")return `<p class="olnone">🎯 Em thử <b>nói độc lập, không nhìn dàn ý</b> nhé. Bé Giọt tin em làm được! Quên ý thì bấm “Dàn ý đầy đủ” để xem lại.</p>`;
   const key=t=>String(t||"").split("\n").map(x=>x.trim()).filter(Boolean).map(x=>{const w=x.split(/\s+/);return w.length>5?w.slice(0,5).join(" ")+"…":x}).join("\n");
-  const f=v==="key"?key:(t=>t);
+  const tidy=t=>String(t||"").split("\n").map(x=>x.trim()).filter(Boolean).join("\n");
+  const f=v==="key"?(t=>key(tidy(t))):tidy;
   return [["Mở đầu",ol.mo],["Triển khai",ol.trien],["Kết luận",ol.ket]].map(([n,t])=>`<div class="olpart"><span class="oln">${n}</span><div class="olt">${esc(f(t))||"…"}</div></div>`).join("");
 }
 function wireOutline(body,d){
@@ -1565,7 +1575,7 @@ const I18N_EN={
 "💧 Bậc 1 · Câu hỏi gợi mở":"💧 Step 1 · Guiding questions","🌊 Bậc 2 · Ý chính và từ khoá":"🌊 Step 2 · Main ideas & key words","🏞️ Bậc 3 · Khung dàn ý":"🏞️ Step 3 · Outline frame",
 "Mở đầu:":"Opening:","Câu chuyển ý:":"Linking phrases:","Triển khai:":"Body:","✍️ Thêm một ví dụ, chi tiết hoặc kỉ niệm của em.":"✍️ Add an example, detail or memory of your own.","Kết luận:":"Conclusion:","📥 Chép khung vào dàn ý":"📥 Copy frame into my outline",
 "Đã chép khung vào ô còn trống. Em sửa thành lời của em nhé!":"Frame copied into the empty boxes. Now rewrite it in your own words!","Các ô dàn ý đã có chữ, Bé Giọt không ghi đè đâu.":"Your outline boxes already have text, so Droplet won't overwrite them.",
-"Bé Giọt gợi ý:":"Droplet's tip:","Em hãy tự trả lời các câu hỏi dưới đây bằng lời của mình. Không cần viết thành bài, chỉ cần vài ý ngắn.":"Answer the questions below in your own words. No need to write a full text, just a few short ideas.",
+"Bé Giọt gợi ý:":"Droplet's tip:","Trước tiên, em hãy tự suy nghĩ và trả lời các câu hỏi dưới đây bằng lời của mình. Không cần viết thành bài, chỉ cần vài ý ngắn. Nếu bí ý, em mở gợi ý theo bậc ở phía dưới.":"First, think for yourself and answer the questions below in your own words. No need for a full text, just a few short ideas. If you get stuck, open the step-by-step hints below.","⚠️ Bấm lần nữa để thay dàn ý đang có":"⚠️ Press again to replace your outline","Ô dàn ý đã có chữ. Bấm lần nữa nếu em muốn thay bằng khung mới.":"Your outline already has text. Press again to replace it with the frame.","Đã chép khung vào dàn ý. Em sửa thành lời của em nhé!":"Frame copied into your outline. Now rewrite it in your own words!","Em hãy tự trả lời các câu hỏi dưới đây bằng lời của mình. Không cần viết thành bài, chỉ cần vài ý ngắn.":"Answer the questions below in your own words. No need to write a full text, just a few short ideas.",
 "Ý của em...":"Your ideas...","Dàn ý của em":"Your outline","Mở đầu":"Opening","Triển khai":"Body","Kết luận":"Conclusion",
 "Giới thiệu vấn đề và nêu khái quát ý kiến của em":"Introduce the issue and state your overall opinion","Các ý chính, lí lẽ, bằng chứng":"Main points, reasons, evidence","Khẳng định lại ý nghĩa, lời nhắn gửi":"Restate the meaning and your message",
 "Gợi ý: lựa chọn vài từ ngữ then chốt phù hợp với vấn đề (SGK). Dàn ý sẽ hiện nhỏ phía trên khi em luyện nói.":"Tip: choose a few key words that fit the issue (textbook). Your outline will appear above while you speak.",
