@@ -357,6 +357,7 @@ h2{color:var(--h-ink)}
 .top-in .brand{min-width:0;flex:1 1 0}.top-in .brand>div{min-width:0}.top-in .brand b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hdr-r{flex:none}
 .bi{display:inline-flex;flex-direction:column;line-height:1.2;gap:1px}.bi .en{font-size:.74em;font-weight:500;opacity:.78;font-style:italic;letter-spacing:.01em}
 h1 .bi .en,h2 .bi .en{font-size:.5em}.btn .bi,nav.tabs .bi,.steps .bi{align-items:center;text-align:center}
+.crit-row .name small.cnote{display:block;font-size:.74rem;font-weight:500;color:var(--ink-soft);margin-top:1px}
 </style>
 
 <div class="bubbles" aria-hidden="true"><i style="left:4%;width:70px;height:70px;animation-duration:26s;animation-delay:-3s"></i><i style="left:12%;width:26px;height:26px;animation-duration:17s;animation-delay:-9s"></i><i style="left:22%;width:44px;height:44px;animation-duration:22s;animation-delay:-14s"></i><i style="left:35%;width:18px;height:18px;animation-duration:13s;animation-delay:-2s"></i><i style="left:48%;width:90px;height:90px;animation-duration:34s;animation-delay:-20s"></i><i style="left:60%;width:30px;height:30px;animation-duration:19s;animation-delay:-6s"></i><i style="left:72%;width:56px;height:56px;animation-duration:28s;animation-delay:-11s"></i><i style="left:83%;width:22px;height:22px;animation-duration:15s;animation-delay:-4s"></i><i style="left:90%;width:110px;height:110px;animation-duration:40s;animation-delay:-25s"></i><i style="left:95%;width:36px;height:36px;animation-duration:21s;animation-delay:-16s"></i></div>
@@ -432,8 +433,8 @@ const CONFIG = {
    DỮ LIỆU 10 BÀI NÓI VÀ NGHE – NGỮ VĂN 8 (KNTT)
    ========================================================= */
 const KINDS = {
-  trinhbay:{name:"Trình bày ý kiến về một vấn đề xã hội", short:"Trình bày ý kiến", target:[90,180]},
-  gioithieu:{name:"Giới thiệu sách", short:"Giới thiệu sách", target:[60,150]},
+  trinhbay:{name:"Trình bày ý kiến về một vấn đề xã hội", short:"Trình bày ý kiến", target:[120,300]},
+  gioithieu:{name:"Giới thiệu sách", short:"Giới thiệu sách", target:[120,300]},
   thaoluan:{name:"Thảo luận một vấn đề trong đời sống", short:"Thảo luận", target:[45,120]}
 };
 const LESSONS = [
@@ -579,8 +580,8 @@ const MARK = {
   open:["xin chào","kính chào","chào các bạn","chào thầy cô","em xin","tôi xin","hôm nay","em muốn trình bày","em xin trình bày","em xin giới thiệu","mình xin","mình muốn","sau đây","em sẽ trình bày"],
   body:["thứ nhất","thứ hai","thứ ba","đầu tiên","trước hết","tiếp theo","bên cạnh đó","ngoài ra","mặt khác","không chỉ","hơn nữa","sau đó","một là","hai là"],
   close:["tóm lại","nói tóm lại","cuối cùng","như vậy","kết luận","tổng kết","vì thế","cảm ơn","xin cảm ơn","em xin hết","em xin kết thúc"],
-  reason:["vì","bởi vì","bởi","do đó","cho nên","nên","vì vậy","chính vì","vì thế","lí do","bởi lẽ","nhờ"],
-  evidence:["ví dụ","chẳng hạn","như là","thực tế","theo","số liệu","em đã từng","mình đã từng","ở quê em","bằng chứng","minh chứng","khi em","có lần","năm","phần trăm"],
+  reason:["vì","bởi vì","bởi","do đó","cho nên","vì vậy","chính vì","vì thế","lí do","bởi lẽ","nhờ"],
+  evidence:["ví dụ","chẳng hạn","thực tế","số liệu","em đã từng","mình đã từng","ở quê em","bằng chứng","minh chứng","khi em","có lần","phần trăm","theo thống kê","theo sách","ông em","bà em","bố em","mẹ em","nhà em","lớp em","trường em"],
   opinion:["theo em","em nghĩ","em cho rằng","em thấy","ý kiến của em","quan điểm","theo mình","mình nghĩ","tôi cho rằng","theo tôi","em tin"],
   invite:["các bạn hãy","các bạn nên","nên đọc","mời các bạn","hãy đọc","hãy tìm đọc","đáng đọc"],
   book:["tác giả","nhà xuất bản","xuất bản","nhân vật","nội dung","cốt truyện","chương","chi tiết","kể về","viết về"],
@@ -614,19 +615,33 @@ function scoreSpeech({text,seconds,lesson,topic,mode,peerText,typed,pauses}){
   const tgt = isReply ? [30,90] : isSum ? [40,120] : KINDS[kind].target;
 
   // Thời lượng
-  let sDur; if(sec<tgt[0]) sDur=clamp(sec/tgt[0]*10); else if(sec<=tgt[1]) sDur=10; else sDur=clamp(10-(sec-tgt[1])/30*2,6);
-  crit.push({key:"dur",name:"Thời lượng",v:sDur});
+  /* Thời lượng chia mức (theo mục tiêu của từng kiểu bài) */
+  const DL=[[tgt[0]/4,2,"Mức 1/5 · Mới bắt đầu"],[tgt[0]/2,4,"Mức 2/5 · Cần thêm ý"],[tgt[0]*3/4,6,"Mức 3/5 · Khá dần"],[tgt[0],8,"Mức 4/5 · Gần đạt"],[tgt[1],10,"Mức 5/5 · Đạt"],[tgt[1]+60,8,"Hơi dài"],[1e9,6,"Quá dài"]];
+  let dl=DL.find(x=>sec<x[0])||DL[DL.length-1];let sDur=dl[1];
+  let durNote=dl[1]<10&&sec<tgt[0]?dl[2]+" – cần thêm "+fmtSec(tgt[0]-sec):dl[1]<10?dl[2]+" – nên gọn dưới "+fmtSec(tgt[1]):dl[2];
+  if(tgt[0]===120&&tgt[1]===300){ /* bài trình bày, giới thiệu sách: thang chi tiết do cô Thủy đề xuất */
+    const s0=Math.round(sec);
+    if(s0<30){sDur=2;durNote="Mới bắt đầu – cần thêm "+fmtSec(120-s0)+" để đạt";}
+    else if(s0<60){sDur=4;durNote="Cần thêm ý – cần thêm "+fmtSec(120-s0)+" để đạt";}
+    else if(s0<90){sDur=6;durNote="Khá dần – cần thêm "+fmtSec(120-s0)+" để đạt";}
+    else if(s0<120){sDur=7;durNote="Gần đạt – cần thêm "+fmtSec(120-s0)+" để đạt";}
+    else if(s0<=180){sDur=8;durNote="Đạt (2–3 phút) · nói đến 3 phút để được 10 điểm";}
+    else if(s0<=300){sDur=10;durNote="Tốt (3–5 phút)";}
+    else{const over=Math.ceil((s0-300)/30);sDur=Math.max(3,10-over);durNote="Quá 5 phút – trừ "+over+" điểm (mỗi 30 giây trừ 1 điểm)";}
+  }
+  crit.push({key:"dur",name:"Thời lượng",v:sDur,note:durNote});
 
   // Trôi chảy
   const lp=Number.isFinite(pauses)?pauses:0;
-  const sFlu=clamp(10-per100*1.4-Math.max(0,lp-1)*0.6);
+  let sFlu=clamp(10-per100*1.6-Math.max(0,lp-1)*0.9);
+  sFlu=Math.min(sFlu,6+4*Math.min(1,sec/tgt[0]));if(typed)sFlu=Math.min(sFlu,8);
   crit.push({key:"flu",name:"Trôi chảy",v:sFlu});
 
   // Tốc độ (âm tiết/phút)
-  let sPace; if(wpm>=110&&wpm<=190) sPace=10; else if(wpm<110) sPace=clamp(10-(110-wpm)/12); else sPace=clamp(10-(wpm-190)/12);
+  let sPace; if(wpm>=120&&wpm<=175) sPace=10; else if(wpm<120) sPace=clamp(10-(120-wpm)/10); else sPace=clamp(10-(wpm-175)/10);
   crit.push({key:"pace",name:"Tốc độ nói",v:sPace});
 
-  const kw = (lesson.keywords||[]).concat(topic? norm(topic).trim().split(" ").filter(x=>x.length>1):[]);
+  const tw=topic?norm(topic).trim().split(" ").filter(Boolean):[];const kw=(lesson.keywords||[]).concat(topic?[tw.join(" ")]:[]).concat(tw.slice(0,-1).map((x,i)=>x+" "+tw[i+1]).filter(x=>x.length>4));
   const kwHit=countPhrases(t,[...new Set(kw)]);
   const info={};
 
@@ -663,8 +678,8 @@ function scoreSpeech({text,seconds,lesson,topic,mode,peerText,typed,pauses}){
     info.open=opHead; info.body=bo.n; info.close=clTail;
     if(kind==="trinhbay"||kind==="thaoluan"){
       const rs=countPhrases(t,MARK.reason), ev=countPhrases(t,MARK.evidence), opn=countPhrases(t,MARK.opinion);
-      crit.push({key:"reason",name:"Lí lẽ, bằng chứng",v:clamp(Math.min(rs.n,4)*1.5+Math.min(ev.n,3)*1.4)});
-      crit.push({key:"opinion",name:"Nêu rõ ý kiến",v:clamp(opn.n?6+Math.min(opn.n,4):1)});
+      crit.push({key:"reason",name:"Lí lẽ, bằng chứng",v:clamp(Math.min(rs.n,4)*1.2+Math.min(ev.n,3)*1.6+(rs.n&&ev.n?0:-1))});
+      crit.push({key:"opinion",name:"Nêu rõ ý kiến",v:clamp(opn.n?5+Math.min(opn.n,3)*1.2+(rs.n?1.4:0):1)});
       Object.assign(info,{reason:rs.n,evidence:ev.n,opinion:opn.n});
     } else {
       const bk=countPhrases(t,MARK.book), fe=countPhrases(t,MARK.feel), iv=countPhrases(t,MARK.invite);
@@ -672,12 +687,22 @@ function scoreSpeech({text,seconds,lesson,topic,mode,peerText,typed,pauses}){
       crit.push({key:"feel",name:"Cảm nhận, lời mời đọc",v:clamp(Math.min(fe.n,3)*2.2+(iv.n?3.4:0))});
       Object.assign(info,{book:bk.n,feel:fe.n,invite:iv.n});
     }
-    crit.push({key:"topic",name:"Bám sát đề",v:clamp(Math.min(kwHit.n,8)*1.25)});
+    let sc=null;try{sc=getScaf(lesson,topic)}catch(e){}
+    if(sc&&!sc.own&&sc.y&&sc.y.length){
+      const SW=new Set(["của","và","với","có","là","các","những","một","được","cho","để","trong","từ","bị","em","mình","nhiều","hơn","rất","đã","cần","như"]);
+      const groups=sc.y.map(([h,k])=>{const out=new Set();String(k).split(/[·,()–]/).map(x=>norm(x).trim()).filter(Boolean).forEach(ph=>{const ws=ph.split(" ");if(ws.length<=2&&ph.length>3)out.add(ph);for(let q=0;q+1<ws.length;q++){if(SW.has(ws[q])||SW.has(ws[q+1]))continue;out.add(ws[q]+" "+ws[q+1])}});["món ăn","học sinh","ý kiến"].forEach(x=>out.delete(x));return [...out]});
+      const hitG=groups.map(g=>countPhrases(t,g).found);const nG=hitG.filter(f=>f.length).length;const gScore=hitG.reduce((a,f)=>a+(f.length>=2?1:f.length?0.55:0),0);
+      crit.push({key:"topic",name:"Bám sát đề",v:clamp(gScore/groups.length*8.5+Math.min(kwHit.n,3)*0.5)});
+      info.groups={hit:nG,total:groups.length,heads:sc.y.map(x=>x[0]),hitG};
+    } else crit.push({key:"topic",name:"Bám sát đề",v:clamp(Math.min(kwHit.n,10)*1.1)});
   }
+  // vốn từ, ý phong phú: số tiếng khác nhau
+  {const uniq=new Set(w).size;crit.push({key:"rich",name:"Vốn từ, ý phong phú",v:clamp((uniq-15)/13)});info.uniq=uniq;}
   // trọng số
-  const W={cover:1.8,sumstruct:1,conclude:1.2,dur:1,flu:1.2,pace:.6,struct:1.4,reason:1.5,opinion:1,topic:1.1,bookinfo:1.4,feel:1.2,listen:1.6,stance:1.2,polite:1};
+  const W={rich:1,cover:1.8,sumstruct:1,conclude:1.2,dur:1.4,flu:1.2,pace:.6,struct:1.4,reason:1.5,opinion:1,topic:1.1,bookinfo:1.4,feel:1.2,listen:1.6,stance:1.2,polite:1};
   let sw=0,s=0;for(const c of crit){const k=W[c.key]||1;sw+=k;s+=c.v*k;c.v=r1(c.v)}
-  const total=r1(s/sw);
+  let tot=s/sw;if(sec<tgt[0])tot*=(0.55+0.45*sec/tgt[0]);
+  const total=r1(tot);
   return {total,crit,metrics:{sec,nw,wpm,fill:fill.n,rep,pauses:Number.isFinite(pauses)?pauses:null,fillFound:fill.found,kwFound:kwHit.found},info,estimated:!(seconds>0),isReply,isSum};
 }
 
@@ -694,7 +719,7 @@ function buildFeedback(res,lesson){
   if(m.pauses>=3)fix.push({k:"flu",v:by.flu-0.01,txt:`Em có ${m.pauses} lần ngừng lâu (trên 3 giây). Hãy nhìn dàn ý và nối ý bằng các từ như “tiếp theo”, “bên cạnh đó” để lời nói liền mạch hơn.`});
   F("flu",`Em dùng ${m.fill} từ đệm${m.fillFound.length?` (${m.fillFound.slice(0,4).map(x=>"“"+x+"”").join(", ")})`:""}${m.rep?` và lặp từ ${m.rep} lần`:""}. Khi cần suy nghĩ, em hãy dừng lại một nhịp thay vì nói “ờ”.`);
   P("pace",`Tốc độ nói vừa phải (khoảng ${m.wpm} tiếng/phút), người nghe dễ theo dõi.`);
-  F("pace",m.wpm<110?`Em nói hơi chậm (${m.wpm} tiếng/phút). Thử nói liền mạch hơn, ngắt nghỉ ở dấu câu.`:`Em nói hơi nhanh (${m.wpm} tiếng/phút). Hãy chậm lại để người nghe kịp hiểu.`);
+  F("pace",m.wpm<120?`Em nói hơi chậm (${m.wpm} tiếng/phút). Thử nói liền mạch hơn, ngắt nghỉ ở dấu câu.`:`Em nói hơi nhanh (${m.wpm} tiếng/phút). Hãy chậm lại để người nghe kịp hiểu.`);
   if(by.struct!==undefined){
     P("struct","Bài nói có bố cục rõ ràng: Mở đầu – Triển khai – Kết luận.");
     if(by.struct<6.5){
@@ -707,7 +732,10 @@ function buildFeedback(res,lesson){
   P("opinion","Em nêu ý kiến riêng rất rõ ràng.");
   F("opinion","Người nghe chưa thấy rõ ý kiến của em. Hãy nói thẳng: “Theo em, ...”.");
   P("topic",`Em bám sát đề, dùng tốt các từ khoá${m.kwFound.length?` như ${m.kwFound.slice(0,3).map(x=>"“"+x+"”").join(", ")}`:""}.`);
-  F("topic","Bài nói chưa bám sát đề. Hãy nhắc lại tên vấn đề và nói về giá trị, hiện trạng hoặc cách giữ gìn.");
+  if(i.groups){const miss=i.groups.heads.filter((h,k)=>!i.groups.hitG[k].length);if(by.topic<7.5&&miss.length)fix.push({k:"topic",v:by.topic,txt:`Bài nói còn thiếu ý về: ${miss.slice(0,2).map(x=>"“"+x+"”").join(", ")}. Mở “Bậc 2” ở bước Chuẩn bị để xem gợi ý nhé.`})}
+  else F("topic","Bài nói chưa bám sát đề. Hãy nhắc lại tên vấn đề và nói về giá trị, hiện trạng hoặc cách giữ gìn.");
+  P("rich","Bài nói nhiều ý, vốn từ phong phú.");
+  F("rich","Bài nói còn ít ý. Hãy thêm một ví dụ, một chi tiết miêu tả hoặc một kỉ niệm của chính em để bài phong phú hơn.");
   P("bookinfo","Em giới thiệu đủ thông tin về cuốn sách.");
   F("bookinfo","Hãy nói rõ hơn về cuốn sách: tên, tác giả, nội dung chính, nhân vật.");
   P("feel","Em chia sẻ cảm nhận chân thành và có lời mời đọc hấp dẫn.");
@@ -730,7 +758,7 @@ function buildFeedback(res,lesson){
     const up={dur:"Thử giữ thời lượng ổn định và nhấn giọng ở các ý chính.",flu:"Thử nói không có từ đệm nào, dừng một nhịp khi cần suy nghĩ.",pace:"Thử điều chỉnh tốc độ, chậm lại ở các ý quan trọng.",struct:"Thử dùng thêm từ nối ý để phần Triển khai mạch lạc hơn.",reason:"Thử thêm một bằng chứng thực tế nữa để thuyết phục hơn.",opinion:"Thử nêu ý kiến của em sắc nét hơn ngay từ phần Mở đầu.",topic:"Thử nói sâu hơn về một khía cạnh: hiện trạng, giá trị hoặc hướng bảo tồn.",bookinfo:"Thử kể thêm một chi tiết đặc sắc của cuốn sách.",feel:"Thử chia sẻ một câu văn em thích nhất trong sách.",listen:"Thử tóm tắt ý bạn ngắn gọn hơn trước khi phản hồi.",cover:"Thử nêu thêm lí do mà mỗi bạn đưa ra.",sumstruct:"Thử dùng tên hoặc thứ tự từng bạn để người nghe dễ theo dõi.",conclude:"Thử nêu thêm việc làm cụ thể mà nhóm thống nhất.",stance:"Thử nói rõ hơn em đồng tình ở điểm nào, chưa đồng tình ở điểm nào.",polite:"Thử kết thúc bằng lời cảm ơn bạn đã chia sẻ."}[lo.k];
     if(up)fix.push({txt:"Để hay hơn nữa: "+up});
   }
-  const PRI=["cover","listen","struct","reason","opinion","topic","bookinfo","feel","stance","polite","sumstruct","conclude","flu","dur","pace"];
+  const PRI=["cover","listen","struct","reason","opinion","rich","topic","bookinfo","feel","stance","polite","sumstruct","conclude","flu","dur","pace"];
   praise.sort((a,b)=>PRI.indexOf(a.k)-PRI.indexOf(b.k));
   return {praise:praise.slice(0,3).map(x=>x.txt),fix:fix.slice(0,2).map(x=>x.txt)};
 }
@@ -841,7 +869,7 @@ function tipToday(){const d=new Date();const n=Math.floor((d-new Date(d.getFullY
 const app=document.getElementById("app");
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let VIEW={name:"home"};
-function go(name,params={}){stopRec();try{MUSIC.stop()}catch(e){}VIEW={name,...params};render();window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
+function go(name,params={}){try{flushPending()}catch(e){}stopRec();try{MUSIC.stop()}catch(e){}VIEW={name,...params};render();window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
   document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.go===({home:"home",lesson:"home",journey:"journey",about:"about"}[name])?"page":"false"));}
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(t._h);t._h=setTimeout(()=>t.hidden=true,2600);}
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>go(b.dataset.go));
@@ -942,6 +970,7 @@ function getLesson(){
 function draftKey(l){return l.id==="custom"?"C"+l.de.slice(0,40):"L"+l.id;}
 
 function renderLesson(){
+  if(VIEW.step!=="result"){try{flushPending()}catch(e){}}
   const l=getLesson(); const step=VIEW.step||"prep"; const dk=draftKey(l);
   const d=DRAFTS[dk]||(DRAFTS[dk]={topic:l.id==="free"?l.de:"",answers:{},outline:{mo:"",trien:"",ket:""}});
   if(l.id==="free")d.topic=l.de;
@@ -1249,7 +1278,7 @@ function renderResult(body,l,d){
         <p style="font-weight:600">${line}</p>
         ${dl!==null?`<p class="small">${dl>0?`<span class="delta-up">▲ Tăng ${String(dl).replace(".",",")} điểm</span> so với lần trước 👏`:dl<0?`<span class="muted">Thấp hơn lần trước ${String(-dl).replace(".",",")} điểm. Không sao, mỗi lần nói là một lần luyện!</span>`:`<span class="muted">Bằng điểm lần trước</span>`}</p>`:`<p class="small muted">Lần luyện đầu tiên của bài này</p>`}
       </div></div>
-      <div class="crit">${res.crit.map(c=>`<div class="crit-row"><span class="name">${c.name}</span><span class="bar"><i style="width:${c.v*10}%"></i></span><span class="v">${String(c.v).replace(".",",")}</span></div>`).join("")}</div>
+      <div class="crit">${res.crit.map(c=>`<div class="crit-row"><span class="name">${c.name}${c.note?`<small class="cnote">${esc(c.note)}</small>`:""}</span><span class="bar"><i style="width:${c.v*10}%"></i></span><span class="v">${String(c.v).replace(".",",")}</span></div>`).join("")}</div>
     </section>
     <section class="card stack">
       <h3>Bé Giọt nhận xét</h3>
@@ -1269,15 +1298,16 @@ function renderResult(body,l,d){
     </section>
     <section class="card stack">
       <h3>Em tự đánh giá</h3>
-      <div class="check">${SELF.map((s,i)=>`<label><input type="checkbox" id="sf${i}"> ${esc(s)}</label>`).join("")}</div>
+      <div class="check">${SELF.map((s,i)=>`<label><input type="checkbox" id="sf${i}" ${(entry.selfIdx||[]).includes(i)?"checked":""}> ${esc(s)}</label>`).join("")}</div>
+      ${ME.mode==="lop"&&!entry.sent?'<p class="small muted">Em tích những điều em đã làm được, rồi bấm “📨 Gửi cho cô”. Nếu em quên, kết quả vẫn tự động gửi cho cô khi em rời trang này.</p>':""}
     </section>
     <div class="row">
       <button class="btn water" id="again">🎤 Nói lại</button>
-      ${ME.mode==="lop"?'<button class="btn leaf" id="send">📨 Gửi cho cô</button>':""}
+      ${ME.mode==="lop"&&!entry.sent?'<button class="btn leaf" id="send">📨 Gửi cho cô</button>':""}
       <button class="btn ghost" id="cpT">📋 Chép cho cô</button>
       <button class="btn ghost" id="home2">Về danh sách bài</button>
     </div>
-    <p class="small muted" id="sendNote">${entry.sent?"Đã gửi cho cô ✅":""}</p>
+    <p class="small muted" id="sendNote">${entry.sent?"Đã gửi kết quả, lời nói và tự đánh giá cho cô ✅":""}</p>
     <textarea id="cpTbox" hidden aria-label="Gói chép cho cô"></textarea>`;
   document.getElementById("cpT").onclick=()=>{
     const pkg=["[H2O]",`Mã bài: ${l.id}`,`Đề: ${l.de}`,`Kiểu: ${l.kind}`,`Chế độ: ${entry.mode}`,`Đề tài: ${entry.topic}`,`Học sinh: ${ME.stt?"STT "+ME.stt:""}${ME.name?" – "+ME.name:""}`,
@@ -1286,6 +1316,8 @@ function renderResult(body,l,d){
     const ta=document.getElementById("cpTbox");
     navigator.clipboard.writeText(pkg).then(()=>toast("Đã chép ✅ Cô dán vào trang giáo viên nhé")).catch(()=>{ta.hidden=false;ta.value=pkg;ta.focus();ta.select();toast("Bôi đen rồi bấm Ctrl+C để chép nhé")});
   };
+  if(ME.mode==="lop"&&!entry.sent)PENDING={entry,l};
+  {const boxes=[...document.querySelectorAll('.check input')];entry.selfTotal=boxes.length;boxes.forEach((x,k)=>x.onchange=()=>{entry.selfIdx=boxes.map((y,j)=>y.checked?j:-1).filter(j=>j>=0);store.set("history",HISTORY)});}
   if(VIEW.result.fresh){VIEW.result.fresh=false;if(newBadge||improved||res.total>=8){rainDrops();SFX.cheer()}else SFX.chime();}
   document.getElementById("again").onclick=()=>{VIEW.step="talk";renderLesson()};
   document.getElementById("home2").onclick=()=>go("home");
@@ -1293,21 +1325,25 @@ function renderResult(body,l,d){
 }
 
 /* ---------- Gửi kết quả cho cô qua Google Form ---------- */
-async function sendToTeacher(entry,l){
-  const note=document.getElementById("sendNote");
-  if(!ME.stt){toast("Em hãy nhập số thứ tự ở trang chủ trước nhé");return;}
+let PENDING=null;
+function flushPending(){if(PENDING&&!PENDING.entry.sent){const p=PENDING;PENDING=null;sendToTeacher(p.entry,p.l,true)}}
+addEventListener("pagehide",flushPending);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")flushPending()});
+async function sendToTeacher(entry,l,auto){
+  const note=document.getElementById("sendNote")||{};
+  if(entry.sent)return;
+  if(!ME.stt){note.textContent="Em chưa nhập số thứ tự nên kết quả chưa gửi được cho cô. Em về trang chủ nhập số thứ tự nhé.";if(!auto)toast("Em hãy nhập số thứ tự ở trang chủ trước nhé");return;}
   const f=getFormConfig();
   if(!f.action){note.textContent="Cô chưa mở hộp thư nhận bài. Kết quả đã được lưu trên máy của em, em có thể gửi lại sau.";return;}
-  const self=[...document.querySelectorAll('.check input')].filter(x=>x.checked).length;
   const by=Object.fromEntries(entry.crit.map(c=>[c.key,c.v]));
   const MODE_VI={solo:l.kind==="thaoluan"?"Nêu ý kiến":"Trình bày",reply:"Phản hồi bạn",summary:"Tóm tắt thảo luận"};
   const vals={stt:ME.stt,name:ME.name||"",lesson:l.id==="free"?"Tự do":l.id==="custom"?"Cô giao":"Bài "+l.id,mode:MODE_VI[entry.mode]||entry.mode,topic:entry.topic,attempt:entry.attempt,
     total:String(entry.total).replace(".",","),crit:entry.crit.map(c=>c.name+": "+String(c.v).replace(".",",")).join("; "),
     sec:Math.round(entry.metrics.sec),words:entry.metrics.nw,fill:entry.metrics.fill,wpm:entry.metrics.wpm,pauses:entry.metrics.pauses??"",
-    self:`${self}/${document.querySelectorAll('.check input').length}`,text:entry.text};
+    self:entry.selfTotal?`${(entry.selfIdx||[]).length}/${entry.selfTotal}`:"",text:entry.text};
   const fd=new URLSearchParams();for(const [k,id] of Object.entries(f.entries)){if(vals[k]!==undefined)fd.append(id,vals[k])}
-  try{await fetch(f.action,{method:"POST",mode:"no-cors",body:fd});entry.sent=true;store.set("history",HISTORY);note.textContent="Đã gửi cho cô ✅";toast("Đã gửi cho cô ✅");}
-  catch(e){note.textContent="Chưa gửi được (có thể do mất mạng). Em thử lại sau nhé.";}
+  if(PENDING&&PENDING.entry===entry)PENDING=null;
+  try{await fetch(f.action,{method:"POST",mode:"no-cors",body:fd,keepalive:true});entry.sent=true;store.set("history",HISTORY);note.textContent="Đã gửi kết quả, lời nói và tự đánh giá cho cô ✅";const sb=document.getElementById("send");if(sb)sb.remove();if(!auto)toast("Đã gửi cho cô ✅");}
+  catch(e){note.textContent="Chưa gửi được (có thể do mất mạng). Em bấm “Gửi cho cô” để thử lại nhé.";if(auto&&!document.getElementById("send")&&note.before){const b=document.createElement("button");b.className="btn leaf";b.id="send";b.textContent="📨 Gửi cho cô";b.onclick=()=>sendToTeacher(entry,l);note.before(b)}}
 }
 const FORM_KEYS=["stt","name","lesson","mode","topic","attempt","total","crit","sec","words","fill","wpm","pauses","self","text"];
 function getFormConfig(){
@@ -1418,7 +1454,7 @@ function renderAbout(){
         <li><span class="ic">🔒</span><span>Không cần tài khoản. Học sinh lớp cô Thủy chỉ dùng số thứ tự; bạn tự luyện không cần nhập thông tin gì.</span></li>
         <li><span class="ic">🎙️</span><span>Giọng nói được chuyển thành chữ ngay khi nói (bằng công nghệ nhận dạng giọng nói có sẵn của trình duyệt) và không được lưu thành file ghi âm.</span></li>
         <li><span class="ic">🤖</span><span>Trang web được thiết kế với sự hỗ trợ của công cụ AI (Claude). Phần nhận xét sâu do AI gợi ý, cô giáo xem lại và quyết định.</span></li>
-        <li><span class="ic">💾</span><span>Lịch sử luyện tập được lưu ngay trên thiết bị của em và chỉ đến tay cô khi em bấm “Gửi cho cô”.</span></li>
+        <li><span class="ic">💾</span><span>Học sinh lớp cô Thủy: mỗi lần luyện, kết quả, lời nói (đã chuyển thành chữ) và phần tự đánh giá được gửi cho cô để theo dõi sự tiến bộ; nếu em quên bấm gửi, trang sẽ tự gửi. Bạn tự luyện: mọi thứ chỉ lưu trên thiết bị của em, không gửi đi đâu.</span></li>
       </ul>
     </section>
     <section class="card stack">
@@ -1502,7 +1538,7 @@ const I18N_EN={
 "Không cần tài khoản. Học sinh lớp cô Thủy chỉ dùng số thứ tự; bạn tự luyện không cần nhập thông tin gì.":"No account needed. Ms. Thủy's students only use their class number; self-learners enter nothing.",
 "Giọng nói được chuyển thành chữ ngay khi nói (bằng công nghệ nhận dạng giọng nói có sẵn của trình duyệt) và không được lưu thành file ghi âm.":"Your voice is turned into text as you speak (using the browser's built-in speech recognition) and is never saved as a recording.",
 "Trang web được thiết kế với sự hỗ trợ của công cụ AI (Claude). Phần nhận xét sâu do AI gợi ý, cô giáo xem lại và quyết định.":"This site was designed with the help of an AI tool (Claude). Detailed feedback is suggested by AI; the teacher reviews and decides.",
-"Lịch sử luyện tập được lưu ngay trên thiết bị của em và chỉ đến tay cô khi em bấm “Gửi cho cô”.":"Your practice history stays on your device and only reaches your teacher when you press “Send to teacher”.",
+"Học sinh lớp cô Thủy: mỗi lần luyện, kết quả, lời nói (đã chuyển thành chữ) và phần tự đánh giá được gửi cho cô để theo dõi sự tiến bộ; nếu em quên bấm gửi, trang sẽ tự gửi. Bạn tự luyện: mọi thứ chỉ lưu trên thiết bị của em, không gửi đi đâu.":"Ms. Thủy's students: after each practice, your result, words (as text) and self-assessment are sent to your teacher to track progress; if you forget to send, the page sends it for you. Self-learners: everything stays on your device and is never sent.",
 "💌 Lời nhắn gửi cô":"💌 Message to the teacher","Lời nhắn gửi cô":"Message to the teacher","(sắp mở)":"(coming soon)",
 "Học sinh, phụ huynh và thầy cô có góp ý hay lời nhắn, xin gửi cho cô Thủy tại đây.":"Students, parents and teachers can send feedback or messages to Ms. Thủy here.",
 "Hướng dẫn nhanh":"Quick guide",
@@ -1572,6 +1608,7 @@ const I18N_EN={
 "Hãy trình bày lần lượt: “Bạn thứ nhất cho rằng..., bạn thứ hai lại nghĩ..., còn bạn thứ ba...”.":"Go in order: “The first classmate thinks..., the second believes..., and the third...”.",
 "Trước khi phản hồi, hãy nhắc lại ý của bạn: “Bạn vừa cho rằng..., mình...”.":"Before responding, restate your classmate's idea: “You just said that..., I...”.",
 "Lời nói trôi chảy, gần như không có từ đệm.":"Fluent speech with almost no fillers.",
+"Vốn từ, ý phong phú":"Rich ideas & vocabulary","Nội dung, ý chính":"Content & main ideas","Bài nói nhiều ý, vốn từ phong phú.":"Your talk has many ideas and rich vocabulary.","Bài nói còn ít ý. Hãy thêm một ví dụ, một chi tiết miêu tả hoặc một kỉ niệm của chính em để bài phong phú hơn.":"Your talk has few ideas. Add an example, a descriptive detail or a memory of your own to enrich it.",
 "lời mở đầu giới thiệu vấn đề":"an opening that introduces the issue","các từ nối ý như “thứ nhất”, “bên cạnh đó”":"linking words such as “firstly”, “besides”","phần kết luận (ví dụ “Tóm lại...”)":"a conclusion (e.g. “In short...”)",
 "Số liệu bài nói":"Talk statistics","thời gian":"time","thời gian (ước tính)":"time (estimated)","số tiếng đã nói":"syllables spoken","từ đệm":"fillers","tiếng/phút":"syllables/min","lần ngừng lâu":"long pauses",
 "Xem lại lời em đã nói":"Review what you said","Từ đệm được gạch chân màu cam.":"Fillers are underlined in orange.","Em tự đánh giá":"Self-assessment",
@@ -1579,7 +1616,7 @@ const I18N_EN={
 "Em nghe hết ý kiến của các bạn":"I listened to all my classmates' opinions","Em nêu được ý chính của từng bạn":"I stated each classmate's main idea","Em trình bày lại theo trình tự rõ ràng":"I retold them in a clear order","Em nêu được kết luận chung của nhóm":"I gave the group's overall conclusion","Em giữ thái độ khách quan, tôn trọng các ý kiến":"I stayed objective and respected all opinions",
 "Em đã lắng nghe hết ý kiến của bạn":"I listened to my classmate's whole opinion","Em nhắc lại được ý của bạn":"I restated my classmate's idea","Em nói rõ đồng tình hay phản biện":"I said clearly whether I agree or disagree","Em đưa ra lí do thuyết phục":"I gave convincing reasons","Em dùng lời lẽ tôn trọng, lịch sự":"I used respectful, polite language",
 "🎤 Nói lại":"🎤 Try again","📋 Chép cho cô":"📋 Copy for teacher","Về danh sách bài":"Back to lessons","Gói chép cho cô":"Package for teacher",
-"📨 Gửi cho cô":"📨 Send to teacher","Đã gửi cho cô ✅":"Sent to your teacher ✅","Chưa gửi được (có thể do mất mạng). Em thử lại sau nhé.":"Couldn't send (maybe no connection). Please try again later.",
+"📨 Gửi cho cô":"📨 Send to teacher","Đã gửi cho cô ✅":"Sent to your teacher ✅","Đã gửi kết quả, lời nói và tự đánh giá cho cô ✅":"Your result, words and self-assessment were sent to your teacher ✅","Em tích những điều em đã làm được, rồi bấm “📨 Gửi cho cô”. Nếu em quên, kết quả vẫn tự động gửi cho cô khi em rời trang này.":"Tick what you did well, then press “📨 Send to teacher”. If you forget, your result is sent automatically when you leave this page.","Đã tự động gửi kết quả và lời nói cho cô ✅":"Your result and words were sent to your teacher automatically ✅","Kết quả đang được gửi cho cô…":"Sending your result to your teacher…","Em chưa nhập số thứ tự nên kết quả chưa gửi được cho cô. Em về trang chủ nhập số thứ tự nhé.":"You haven't entered your class number, so the result wasn't sent. Go home and enter it.","Chưa gửi được (có thể do mất mạng). Em bấm “Gửi cho cô” để thử lại nhé.":"Couldn't send (maybe no connection). Press “Send to teacher” to try again.","Chưa gửi được (có thể do mất mạng). Em thử lại sau nhé.":"Couldn't send (maybe no connection). Please try again later.",
 "Em hãy nhập số thứ tự ở trang chủ trước nhé":"Please enter your class number on the home page first","Cô chưa mở hộp thư nhận bài. Kết quả đã được lưu trên máy của em, em có thể gửi lại sau.":"Your teacher's inbox isn't open yet. Your result is saved on your device; you can send it later.",
 "Đã chép ✅ Cô dán vào trang giáo viên nhé":"Copied ✅ Paste it into the teacher page","Bôi đen rồi bấm Ctrl+C để chép nhé":"Select it and press Ctrl+C to copy",
 "Đã bật âm thanh 💧":"Sound on 💧","Đã tắt âm thanh":"Sound off",
@@ -1610,6 +1647,14 @@ const I18N_PAT=[
  [/^Tốc độ nói vừa phải \(khoảng (\d+) tiếng\/phút\), người nghe dễ theo dõi\.$/,m=>`Good pace (about ${m[1]} syllables/min), easy to follow.`],
  [/^Em bám sát đề, dùng tốt các từ khoá( như (.+))?\.$/,m=>`You stayed on topic and used key words well${m[2]?` such as ${m[2]}`:""}.`],
  [/^Em dùng (\d+) từ đệm( \((.+?)\))?( và lặp từ (\d+) lần)?\. Khi cần suy nghĩ, em hãy dừng lại một nhịp thay vì nói “ờ”\.$/,m=>`You used ${m[1]} fillers${m[3]?` (${m[3]})`:""}${m[5]?` and repeated words ${m[5]} times`:""}. When you need to think, pause for a beat instead of saying “uh”.`],
+ [/^Mức (\d)\/5 · (.+?)( – cần thêm (.+))?$/,m=>`Level ${m[1]}/5 · ${({"Mới bắt đầu":"Just started","Cần thêm ý":"Needs more ideas","Khá dần":"Getting better","Gần đạt":"Almost there","Đạt":"Achieved"})[m[2]]||m[2]}${m[4]?` – ${durI(m[4])} more needed`:""}`],
+ [/^(Hơi dài|Quá dài)( – nên gọn dưới (.+))?$/,m=>`${m[1]==="Hơi dài"?"A bit long":"Too long"}${m[3]?` – keep it under ${durI(m[3])}`:""}`],
+ [/^Nói được (\d+)\/(\d+) nhóm ý chính gợi ý$/,m=>`Covered ${m[1]}/${m[2]} suggested idea groups`],
+ [/^Bài nói còn thiếu ý về: (.+)\. Mở “Bậc 2” ở bước Chuẩn bị để xem gợi ý nhé\.$/,m=>`Your talk is missing ideas about: ${m[1]}. Open “Step 2” in Prepare for hints.`],
+ [/^(Mới bắt đầu|Cần thêm ý|Khá dần|Gần đạt) – cần thêm (.+) để đạt$/,m=>`${({"Mới bắt đầu":"Just started","Cần thêm ý":"Needs more ideas","Khá dần":"Getting better","Gần đạt":"Almost there"})[m[1]]} – ${durI(m[2])} more to pass`],
+ [/^Đạt \(2–3 phút\) · nói đến 3 phút để được 10 điểm$/,()=>"Pass (2–3 min) · reach 3 min for 10 points"],
+ [/^Tốt \(3–5 phút\)$/,()=>"Good (3–5 min)"],
+ [/^Quá 5 phút – trừ (\d+) điểm \(mỗi 30 giây trừ 1 điểm\)$/,m=>`Over 5 min – minus ${m[1]} (1 point per 30 s)`],
  [/^Bài nói còn thiếu (.+)\.$/,m=>{let t=m[1];["lời mở đầu giới thiệu vấn đề","các từ nối ý như “thứ nhất”, “bên cạnh đó”","phần kết luận (ví dụ “Tóm lại...”)"].forEach(k=>{t=t.split(k).join(I18N_EN[k])});return `Your talk is missing ${t}.`}]
 ];
 
