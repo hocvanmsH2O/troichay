@@ -1073,6 +1073,13 @@ const MUSIC=(()=>{let ctx=null,out=null,timer=null,next=0,step=0,pos=3,cur=null;
 })();
 /* ---------- Nhận dạng giọng nói ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+/* Ghép lời nói an toàn: Chrome trên Android hay trả kết quả "cộng dồn" (có / có một / có một món...), nên mỗi lần nhận đều ghép lại từ đầu và bỏ phần trùng */
+const nzT=x=>String(x||"").toLowerCase().replace(/\s+/g," ").trim();
+function mergeT(acc,t){t=String(t||"").replace(/\s+/g," ").trim();if(!t)return acc;acc=String(acc||"").trim();if(!acc)return t;const A=nzT(acc),T=nzT(t);
+  if(T.startsWith(A))return t;if(A.endsWith(T))return acc;
+  const aw=acc.split(" "),tw=t.split(" ");for(let k=Math.min(aw.length,tw.length);k>0;k--){if(nzT(aw.slice(-k).join(" "))===nzT(tw.slice(0,k).join(" ")))return acc+(k<tw.length?" "+tw.slice(k).join(" "):"")}
+  return acc+" "+t}
+let srBase="";
 let rec=null,recOn=false,finalText="",t0=0,tick=null,elapsed=0,lastHeard=0,longPauses=0;
 function stopRec(){recOn=false;if(rec){try{rec.stop()}catch(e){}}clearInterval(tick);stopMeter();}
 /* ---------- Sóng nước theo giọng nói ---------- */
@@ -1178,14 +1185,14 @@ function renderTalk(body,l,d){
   if(summ)document.getElementById("speakAll").onclick=()=>speak(three.map((o,k)=>`Bạn ${NAMES[k]}: ${o}`));
   wireOutline(body,d);
   const micB=document.getElementById("mic"),live=document.getElementById("live"),timer=document.getElementById("timer"),done=document.getElementById("doneBtn"),hint=document.getElementById("micHint");
-  finalText="";elapsed=0;longPauses=0;lastHeard=0;
+  finalText="";srBase="";elapsed=0;longPauses=0;lastHeard=0;
   const show=(interim="")=>{live.innerHTML=(finalText||interim)?esc(finalText)+(interim?`<span class="interim"> ${esc(interim)}</span>`:""):'<span class="muted">Lời em nói sẽ hiện ở đây…</span>'};
   micB.onclick=()=>{
     if(!SR){document.getElementById("typeBox").open=true;document.getElementById("typed").focus();return;}
     if(recOn){stopRec();lastHeard=0;micB.classList.remove("on");micB.setAttribute("aria-label","Nói tiếp");hint.textContent="Đã tạm dừng. Bấm micro để nói tiếp, hoặc xem kết quả.";done.disabled=!finalText.trim();return;}
     try{
-      rec=new SR();rec.lang="vi-VN";rec.continuous=true;rec.interimResults=true;
-      rec.onresult=e=>{bumpLevel(.7);const now=Date.now();if(lastHeard&&now-lastHeard>3000&&finalText)longPauses++;lastHeard=now;let interim="";for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)finalText+=(finalText?" ":"")+r[0].transcript.trim();else interim+=r[0].transcript}show(interim);done.disabled=!finalText.trim()};
+      srBase=finalText;rec=new SR();rec.lang="vi-VN";rec.continuous=!/Android/i.test(navigator.userAgent);rec.interimResults=true;
+      rec.onresult=e=>{bumpLevel(.7);const now=Date.now();if(lastHeard&&now-lastHeard>3000&&finalText)longPauses++;lastHeard=now;let sess="",interim="";for(let i=0;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)sess=mergeT(sess,r[0].transcript);else interim=r[0].transcript}finalText=mergeT(srBase,sess);if(interim){const I=nzT(interim),F=nzT(finalText);if(F&&F.endsWith(I))interim="";else{const m=nzT(sess);if(m&&I.startsWith(m))interim=interim.trim().slice(sess.length).trim()}}show(interim);done.disabled=!finalText.trim()};
       rec.onerror=e=>{
         const MSG={"not-allowed":location.protocol==="file:"?"Chrome chặn micro khi mở tệp trực tiếp trên máy. Hãy mở web bằng đường link https (GitHub Pages), hoặc gõ bài nói ở ô bên dưới.":"Máy chưa được phép dùng micro. Bấm biểu tượng 🔒 cạnh thanh địa chỉ → cho phép Micrô, rồi tải lại trang.",
           "service-not-allowed":"Trình duyệt này chưa cho phép nhận dạng giọng nói. Em hãy dùng Google Chrome.",
@@ -1196,7 +1203,7 @@ function renderTalk(body,l,d){
         hint.textContent=(MSG[e.error]||"Micro gặp lỗi ("+e.error+"). Em thử tải lại trang, hoặc gõ bài nói ở ô bên dưới.");
         document.getElementById("typeBox").open=true;};
       rec.onstart=()=>{startMeter();};
-      rec.onend=()=>{if(recOn){try{rec.start()}catch(e){}}};
+      rec.onend=()=>{srBase=finalText;if(recOn){try{rec.start()}catch(e){}}};
       try{MUSIC.stop()}catch(e){}recOn=true;lastHeard=Date.now();rec.start();micB.classList.add("on");micB.setAttribute("aria-label","Tạm dừng");hint.textContent="Đang nghe… Bấm lần nữa để tạm dừng.";
       t0=Date.now()-elapsed*1000;clearInterval(tick);tick=setInterval(()=>{elapsed=(Date.now()-t0)/1000;const s=Math.floor(elapsed);timer.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`},250);
     }catch(err){hint.textContent="Không mở được micro. Em hãy gõ bài nói ở ô bên dưới.";document.getElementById("typeBox").open=true;}
